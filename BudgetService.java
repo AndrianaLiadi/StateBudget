@@ -1,3 +1,5 @@
+package logic;
+
 public class BudgetService {
     private final BudgetDataLoader objloader;
 
