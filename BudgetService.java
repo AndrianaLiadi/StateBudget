@@ -22,12 +22,12 @@ public class BudgetService {
     public Budget loadBudget(int year) {
         String filename = "budget_" + year + ".json"; 
         //edw xrhsimopoiw th BudgetDataLoader gia ton xrono pou thelw
-        Budget budget = objloader.loadfromJSON(filename); //analoga pali
+        Budget budget = objloader.loadFromJSON(filename); //analoga pali
         return budget;
     }
 
     public long calculateDeficit(Budget budgetnow) {
-        return budget.getDeficitOrSurplus();
+        return budgetnow.getDeficitOrSurplus();
         //xrhsimopoiw methodo apo to 1 
     }
 
@@ -43,11 +43,11 @@ public class BudgetService {
             if (itemB != null) {
                 amountB = itemB.getAmount();
             } else {
-                amountB = 0.0;
+                amountB = 0L;
             }
             //edw prepei na dw ton kwdika tou BudgetChange
             if (amountA != amountB) {
-                BudgetChange change = new BudgetChange(code, amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB);
                 differences.add(change);
             }
         }
@@ -55,10 +55,10 @@ public class BudgetService {
             String code = itemB.getCode();
             //elegxw thn periptwsh sto budgetB na yparxei kati pou den yparxei sto A
             if (!processedCodes.contains(code)) {
-                double amountA = 0.0
+                double amountA = 0L;
                 double amountB = itemB.getAmount();
                 //edw pali prepei na dw ton kwdika tou BudgetChange
-                BudgetChange change = new BudgetChange(code, amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemA.getName() amountA, amountB);
                 differences.add(change);
             }
 
@@ -67,10 +67,9 @@ public class BudgetService {
     }
 
     private final ReportGenerator reportGenerator;
-    public String analyzeImpact(Budget base, Budget modified) {
-        Scenario tempScenario = new Scenario; //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
-        tempScenario.setModifiedBudget(modified);
-        String summary = reportGenerator.generateSummary(tempScenario, changes);
-        return summary;
+    public String analyzeImpact(Budget base, Budget modified, String description) {
+        Scenario tempScenario = new Scenario(base, description); //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
+        List<BudgetChange> changes = compareBudgets(base, modified);
+        return reportGenerator.generateSummary(tempScenario, changes);
     }
 }
