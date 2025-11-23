@@ -1,5 +1,17 @@
 package logic;
 
+import data.BudgetDataLoader;
+import model.Budget;
+import model.BudgetItem;
+import model.BudgetChange;
+import model.Scenario;
+import util.ReportGenerator;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 public class BudgetService {
     private final BudgetDataLoader objloader;
 
@@ -8,13 +20,13 @@ public class BudgetService {
     }
 
     public Budget loadBudget(int year) {
-        String filename = 'budget_' + year + '.json'; //analoga pws tha ta paroume
+        String filename = "budget_" + year + ".json"; 
         //edw xrhsimopoiw th BudgetDataLoader gia ton xrono pou thelw
         Budget budget = objloader.loadfromJSON(filename); //analoga pali
         return budget;
     }
 
-    public double calculateDeficit(Budget budgetnow) {
+    public long calculateDeficit(Budget budgetnow) {
         return budget.getDeficitOrSurplus();
         //xrhsimopoiw methodo apo to 1 
     }
@@ -26,8 +38,8 @@ public class BudgetService {
             String code = itemA.getCode();
             processedCodes.add(code); //exei xrhsimopoihthei
             BudgetItem itemB = budgetB.getItemByCode(code);
-            double amountA = itemA.getAmount();
-            double amountB;
+            long amountA = itemA.getAmount();
+            long amountB;
             if (itemB != null) {
                 amountB = itemB.getAmount();
             } else {
@@ -58,7 +70,7 @@ public class BudgetService {
     public String analyzeImpact(Budget base, Budget modified) {
         Scenario tempScenario = new Scenario; //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
         tempScenario.setModifiedBudget(modified);
-        String summary = reportGenerator.generateSummary(tempScenario);
+        String summary = reportGenerator.generateSummary(tempScenario, changes);
         return summary;
     }
 }
