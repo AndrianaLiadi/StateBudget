@@ -28,7 +28,7 @@ public class BudgetService {
 
     public long calculateDeficit(Budget budgetnow) {
         return budgetnow.getDeficitOrSurplus();
-        //xrhsimopoiw methodo apo to 1 
+        //xrhsimopoiw methodo apo to model
     }
 
     public List<BudgetChange> compareBudgets(Budget budgetA, Budget budgetB) {
@@ -58,7 +58,7 @@ public class BudgetService {
                 double amountA = 0L;
                 double amountB = itemB.getAmount();
                 //edw pali prepei na dw ton kwdika tou BudgetChange
-                BudgetChange change = new BudgetChange(code, itemA.getName() amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB);
                 differences.add(change);
             }
 
