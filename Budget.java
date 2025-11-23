@@ -34,12 +34,27 @@ public class Budget{
     }
 
     public static int deficitFinder(int trevenue, int texpenditure){
-        int deficit = trevenue - texpenditure;
-        return deficit;
+        if trevenue < texpenditure{
+            int deficit = trevenue - texpenditure;
+            System.out.println("The deficit is", deficit)
+            return deficit;
+        } else {
+            int surplus = texpenditure - trevenue;
+            System.out.println("The surplus is", surplus)
+        }
     }
     
-    public static double getItembyCode(){
+    public static String getItembyCode(){
         scanner Scanner = new Scanner
         System.out.println("Enter the Code of the Item")
+        String code = scanner.nextLine();
+        string f = null;
+        for (BudgetItem item : budget.getItems()){
+            if (item.getCode() == code) {
+                f = item;
+                break;
+            }
+        }
+        return f;
     }
 }
