@@ -1,5 +1,4 @@
-Import java.util.Scanner;
-Import 
+Import java.util.Scanner; 
 public class Main {
     public static void main(String[] args) {
         Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
@@ -11,6 +10,9 @@ public class Main {
 
         int totalExp = budget.totalExpenditure();
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + totalExp);
+
+
+
 
 
 
