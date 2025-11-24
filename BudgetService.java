@@ -16,7 +16,7 @@ public class BudgetService {
     private final BudgetDataLoader objloader;
     private final ReportGenerator reportGenerator;
 
-    public BudgetService(BudgetDataLoader objloader) {
+    public BudgetService(BudgetDataLoader objloader, ReportGenerator reportGenerator) {
         this.objloader = objloader;
         this.reportGenerator = reportGenerator;
     }
@@ -24,8 +24,12 @@ public class BudgetService {
     public Budget loadBudget(int year) {
         String filename = "budget_" + year + ".json"; 
         //edw xrhsimopoiw th BudgetDataLoader gia ton xrono pou thelw
-        Budget budget = objloader.loadFromJSON(filename); //analoga pali
-        return budget;
+         try {
+            return loader.loadFromJSON(filename);
+        } catch (Exception e) {
+            throw new RuntimeException("Cannot load budget file: " + filename, e);
+        }
+    }
     }
 
     public long calculateDeficit(Budget budgetnow) {
@@ -34,8 +38,8 @@ public class BudgetService {
     }
 
     public List<BudgetChange> compareBudgets(Budget budgetA, Budget budgetB) {
-        List<BudgetChange> differences = new ArrayList<>;
-        List<String> processedCodes = new ArrayList<>; //wste na mhn ginetai dyo fores
+        List<BudgetChange> differences = new ArrayList<>();
+        List<String> processedCodes = new ArrayList<>(); //wste na mhn ginetai dyo fores
         for (BudgetItem itemA : budgetA.getItems()) {
             String code = itemA.getCode();
             processedCodes.add(code); //exei xrhsimopoihthei
@@ -60,7 +64,7 @@ public class BudgetService {
                 long amountA = 0L;
                 long amountB = itemB.getAmount();
                 //edw pali prepei na dw ton kwdika tou BudgetChange
-                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemB.getName(), amountA, amountB);
                 differences.add(change);
             }
 
