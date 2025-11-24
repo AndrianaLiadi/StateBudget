@@ -68,13 +68,6 @@ public class MainApp extends JFrame {
 
         setJMenuBar(menuBar);
     }
-
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> {
-            MainApp app = new MainApp();
-            app.setVisible(true);
-        });
-    }
 }
 
 
