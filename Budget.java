@@ -1,56 +1,74 @@
-import.java.util.Scanner;
+package data;
+
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Budget{
-    public static void listMaker(){
-        List<BudgetItem> allItems = budget.getItems();
+
+    private List<BudgetItem> items;
+
+    public Budget() {
+        this.items = new ArrayList<>();
+    }
+    
+    public List<BudgetItem> getItems() {
+        return this.items;
     }
 
-    public static int getYear() {
-        scanner Scanner = new Scanner
-        System.out.println("Enter the Budjet Year")
+    public List<BudgetItem> listMaker(){
+        return this.getItems();
+    }
+
+    public static int getYearFromUser() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Budget Year");
         int year = scanner.nextInt();
-        return year 
+        return year;
     }
 
-    public static void totalRevenue(){
-        public int trevenue = 0;
+    public double totalRevenue(){
+        double trevenue = 0;
         List<BudgetItem> revenue = new ArrayList<>();
-        for (BudgetItem item : allItems){
-            if (item.getType() == BudgetItem.Type.REVENUE){
-                revenues.add(item);
-                trevenue = trevenue + item;
+        for (BudgetItem item : this.items){
+            if (item.getType().equals("REVENUE")){
+                revenue.add(item);
+                trevenue = trevenue + item.getAmount();
             }
         }
+        return trevenue;
     }
 
-    public static void totalExpenditure(){
-        public int texpenditure = 0;
+    public double totalExpenditure(){
+        double texpenditure = 0;
         List<BudgetItem> expenditure = new ArrayList<>();
-        for (BudgetItem item : allItems){
-            if (item.getType() == BudgetItem.Type.EXPENDITURE){
-                expeditures.add(item);
-                texpenditure = texpenditure + item;
+        for (BudgetItem item : this.items){
+            if (item.getType().equals("EXPENDITURE")){
+                expenditure.add(item);
+                texpenditure = texpenditure + item.getAmount();
             }
         }
+        return texpenditure;
     }
-
-    public static int deficitFinder(int trevenue, int texpenditure){
-        if trevenue < texpenditure{
-            int deficit = trevenue - texpenditure;
-            System.out.println("The deficit is", deficit)
+    public double surplusdeficitFinder(double trevenue, double texpenditure){
+        if (trevenue < texpenditure) {
+            double deficit = texpenditure - trevenue;
+            System.out.println("The deficit is " + deficit);
             return deficit;
         } else {
-            int surplus = texpenditure - trevenue;
-            System.out.println("The surplus is", surplus)
+            double surplus = trevenue - texpenditure;
+            System.out.println("The surplus is " + surplus);
+            return surplus;
         }
     }
     
-    public static String getItembyCode(){
-        scanner Scanner = new Scanner
-        System.out.println("Enter the Code of the Item")
+    public BudgetItem getItembyCode(){
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Code of the Item");
         String code = scanner.nextLine();
-        string f = null;
-        for (BudgetItem item : budget.getItems()){
-            if (item.getCode() == code) {
+        BudgetItem f = null;
+        for (BudgetItem item : this.getItems()){
+            if (item.getCode().equals(code)) {
                 f = item;
                 break;
             }
