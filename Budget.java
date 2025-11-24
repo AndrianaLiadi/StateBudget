@@ -16,15 +16,15 @@ public class Budget implements Cloneable{
         return this.items;
     }
 
-    public List<BudgetItem> listMaker(){
+    public List<BudgetItem> listMaker() {
         return this.getItems();
     }
 
-    public static int getYearFromUser() {
+    public static int getYear() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Budget Year");
         int year = scanner.nextInt();
-        return year;
+        return year; 
     }
 
     public double totalRevenue(){
@@ -62,7 +62,7 @@ public class Budget implements Cloneable{
             return deficit;
         }
     }
-
+    
     public BudgetItem getItembyCode(){
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Code of the Item");
