@@ -78,3 +78,22 @@ public class Scenario {
             this.summary = "Δεν υπάρχει καμία αλλαγή στο συγκεκριμένο σενάριο";
             return;
         }
+
+         StringBuilder sb = new StringBuilder();
+        sb.append("Σενάριο: ").append(name).append("\n");
+        sb.append("Αλλαγές που εφαρμόστηκαν:\n\n");
+
+        for (BudgetChange change : changes) {
+            sb.append("- ")
+              .append(change.getName()).append(" (")
+              .append(change.getCode()).append(")")
+              .append(": από ")
+              .append(change.getOldAmount())
+              .append(" σε ")
+              .append(change.getNewAmount())
+              .append("\n");
+        }
+
+        this.summary = sb.toString();
+    }
+}
