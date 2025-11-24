@@ -13,5 +13,15 @@ public class BudgetChange {
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
-
     
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public long getOldValue() {
+        return oldValue;
+    }
