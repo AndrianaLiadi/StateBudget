@@ -13,7 +13,7 @@ public class BudgetChange {
         this.oldValue = oldValue;
         this.newValue = newValue;
     }
-    
+
     public String getItemCode() {
         return itemCode;
     }
@@ -25,3 +25,23 @@ public class BudgetChange {
     public long getOldValue() {
         return oldValue;
     }
+
+    public long getNewValue() {
+        return newValue;
+    }
+
+    public long getDifference() {
+        return newValue - oldValue;
+    }
+    //dinetai i posostiaia metavoli
+    public double getPercentageChange() {
+        if (oldValue == 0) {
+            return newValue != 0 ? 100.0 : 0.0;
+        }
+        return ((double)(newValue - oldValue) / oldValue) * 100.0;
+    }
+
+    public void setNewValue(long newValue) {
+        this.newValue = newValue;
+    }
+}
