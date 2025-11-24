@@ -57,3 +57,24 @@ public class Scenario {
                     break;
                 }
             }
+
+             if (targetItem != null) {
+                targetItem.setAmount(change.getNewAmount());
+            } else {
+                BudgetItem y = new BudgetItem(
+                        change.getCode(),
+                        change.getName(),
+                        change.getNewAmount()
+                );
+                newItems.add(y);
+            }
+        }
+
+        this.modifiedBudget = new Budget(newItems);
+    }
+    //prosthiki syntomis perilipsis sxetika me tis allages pou pragmatopoiithikan
+    public void generateSummary() {
+        if (changes == null || changes.isEmpty()) {
+            this.summary = "Δεν υπάρχει καμία αλλαγή στο συγκεκριμένο σενάριο";
+            return;
+        }
