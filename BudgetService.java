@@ -25,11 +25,10 @@ public class BudgetService {
         String filename = "budget_" + year + ".json"; 
         //edw xrhsimopoiw th BudgetDataLoader gia ton xrono pou thelw
          try {
-            return loader.loadFromJSON(filename);
+            return objloader.loadFromJSON(filename);
         } catch (Exception e) {
             throw new RuntimeException("Cannot load budget file: " + filename, e);
         }
-    }
     }
 
     public long calculateDeficit(Budget budgetnow) {
@@ -73,8 +72,8 @@ public class BudgetService {
     }
 
 
-    public String analyzeImpact(Budget base, Budget modified, String description) {
-        Scenario tempScenario = new Scenario(base, description); //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
+    public String analyzeImpact(Budget base, Budget modified, String name) {
+        Scenario tempScenario = new Scenario(base, name); //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
         List<BudgetChange> changes = compareBudgets(base, modified);
         return reportGenerator.generateSummary(tempScenario, changes);
     }
