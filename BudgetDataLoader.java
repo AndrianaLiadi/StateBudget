@@ -2,6 +2,7 @@ package data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class BudgetDataLoader {
         
         String cleaned = raw.replace(".", "").replace(",", "");
 
+
         try {
             if (cleaned.endsWith("»")) {
                 cleaned = cleaned.substring(0, cleaned.length() - 1);
@@ -77,13 +79,13 @@ public class BudgetDataLoader {
 
     public void saveToJSON(Budget budget, String outputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new FileWriter(outputFilePath), budget);
         try (FileWriter writer = new FileWriter(outputFilePath)) {
             mapper.writerWithDefaultPrettyPrinter().writeValue(writer, budget);
         }
     }
 
-    public void loadFromJSON(String inputFilePath) throws IOException {
+
+    public Budget loadFromJSON(String inputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(inputFilePath), Budget.class);
     }
