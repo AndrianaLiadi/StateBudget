@@ -28,3 +28,32 @@ public class Scenario {
     public List<BudgetChange> getChanges() {
         return changes;
     }
+    
+    public Budget getModifiedBudget() {
+        return modifiedBudget;
+    }
+
+    public String getSummary() {
+        return summary;
+    }
+
+    public void setChanges(List<BudgetChange> changes) {
+        this.changes = changes;
+    }
+    //efarmozei tis allages pou poragmatopoiise o xrhsths
+    public void applyChanges() {
+        List<BudgetItem> newItems = new ArrayList<>();
+
+        for (BudgetItem item : baseBudget.getItems()) {
+            BudgetItem newItem = new BudgetItem(item.getCode(), item.getName(), item.getAmount());
+            newItems.add(newItem);
+        }
+        for (BudgetChange change : changes) {
+
+            BudgetItem targetItem = null;
+            for (BudgetItem it : newItems) {
+                if (it.getCode().equals(change.getCode())) {
+                    targetItem = it;
+                    break;
+                }
+            }
