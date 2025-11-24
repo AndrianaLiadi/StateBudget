@@ -11,4 +11,20 @@ public class Scenario {
     private Budget modifiedBudget;
     private String summary;
 
-   
+    public Scenario(Budget baseBudget, String name) {
+        this.baseBudget = baseBudget;
+        this.name = name;
+        this.changes = new ArrayList<>();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Budget getBaseBudget() {
+        return baseBudget;
+    }
+
+    public List<BudgetChange> getChanges() {
+        return changes;
+    }
