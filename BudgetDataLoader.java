@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.File;
+
 
 public class BudgetDataLoader {
     private static final String CSV_DELIMITER = ",";
@@ -63,7 +65,8 @@ public class BudgetDataLoader {
             return 0;
         }
         
-        String cleaned = raw.replace(".", "").replace(",", "");
+        String cleaned = amountString.replace(".", "").replace(",", "");
+
 
         try {
             if (cleaned.endsWith("»")) {
@@ -77,13 +80,13 @@ public class BudgetDataLoader {
 
     public void saveToJSON(Budget budget, String outputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.writerWithDefaultPrettyPrinter().writeValue(new FileWriter(outputFilePath), budget);
         try (FileWriter writer = new FileWriter(outputFilePath)) {
             mapper.writerWithDefaultPrettyPrinter().writeValue(writer, budget);
         }
     }
 
-    public void loadFromJSON(String inputFilePath) throws IOException {
+
+    public Budget loadFromJSON(String inputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         return mapper.readValue(new File(inputFilePath), Budget.class);
     }
