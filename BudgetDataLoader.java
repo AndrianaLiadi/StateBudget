@@ -63,7 +63,7 @@ public class BudgetDataLoader {
             return 0;
         }
         
-        String cleaned = raw.replace(".", "").replace(",", "");
+        String cleaned = raw.replace(".", "").replace("," , "");
 
         try {
             if (cleaned.endsWith("»")) {

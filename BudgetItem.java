@@ -12,19 +12,19 @@ public class BudgetItem{
         this.amount = amount;
     }
 
-    public static String getCode(){
+    public String getCode(){
         return code;
     }
 
-    public static String getName(){
+    public String getName(){
         return code;
     }
      
-    public static String getType(){
+    public String getType(){
         return type;
     }
 
-    public static double getAmount(){
+    public double getAmount(){
         return amount;
     }
 
