@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetItem implements Cloneable {
-    
+
     private String code;
     private String name;
     private String type;
@@ -28,7 +28,7 @@ public class BudgetItem implements Cloneable {
     public String getName() {
         return name;
     }
-     
+
     public String getType() {
         return type;
     }
@@ -36,6 +36,7 @@ public class BudgetItem implements Cloneable {
     public double getAmount() {
         return amount;
     }
+
 
     public BudgetItem getParentCategory() {
         return parentcategory;
@@ -81,5 +82,5 @@ public class BudgetItem implements Cloneable {
 
 
 
-    
+
 }
