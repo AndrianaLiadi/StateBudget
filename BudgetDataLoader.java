@@ -50,7 +50,7 @@ public class BudgetDataLoader {
                 long amount = parseAmount(amountString);
                 if (amount == 0) continue;
 
-                String finalCode = code.isEmpty ? name.substring(0, Math.min(name.length, 10)) : code;
+                String finalCode = code.isEmpty() ? name.substring(0, Math.min(name.length, 10)) : code;
                 BudgetItem item = new BudgetItem(finalCode, name, currentType, amount);
                 budget.addItem(item);
             }
@@ -62,8 +62,8 @@ public class BudgetDataLoader {
         if (amountString == null || amountString.isEmpty()) {
             return 0;
         }
-        String cleaned = amountString.replaceAll("[.]", "");
-        cleaned.replaceAll(",", "");
+        
+        String cleaned = raw.replace(".", "").replace(",", "");
 
         try {
             if (cleaned.endsWith("»")) {
@@ -78,10 +78,13 @@ public class BudgetDataLoader {
     public void saveToJSON(Budget budget, String outputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         mapper.writerWithDefaultPrettyPrinter().writeValue(new FileWriter(outputFilePath), budget);
+        try (FileWriter writer = new FileWriter(outputFilePath)) {
+            mapper.writerWithDefaultPrettyPrinter().writeValue(writer, budget);
+        }
     }
 
     public void loadFromJSON(String inputFilePath) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new FileReader(inputFilePath, Budget.class));
+        return mapper.readValue(new File(inputFilePath), Budget.class);
     }
 }
