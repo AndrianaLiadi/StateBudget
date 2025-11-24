@@ -1,8 +1,9 @@
-import java.io.IOException;
-
 import data.BudgetDataLoader;
+import java.io.IOException;
+import java.util.Scanner; 
+import javax.swing.SwingUtilities; 
 
-Import java.util.Scanner; 
+
 public class Main {
 
     public static void main(String[] args) {
@@ -32,6 +33,12 @@ public class Main {
                 e.printStackTrace();
             }
         }
+
+            SwingUtilities.invokeLater(() -> {
+            MainApp app = new MainApp();
+            app.setVisible(true);
+        });
+
         Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
         int year = budget.getYear(); 
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
@@ -42,7 +49,7 @@ public class Main {
         int totalExp = budget.totalExpenditure();
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + totalExp);
 
-
+        
 
 
 
