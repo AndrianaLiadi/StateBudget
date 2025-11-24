@@ -34,7 +34,7 @@ public class Budget{
     }
 
     public static int deficitFinder(int trevenue, int texpenditure){
-        if trevenue < texpenditure{
+        if (trevenue < texpenditure){
             int deficit = trevenue - texpenditure;
             System.out.println("The deficit is", deficit)
             return deficit;
