@@ -1,4 +1,4 @@
-package ui;
+package src.main.java.ui;
 
 
 
