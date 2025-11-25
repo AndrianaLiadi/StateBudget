@@ -76,4 +76,22 @@ public class Budget implements Cloneable{
         }
         return f;
     }
+
+    @Override
+    public Budget clone() {
+        try {
+            Budget cloned = (Budget) super.clone();
+
+            cloned.items = new ArrayList<>();
+            for (BudgetItem item : this.items) {
+                cloned.items.add(item.clone());
+            }
+
+            return cloned;
+
+        } catch (CloneNotSupportedException e) {
+            System.out.println("Clone Error");
+            return null;
+        }
+    }
 }
