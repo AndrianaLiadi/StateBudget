@@ -1,3 +1,4 @@
+package src.main.java.ui;
 import javax.swing.*;
 import java.awt.*;
 
