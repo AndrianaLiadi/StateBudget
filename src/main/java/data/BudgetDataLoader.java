@@ -24,12 +24,12 @@ public class BudgetDataLoader {
                 if (line.isEmpty()) continue;
 
                 if (line.contains("1. ΕΣΟΔΑ")) {
-                    currentType = BudgetItem.Type.REVENUE;
+                    currentType = src.main.java.model.Type.REVENUE;
                     continue;
                 }
 
                 if (line.contains("2. ΕΞΟΔΑ")) {
-                    currentType = BudgetItem.Type.EXPENDITURE;
+                    currentType = src.main.java.model.Type.EXPENDITURE;
                     continue;
                 }
 
@@ -43,7 +43,7 @@ public class BudgetDataLoader {
 
                 String amountString = "";
 
-                if (currentType == BudgetItem.Type.REVENUE) {
+                if (currentType == src.main.java.model.Type.REVENUE) {
                     //esoda 5h sthlh
                     amountString = columns.length > 4 ? columns[4].trim().replace("\"", "") : "";
                 } else {
