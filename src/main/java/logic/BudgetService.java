@@ -31,9 +31,10 @@ public class BudgetService {
         }
     }
 
-    public long calculateDeficit(Budget budgetnow) {
-        return budgetnow.getDeficitOrSurplus();
-        //xrhsimopoiw methodo apo to model
+    public double calculateSurplusOrDeficit(Budget budget) {
+        double revenue = budget.totalRevenue();
+        double expenditure = budget.totalExpenditure();
+        return budget.surplusdeficitFinder(revenue, expenditure); 
     }
 
     public List<BudgetChange> compareBudgets(Budget budgetA, Budget budgetB) {
@@ -70,7 +71,6 @@ public class BudgetService {
         }
         return differences;
     }
-
 
     public String analyzeImpact(Budget base, Budget modified, String name) {
         Scenario tempScenario = new Scenario(base, name); //prepei na dw ton kwdika kai ton kataskevasth tou Scenario
