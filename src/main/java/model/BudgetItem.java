@@ -9,7 +9,7 @@ public class BudgetItem implements Cloneable {
     private String code;
     private String name;
     private String type;
-    private double amount;
+    private long amount;
     private BudgetItem parentCategory;
     private List<BudgetItem> subItems;
 
