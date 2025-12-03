@@ -1,5 +1,5 @@
 package src.main.java.main;
-import data.BudgetDataLoader;
+import src.main.java.data.BudgetDataLoader;
 import src.main.java.ui.MainApp;
 
 import java.io.IOException;
