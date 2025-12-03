@@ -1,11 +1,11 @@
-package logic;
+package src.main.java.logic;
 
-import data.BudgetDataLoader;
-import data.Budget;
-import data.BudgetItem;
-import model.BudgetChange;
-import model.Scenario;
-import util.ReportGenerator;
+import src.main.java.data.BudgetDataLoader;
+import src.main.java.model.Budget;
+import src.main.java.model.BudgetItem;
+import src.main.java.model.BudgetChange;
+import src.main.java.model.Scenario;
+import src.main.java.ui.ReportGenerator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
