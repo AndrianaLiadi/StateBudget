@@ -1,4 +1,4 @@
-package data;
+package src.main.java.data;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
@@ -6,8 +6,8 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import data.Budget;
-import data.BudgetItem;
+import src.main.java.model.Budget;
+import src.main.java.model.BudgetItem;
 
 
 public class BudgetDataLoader {
