@@ -1,7 +1,7 @@
-package ui; 
+package src.main.java.ui; 
 
 
-import model.BudgetChange;
+import src.main.java.model.BudgetChange;
 import java.util.List;
 
 
