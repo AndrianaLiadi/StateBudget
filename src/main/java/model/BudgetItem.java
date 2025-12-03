@@ -34,7 +34,7 @@ public class BudgetItem implements Cloneable {
         return type;
     }
 
-    public double getAmount() {  
+    public long getAmount() {  
         return amount;
     }
 
