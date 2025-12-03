@@ -46,7 +46,7 @@ public class BudgetItem implements Cloneable {
         return subItems;
     }
 
-    public void updateAmount(double newValue) {
+    public void updateAmount(long newValue) {
         this.amount = newValue;
     }
 
