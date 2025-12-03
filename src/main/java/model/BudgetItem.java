@@ -13,7 +13,7 @@ public class BudgetItem implements Cloneable {
     private BudgetItem parentCategory;
     private List<BudgetItem> subItems;
 
-    public BudgetItem(String code, String name, String type, double amount) {
+    public BudgetItem(String code, String name, String type, long amount) {
         this.code = code;
         this.name = name;
         this.type = type;
