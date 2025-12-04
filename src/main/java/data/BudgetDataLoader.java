@@ -1,100 +1,77 @@
 package src.main.java.data;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
 import src.main.java.model.Budget;
 import src.main.java.model.BudgetItem;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BudgetDataLoader {
-    private static final String CSV_DELIMITER = ",";
+    private long cleanAndParseAmount(String amountStr) throws NumberFormatException {
+        if (amountStr == null || amountStr.trim().isEmpty()) {
+            return 0;
+        }
 
-    public Budget loadFromCSV(String filePath, int year) throws IOException {
-        Budget budget = new Budget(year);
-        BudgetItem.Type currentType = null;
+        // afairesh perittwn
+        String cleaned = amountStr.replaceAll("\\.", "").replaceAll("»", "").trim();
+        if (cleaned.contains(",")) {
+            cleaned = cleaned.substring(0, cleaned.indexOf(','));
+        }
 
+        //ta kanw long
+        return Long.parseLong(cleaned);
+    }
+
+    //pairnei to arxeio kai ftiaxnei to budget
+    public Budget loadFromCSV(String filePath, int year) {
+        List<BudgetItem> items = new ArrayList<>();
+        String line;
+        String cvsSplitBy = ",";
+        String currentType = null; 
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
+
             while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-
-                if (line.contains("1. ΕΣΟΔΑ")) {
-                    currentType = src.main.java.model.Type.REVENUE;
+                String[] data = line.split(cvsSplitBy, -1);
+                //gia na mh vlepw kenes h mh xrhsimes grammes:
+                if (data.length < 2) {
                     continue;
                 }
-
-                if (line.contains("2. ΕΞΟΔΑ")) {
-                    currentType = src.main.java.model.Type.EXPENDITURE;
+                String codePart = data[0].trim();
+                String name = data[1].trim();
+                //elegxw gia na eimaste sigouroi oti to poso einai sth sthlh 5
+                String amountStr = (data.length > 4) ? data[4] : null;
+                //orizw currentType analoga me to arxeio
+                if (codePart.contains("ΕΣΟΔΑ")) {
+                    currentType = "REVENUE";
+                    continue; 
+                }
+                if (codePart.contains("ΕΞΟΔΑ")) {
+                    currentType = "EXPENDITURE";
                     continue;
                 }
-
-                if (currentType == null) continue;
-
-                String[] columns = line.split(CSV_DELIMITER, -1);
-                String code = columns[0].trim().replace("\"", "");
-                String name = columns.length > 1 ? columns[1].trim().replace("\"", "") : "";
-
-                if (name.isEmpty() || name.contains("Ονομασία") || name.length < 3) continue;
-
-                String amountString = "";
-
-                if (currentType == src.main.java.model.Type.REVENUE) {
-                    //esoda 5h sthlh
-                    amountString = columns.length > 4 ? columns[4].trim().replace("\"", "") : "";
-                } else {
-                    //exoda 3h sthlh
-                    amountString = columns.length > 2 ? columns[2].trim().replace("\"", "") : "";
+                //ftiaxnw to budgetitem
+                if (currentType != null && !codePart.isEmpty() && amountStr != null && !amountStr.trim().isEmpty()) {
+                    try {
+                        //vgazw teleies gia eukolia
+                        String cleanCode = codePart.replaceAll("\\.", "").trim();
+                        //metatrepw se long
+                        long amount = cleanAndParseAmount(amountStr);
+                        //ftiaxnw twra to antikeimeno
+                        BudgetItem item = new BudgetItem(cleanCode, name, currentType, amount);
+                        items.add(item);
+                    } catch (NumberFormatException e) {
+                        System.err.println("Προσοχή: Δεν μπόρεσε να διαβαστεί το ποσό στη γραμμή: " + line);
+                    }
                 }
-
-                long amount = parseAmount(amountString);
-                if (amount == 0) continue;
-
-                String finalCode = code.isEmpty() ? name.substring(0, Math.min(name.length, 10)) : code;
-                BudgetItem item = new BudgetItem(finalCode, name, currentType, amount);
-                budget.addItem(item);
             }
+            //return to budget!
+            return new Budget(year, items);
+        } catch (IOException e) {
+            System.err.println("Σφάλμα κατά την ανάγνωση του αρχείου: " + e.getMessage());
+            return null;
         }
-        budget.calculateTotals();
-        return budget;
-    }
-    private long parseAmount(String amountString) {
-        if (amountString == null || amountString.isEmpty()) {
-            return 0;
-        }
-        
-<<<<<<< HEAD
-        String cleaned = raw.replace(".", "").replace("," , "");
-=======
-        String cleaned = amountString.replace(".", "").replace(",", "");
-
-
->>>>>>> 6450fabb1d86f2121c83188202b1bdbe59cb7ed5
-
-        try {
-            if (cleaned.endsWith("»")) {
-                cleaned = cleaned.substring(0, cleaned.length() - 1);
-            }
-            return Long.parseLong(cleaned);
-        } catch (NumberFormatException e) {
-            return 0;
-        }
-    }
-
-    public void saveToJSON(Budget budget, String outputFilePath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        try (FileWriter writer = new FileWriter(outputFilePath)) {
-            mapper.writerWithDefaultPrettyPrinter().writeValue(writer, budget);
-        }
-    }
-
-
-    public Budget loadFromJSON(String inputFilePath) throws IOException {
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(new File(inputFilePath), Budget.class);
     }
 }
