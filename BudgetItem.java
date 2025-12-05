@@ -9,11 +9,11 @@ public class BudgetItem implements Cloneable {
     private String code;
     private String name;
     private String type;
-    private double amount;
+    private long amount;
     private BudgetItem parentCategory;
     private List<BudgetItem> subItems;
 
-    public BudgetItem(String code, String name, String type, double amount) {
+    public BudgetItem(String code, String name, String type, long amount) {
         this.code = code;
         this.name = name;
         this.type = type;
@@ -34,7 +34,7 @@ public class BudgetItem implements Cloneable {
         return type;
     }
 
-    public double getAmount() {  
+    public long getAmount() {  
         return amount;
     }
 
@@ -46,7 +46,7 @@ public class BudgetItem implements Cloneable {
         return subItems;
     }
 
-    public void updateAmount(double newValue) {
+    public void updateAmount(long newValue) {
         this.amount = newValue;
     }
 
@@ -55,8 +55,8 @@ public class BudgetItem implements Cloneable {
         subItems.add(newItem);
     }
 
-    public double getTotal() {
-        double total = this.amount;
+    public long getTotal() {
+        long total = this.amount;
         for (BudgetItem i: subItems){
             total = total + i.getTotal();
         }
