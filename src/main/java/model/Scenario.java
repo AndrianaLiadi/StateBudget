@@ -5,20 +5,20 @@ import java.util.List;
 
 public class Scenario {
 
-    private String name;
+    private String itemName;
     private Budget baseBudget;
     private List<BudgetChange> changes;
     private Budget modifiedBudget;
     private String summary;
 
-    public Scenario(Budget baseBudget, String name) {
+    public Scenario(Budget baseBudget, String itemName) {
         this.baseBudget = baseBudget;
-        this.name = name;
+        this.itemName = itemName;
         this.changes = new ArrayList<>();
     }
 
-    public String getName() {
-        return name;
+    public String getitemName() {
+        return itemName;
     }
 
     public Budget getBaseBudget() {
@@ -45,7 +45,7 @@ public class Scenario {
         List<BudgetItem> newItems = new ArrayList<>();
 
         for (BudgetItem item : baseBudget.getItems()) {
-            BudgetItem newItem = new BudgetItem(item.getCode(), item.getName(), item.getAmount());
+            BudgetItem newItem = new BudgetItem(item.getCode(), item.getitemName(), item.getAmount());
             newItems.add(newItem);
         }
         for (BudgetChange change : changes) {
@@ -63,7 +63,7 @@ public class Scenario {
             } else {
                 BudgetItem y = new BudgetItem(
                         change.getCode(),
-                        change.getName(),
+                        change.getitemName(),
                         change.getNewAmount()
                 );
                 newItems.add(y);
@@ -80,12 +80,12 @@ public class Scenario {
         }
 
          StringBuilder sb = new StringBuilder();
-        sb.append("Σενάριο: ").append(name).append("\n");
+        sb.append("Σενάριο: ").append(itemName).append("\n");
         sb.append("Αλλαγές που εφαρμόστηκαν:\n\n");
 
         for (BudgetChange change : changes) {
             sb.append("- ")
-              .append(change.getName()).append(" (")
+              .append(change.getitemName()).append(" (")
               .append(change.getCode()).append(")")
               .append(": από ")
               .append(change.getOldAmount())
