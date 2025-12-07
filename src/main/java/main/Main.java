@@ -18,36 +18,23 @@ public class Main {
 
     public static void main(String[] args) {
         
-    BudgetDataLoader dataloader = new BudgetDataLoader(); 
-        String csvFilePath = "budget_data.csv"; 
-        String jsonOutputFilePath = "budget_output.json";
-        String jsonInputFilePath = "budget_output.json";
+    System.out.println("Enter Budget Year:");
+        int year = scanner.nextInt();
+        scanner.nextLine(); 
 
-        int year = 2024; // etos proypologismou//
+    
+// fortwsh apo  CSV
+        BudgetDataLoader loader = new BudgetDataLoader(); // dhmioyrgia adikeimenou ths BudgetdataLoader
+        Budget budget = loader.loadFromCSV(filePath, year);
 
-        // fortosh apo CSV//
-        Budget loadedBudget = null;
-        try {
-            loadedBudget = dataLoader.loadFromCSV(csvFilePath, year);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return; // stamataei an den fortothei to archeio//
+        if (budget == null) {
+            System.out.println(" Αποτυχία φόρτωσης από CSV");
+            return;
         }
 
-        // Apothikefsfh se jason//
-        if (loadedBudget != null) {
-                 try {
-                dataLoader.saveToJSON(loadedBudget, jsonOutputFilePath);
-            
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        
 
         Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
-        int year = budget.getYear(); 
+    
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
 
         int totalRev = budget.totalRevenue();
