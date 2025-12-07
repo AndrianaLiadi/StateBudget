@@ -1,7 +1,10 @@
 package src.main.java.main;
 import src.main.java.data.BudgetDataLoader;
 import src.main.java.ui.MainApp;
-
+import src.main.java.model.Budget;
+import src.main.java.model.BudgetItem;
+import src.main.java.model.BudgetChange;
+import src.main.java.model.Scenario;
 import java.io.IOException;
 import java.util.Scanner; 
 import javax.swing.SwingUtilities; 
