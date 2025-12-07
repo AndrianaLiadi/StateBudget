@@ -48,17 +48,36 @@ public class Main {
         
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
+        System.out.println("\nΔώστε το σεναριό σας!");
+        String scenarioName = scanner.nextLine();
+
+        Scenario scenario = new Scenario(budget, scenarioName);
+
+        boolean addMore = true;
+
+        while (addMore) {
+            System.out.println("\nΕισάγετε κωδικό σεναρίου αλλαγής!");
+            String code = scanner.nextLine();
+
+            BudgetItem item = null;
+            for (BudgetItem bItem : budget.getItems()) {
+                if (bItem.getCode().equals(code)) {
+                    item = bItem;
+                    break;
+                }
+            }
+
+            if (item == null) {
+                System.out.println("Το στοιχείο δεν βρέθηκε! Προσπάθείστε ξανά!");
+                continue;
+            }
+
+            System.out.println(" Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
+            System.out.println("εισάγετε καινούριο ποσό");
+            long newAmount = scanner.nextLong();
+            scanner.nextLine();
 
 
-        System.out.println("Εισάγετε κωδικό");
-        BudgetItem item = budget.getItembyCode();
-
-        if (item != null) {
-            System.out.println("Επεξεργάζεστε: " + item.getName() + " — " + item.getAmount());
-        } else {
-            System.out.println("Δεν βρέθηκε στοιχείο για επεξεργασία!");
-        }
-    
    
     SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -71,4 +90,5 @@ public class Main {
 
     scanner.close();
     }
-} 
+}
+}
