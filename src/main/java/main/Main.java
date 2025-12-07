@@ -3,13 +3,11 @@ package main;
 import data.BudgetDataLoader;
 import ui.MainApp;
 import model.Budget;
-import model.BudgetItem;
 import model.BudgetChange;
+import model.BudgetItem;
 import model.Scenario;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+
 import java.util.Scanner; 
 import javax.swing.SwingUtilities; 
 
@@ -48,6 +46,7 @@ public class Main {
         
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
+        
         System.out.println("\nΔώστε το σεναριό σας!");
         String scenarioName = scanner.nextLine();
 
@@ -76,6 +75,28 @@ public class Main {
             System.out.println("εισάγετε καινούριο ποσό");
             long newAmount = scanner.nextLong();
             scanner.nextLine();
+        }
+
+
+        BudgetChange change = new BudgetChange(
+                    item.getCode(),
+                    item.getName(),
+                    item.getAmount(),
+                    newAmount
+            );
+            scenario.getChanges().add(change);
+
+            System.out.println("Θέλετε να προσθέσετε άλλη αλλαγή; (y/n)");
+            String answer = scanner.nextLine().trim().toLowerCase();
+            if (!answer.equals("y")) addMore = false;
+        }
+
+        // egarmogh allagvn kai sunopsi
+        scenario.applyChanges();
+        scenario.generateSummary();
+
+        System.out.println("\n=== Σύνοψη ===");
+        System.out.println(scenario.getSummary());
 
 
    
@@ -91,4 +112,4 @@ public class Main {
     scanner.close();
     }
 }
-}
+
