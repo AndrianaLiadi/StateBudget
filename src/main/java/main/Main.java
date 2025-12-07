@@ -1,11 +1,11 @@
-package src.main.java.main;
+package main;
 
-import src.main.java.data.BudgetDataLoader;
-import src.main.java.ui.MainApp;
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
-import src.main.java.model.BudgetChange;
-import src.main.java.model.Scenario;
+import data.BudgetDataLoader;
+import ui.MainApp;
+import model.Budget;
+import model.BudgetItem;
+import model.BudgetChange;
+import model.Scenario;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,7 +17,9 @@ import javax.swing.SwingUtilities;
 public class Main {
 
     public static void main(String[] args) {
-        
+    
+   Scanner scanner = new Scanner(System.in);
+
     System.out.println("Enter Budget Year:");
         int year = scanner.nextInt();
         scanner.nextLine(); 
@@ -25,10 +27,14 @@ public class Main {
     
 // fortwsh apo  CSV
         BudgetDataLoader loader = new BudgetDataLoader(); // dhmioyrgia adikeimenou ths BudgetdataLoader
-        Budget budget = loader.loadFromCSV(filePath, year);
+        System.out.println("Εισάγετε το path του αρχείου CSV");
+        String filePath = scanner.nextLine();
+        
+        Budget csv = loader.loadFromCSV(filePath, year);
 
-        if (budget == null) {
+        if (csv == null) {
             System.out.println(" Αποτυχία φόρτωσης από CSV");
+            scanner.close();
             return;
         }
 
@@ -57,6 +63,6 @@ public class Main {
 
 
 
-
+    scanner.close();
     }
 } 
