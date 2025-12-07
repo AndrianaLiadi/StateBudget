@@ -60,7 +60,13 @@ public class Main {
         }
     
    
-
+    SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                MainApp app = new MainApp();
+                app.setVisible(true);
+            }
+        }); //emfanish parathyrou ui
 
 
     scanner.close();
