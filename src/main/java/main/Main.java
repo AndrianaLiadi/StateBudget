@@ -37,21 +37,23 @@ public class Main {
     
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
 
-        int totalRev = budget.totalRevenue();
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έσοδα:" + totalRev);
-
-        int totalExp = budget.totalExpenditure();
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + totalExp);
+        System.out.println( "Εδώ παρατίθενται τα συνολικά έσοδα:" +  budget.totalRevenue());
 
         
-BudgetItem item1 = new BudgetItem(csvFilePath, jsonOutputFilePath, jsonInputFilePath, totalExp);
-    BudgetItem item2 = new BudgetItem(csvFilePath, jsonOutputFilePath, jsonInputFilePath, totalExp);   
+        System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
-    List<BudgetItem> items = new ArrayList<>();
-        items.add(item1);
-        items.add(item2);
 
-        Budget baseBudget = new Budget(items);
+
+        System.out.println("Εισάγετε κωδικό");
+        BudgetItem item = budget.getItembyCode();
+
+        if (item != null) {
+            System.out.println("Επεξεργάζεστε: " + item.getName() + " — " + item.getAmount());
+        } else {
+            System.out.println("Δεν βρέθηκε στοιχείο για επεξεργασία!");
+        }
+    
+   
 
 
 
