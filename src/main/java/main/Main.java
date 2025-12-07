@@ -1,11 +1,15 @@
 package src.main.java.main;
+
 import src.main.java.data.BudgetDataLoader;
 import src.main.java.ui.MainApp;
 import src.main.java.model.Budget;
 import src.main.java.model.BudgetItem;
 import src.main.java.model.BudgetChange;
 import src.main.java.model.Scenario;
+
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner; 
 import javax.swing.SwingUtilities; 
 
@@ -40,10 +44,7 @@ public class Main {
             }
         }
 
-            SwingUtilities.invokeLater(() -> {
-            MainApp app = new MainApp();
-            app.setVisible(true);
-        });
+        
 
         Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
         int year = budget.getYear(); 
@@ -56,6 +57,14 @@ public class Main {
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + totalExp);
 
         
+BudgetItem item1 = new BudgetItem(csvFilePath, jsonOutputFilePath, jsonInputFilePath, totalExp);
+    BudgetItem item2 = new BudgetItem(csvFilePath, jsonOutputFilePath, jsonInputFilePath, totalExp);   
+
+    List<BudgetItem> items = new ArrayList<>();
+        items.add(item1);
+        items.add(item2);
+
+        Budget baseBudget = new Budget(items);
 
 
 
