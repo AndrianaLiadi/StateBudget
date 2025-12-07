@@ -1,4 +1,4 @@
-package data;
+package model;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -23,6 +23,9 @@ public class Budget implements Cloneable{
     }
 
     public static int getYear() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter the Budget Year");
+        int year = scanner.nextInt();
         return year; 
     }
 
@@ -66,6 +69,7 @@ public class Budget implements Cloneable{
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Code of the Item");
         String code = scanner.nextLine();
+        scanner.close();
         BudgetItem f = null;
         for (BudgetItem item : this.getItems()){
             if (item.getCode().equals(code)) {
