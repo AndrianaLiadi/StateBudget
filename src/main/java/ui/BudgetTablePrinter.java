@@ -2,8 +2,6 @@ package ui;
 
 import model.Budget;
 import model.BudgetItem;
-import data.BudgetDataLoader;
-
 import java.util.Comparator;
 import java.util.List;
 
