@@ -1,4 +1,4 @@
-package java.ui; 
+package ui; 
 
 
 import model.BudgetChange;
@@ -16,7 +16,7 @@ this.changes = changes;
 public void printTable() {
 System.out.println(" ΑΛΛΑΓΜΕΝΟΣ ΠΙΝΑΚΑΣ ");
 for (BudgetChange ch : changes) {
-System.out.println(ch.getCode() + " : " + ch.getName() + " Από " + ch.getAmountA() + " -> " + ch.getAmountB());
+System.out.println(ch.getItemCode() + " : " + ch.getItemName() + " Από " + ch.getOldValue() + " -> " + ch.getNewValue());
 }
 System.out.println("Σύνολο αλλαγών: " + changes.size());
 }
