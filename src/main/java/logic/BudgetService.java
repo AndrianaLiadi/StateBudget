@@ -1,11 +1,11 @@
-package src.main.java.logic;
+package logic;
 
-import src.main.java.data.BudgetDataLoader;
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
-import src.main.java.model.BudgetChange;
-import src.main.java.model.Scenario;
-import src.main.java.ui.ReportGenerator;
+import data.BudgetDataLoader;
+import model.Budget;
+import model.BudgetItem;
+import model.BudgetChange;
+import model.Scenario;
+import ui.ReportGenerator;
 import java.util.ArrayList;
 import java.util.List;
 public class BudgetService {
