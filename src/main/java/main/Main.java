@@ -19,7 +19,7 @@ public class Main {
     
    Scanner scanner = new Scanner(System.in);
 
-    System.out.println("Enter Budget Year:");
+    System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
         int year = scanner.nextInt();
         scanner.nextLine(); 
 
