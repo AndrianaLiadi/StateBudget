@@ -45,32 +45,34 @@ public class Scenario {
         List<BudgetItem> newItems = new ArrayList<>();
 
         for (BudgetItem item : baseBudget.getItems()) {
-            BudgetItem newItem = new BudgetItem(item.getCode(), item.getitemName(), item.getAmount());
+            BudgetItem newItem = new BudgetItem(item.getCode(), item.getName(), item.getType(), item.getAmount());
             newItems.add(newItem);
         }
+
         for (BudgetChange change : changes) {
 
             BudgetItem targetItem = null;
             for (BudgetItem it : newItems) {
-                if (it.getCode().equals(change.getCode())) {
+                if (it.getCode().equals(it.getCode())) {
                     targetItem = it;
                     break;
                 }
             }
 
              if (targetItem != null) {
-                targetItem.setAmount(change.getNewAmount());
+                targetItem.updateAmount(change.getNewValue());
             } else {
                 BudgetItem y = new BudgetItem(
-                        change.getCode(),
-                        change.getitemName(),
-                        change.getNewAmount()
-                );
+                        change.getItemCode(),
+                        change.getItemName(),
+                        change.getType(),
+                        change.getNewValue());
+                
                 newItems.add(y);
             }
         }
 
-        this.modifiedBudget = new Budget(newItems);
+        this.modifiedBudget = new Budget(baseBudget.getYear(), newItems);
     }
     //prosthiki syntomis perilipsis sxetika me tis allages pou pragmatopoiithikan
     public void generateSummary() {
@@ -85,12 +87,12 @@ public class Scenario {
 
         for (BudgetChange change : changes) {
             sb.append("- ")
-              .append(change.getitemName()).append(" (")
-              .append(change.getCode()).append(")")
+              .append(change.getItemName()).append(" (")
+              .append(change.getItemCode()).append(")")
               .append(": από ")
-              .append(change.getOldAmount())
+              .append(change.getOldValue())
               .append(" σε ")
-              .append(change.getNewAmount())
+              .append(change.getNewValue())
               .append("\n");
         }
 
