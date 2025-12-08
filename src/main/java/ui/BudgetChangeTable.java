@@ -18,6 +18,6 @@ System.out.println(" ΑΛΛΑΓΜΕΝΟΣ ΠΙΝΑΚΑΣ ");
 for (BudgetChange ch : changes) {
 System.out.println(ch.getCode() + " : " + ch.getName() + " Από " + ch.getAmountA() + " -> " + ch.getAmountB());
 }
-System.out.println("Σύνολο αλλαγών: " + changes.size());
+System.out.println("Σύνολο  αλλαγών: " + changes.size());
 }
 }

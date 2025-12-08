@@ -1,7 +1,7 @@
-package src.main.java.ui;
+package ui;
 
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
+import model.Budget;
+import model.BudgetItem;
 
 import java.util.Comparator;
 import java.util.List;
