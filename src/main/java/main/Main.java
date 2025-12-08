@@ -74,17 +74,19 @@ public class Main {
             System.out.println(" Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
             System.out.println("εισάγετε καινούριο ποσό");
             long newAmount = scanner.nextLong();
+            String changeType = scanner.nextLine();
             scanner.nextLine();
         
 
 
         BudgetChange change = new BudgetChange(
-                    item.getCode(),
-                    item.getName(),
-                    item.getAmount(),
-                    newAmount
-            );
-            scenario.getChanges().add(change);
+        item.getCode(),
+        item.getName(),
+        item.getAmount(),
+        newAmount, 
+        changeType);
+            
+        scenario.getChanges().add(change);
 
             System.out.println("Θέλετε να προσθέσετε άλλη αλλαγή; (y/n)");
             String answer = scanner.nextLine().trim().toLowerCase();
