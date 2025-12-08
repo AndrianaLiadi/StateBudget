@@ -1,6 +1,6 @@
-package model;
+package src.main.java.model;
 
-
+import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,8 +55,8 @@ public class BudgetItem implements Cloneable {
         subItems.add(newItem);
     }
 
-    public long getTotal() {
-        long total = this.amount;
+    public double getTotal() {
+        double total = this.amount;
         for (BudgetItem i: subItems){
             total = total + i.getTotal();
         }

@@ -1,5 +1,6 @@
-package model;
+package src.main.java.model;
 
+import src.main.java.model.BudgetItem;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,6 @@ public class Budget implements Cloneable{
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Code of the Item");
         String code = scanner.nextLine();
-        scanner.close();
         BudgetItem f = null;
         for (BudgetItem item : this.getItems()){
             if (item.getCode().equals(code)) {
