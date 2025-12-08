@@ -14,8 +14,8 @@ public class BudgetTablePrinter {
 
         style.printHeader("ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ");
 
-        printSection("ΕΣΟΔΑ", budget.getItemsByType(BudgetItem.Type.REVENUE));
-        printSection("ΕΞΟΔΑ", budget.getItemsByType(BudgetItem.Type.EXPENDITURE));
+        printSection("ΕΣΟΔΑ", budget.getItemsByType("REVENUE"));
+        printSection("ΕΞΟΔΑ", budget.getItemsByType("EXPENDITURE"));
 
         style.printSubHeader("ΣΥΝΟΛΙΚΑ");
         System.out.println("Έσοδα: " + budget.getTotalRevenue());
