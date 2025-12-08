@@ -63,6 +63,6 @@ public class BudgetService {
         scenario.setChanges(changes);
         scenario.generateSummary(); 
         //return report
-        return reportGenerator.generateSummary(scenario);
+        return reportGenerator.generateSummary(scenario, changes);
     }
 }
