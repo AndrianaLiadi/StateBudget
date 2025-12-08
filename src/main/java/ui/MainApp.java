@@ -1,7 +1,6 @@
-package ui;
+package src.main.java.ui;
 
 import controller.AppController;
-
 import javax.swing.*;
 
 public class MainApp {
