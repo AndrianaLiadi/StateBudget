@@ -33,11 +33,11 @@ public class Main {
         if (csv == null) {
             System.out.println(" Αποτυχία φόρτωσης από CSV");
             scanner.close();
-            return;
+            return; }
         }
 
 
-        Budget(); {
+        public Budget(); {
 
         } // kataskevastis Budget
         
