@@ -42,7 +42,8 @@ public void exportToTextFile(Scenario scenario, String filename){
         System.out.println("Αποθηκεύτηκε στο αρχείο:" filename);
     }catch (IOException e) {
         System.out.println("Σφάλμα κατά την εγγραφή του αρχείου.")
-        e.printStackTrace();
+        e.printStackTrace();//Εκτύπωση του εγγράγου
     }
 }
 }
+
