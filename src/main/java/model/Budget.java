@@ -22,17 +22,14 @@ public class Budget implements Cloneable{
         return this.getItems();
     }
 
-    public static int getYear() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the Budget Year");
-        int year = scanner.nextInt();
+    public int getYear() {
         return year; 
     }
 
     public long totalRevenue(){
         long trevenue = 0;
         List<BudgetItem> revenue = new ArrayList<>();
-         for (BudgetItem item : this.items) {
+        for (BudgetItem item : this.items) {
             if (item.getType().equals("REVENUE")) {
                 revenue.add(item);
                 trevenue = trevenue + item.getAmount();
@@ -78,6 +75,16 @@ public class Budget implements Cloneable{
             }
         }
         return f;
+    }
+
+    public List<BudgetItem> getItemsByType(String type) {
+        List<BudgetItem> filteredItems = new ArrayList<>();
+        for (BudgetItem item : items) {
+            if (item.getType() != null && item.getType().equals(type)) {
+                filteredItems.add(item);
+            }
+        }
+        return filteredItems;
     }
 
     @Override
