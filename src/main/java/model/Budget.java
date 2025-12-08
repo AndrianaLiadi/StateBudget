@@ -1,6 +1,5 @@
-package src.main.java.model;
+package model;
 
-import src.main.java.model.BudgetItem;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
