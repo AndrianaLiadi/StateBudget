@@ -35,7 +35,7 @@ public class BudgetChange {
     public long getDifference() {
         return newValue - oldValue;
     }
-
+    
     public String getType() {
         return type;
     }
