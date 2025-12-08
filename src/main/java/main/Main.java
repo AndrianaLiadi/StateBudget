@@ -1,7 +1,6 @@
 package main;
 
 import data.BudgetDataLoader;
-import ui.MainApp;
 import model.Budget;
 import model.BudgetChange;
 import model.BudgetItem;
@@ -9,7 +8,7 @@ import model.Scenario;
 
 
 import java.util.Scanner; 
-import javax.swing.SwingUtilities; 
+
 
 
 public class Main {
@@ -28,20 +27,14 @@ public class Main {
         System.out.println("Εισάγετε το path του αρχείου CSV");
         String filePath = scanner.nextLine();
         
-        Budget csv = loader.loadFromCSV(filePath, year);
+        Budget budget = loader.loadFromCSV(filePath, year);
 
-        if (csv == null) {
+        if (budget == null) {
             System.out.println(" Αποτυχία φόρτωσης από CSV");
             scanner.close();
             return; }
-        }
-
-
-        public Budget(); {
-
-        } // kataskevastis Budget
         
-        Budget budget = new Budget();// dhmioygia antikeimenou budget gia thn klish ths klashs budget//
+
     
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
 
@@ -79,7 +72,7 @@ public class Main {
             System.out.println("εισάγετε καινούριο ποσό");
             long newAmount = scanner.nextLong();
             scanner.nextLine();
-        }
+        
 
 
         BudgetChange change = new BudgetChange(
@@ -102,17 +95,11 @@ public class Main {
         System.out.println("\n=== Σύνοψη ===");
         System.out.println(scenario.getSummary());
 
-
+        }
    
-    SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                MainApp app = new MainApp();
-                app.setVisible(true);
-            }
-        }); //emfanish parathyrou ui
-    }
+
+         
 
     scanner.close();
     }
-
+}
