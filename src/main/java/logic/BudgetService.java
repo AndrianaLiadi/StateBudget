@@ -8,6 +8,7 @@ import model.Scenario;
 import ui.ReportGenerator;
 import java.util.ArrayList;
 import java.util.List;
+
 public class BudgetService {
     private final BudgetDataLoader objloader;
     private final ReportGenerator reportGenerator;
