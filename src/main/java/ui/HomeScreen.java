@@ -1,4 +1,4 @@
-package src.main.java.ui;
+package ui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,14 +7,18 @@ public class HomeScreen extends JPanel {
 
     public HomeScreen(AppController controller) {
 
-        setLayout(new BorderLayout());
+        setLayout(new GridLayout(3, 1, 10, 10));
 
-        JLabel label = new JLabel("Home Page", SwingConstants.CENTER);
+        JLabel title = new JLabel("Καλώς ήρθες στο Home", SwingConstants.CENTER);
 
-        JButton back = new JButton("Back");
-        back.addActionListener(e -> controller.showScreen(AppController.LANDING));
+        JButton budgetBtn = new JButton("Δες Προϋπολογισμό");
+        budgetBtn.addActionListener(e -> controller.showScreen(AppController.BUDGET));
 
-        add(label, BorderLayout.CENTER);
-        add(back, BorderLayout.SOUTH);
+        JButton backBtn = new JButton("Back");
+        backBtn.addActionListener(e -> controller.showScreen(AppController.LANDING));
+
+        add(title);
+        add(budgetBtn);
+        add(backBtn);
     }
 }
