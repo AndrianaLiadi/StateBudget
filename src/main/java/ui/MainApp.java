@@ -1,4 +1,4 @@
-package src.main.java.ui;
+package ui;
 
 import controller.AppController;
 

@@ -1,7 +1,7 @@
-package src.main.java.data;
+package data;
 
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
+import model.Budget;
+import model.BudgetItem;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
