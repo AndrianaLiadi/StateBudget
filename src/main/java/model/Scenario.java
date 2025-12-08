@@ -72,7 +72,7 @@ public class Scenario {
             }
         }
 
-        this.modifiedBudget = new Budget(Budget.getYear(), newItems);
+        this.modifiedBudget = new Budget(baseBudget.getYear(), newItems);
     }
     //prosthiki syntomis perilipsis sxetika me tis allages pou pragmatopoiithikan
     public void generateSummary() {
