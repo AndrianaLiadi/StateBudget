@@ -1,4 +1,4 @@
-package model;
+package src.main.java.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ public class Scenario {
     private String itemName;
     private Budget baseBudget;
     private List<BudgetChange> changes;
-    private Budget modifiedBudget;
+    private int modifiedBudget;
     private String summary;
 
     public Scenario(Budget baseBudget, String itemName) {
@@ -21,7 +21,7 @@ public class Scenario {
         return itemName;
     }
 
-    public Budget getBaseBudget() {
+    public int getBaseBudget() {
         return baseBudget;
     }
 
@@ -29,7 +29,7 @@ public class Scenario {
         return changes;
     }
     
-    public Budget getModifiedBudget() {
+    public int getModifiedBudget() {
         return modifiedBudget;
     }
 
@@ -43,6 +43,8 @@ public class Scenario {
     //efarmozei tis allages pou poragmatopoiise o xrhsths
     public void applyChanges() {
         List<BudgetItem> newItems = new ArrayList<>();
+
+        Budget modified = this.baseBudget.clone();
 
         for (BudgetItem item : baseBudget.getItems()) {
             BudgetItem newItem = new BudgetItem(item.getCode(), item.getitemName(), item.getAmount());
