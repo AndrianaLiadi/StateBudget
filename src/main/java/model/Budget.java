@@ -7,9 +7,11 @@ import java.util.List;
 public class Budget implements Cloneable{
 
     private List<BudgetItem> items;
+    private int year;
 
-    public Budget() {
-        this.items = new ArrayList<>();
+    public Budget(int year, List<BudgetItem> items){
+        this.items = items;
+        this.year = year;
     }
 
     public List<BudgetItem> getItems() {
@@ -24,12 +26,11 @@ public class Budget implements Cloneable{
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the Budget Year");
         int year = scanner.nextInt();
-        scanner.close();
-        return year;
+        return year; 
     }
 
-    public double totalRevenue(){
-        double trevenue = 0;
+    public long totalRevenue(){
+        long trevenue = 0;
         List<BudgetItem> revenue = new ArrayList<>();
          for (BudgetItem item : this.items) {
             if (item.getType().equals("REVENUE")) {
@@ -41,7 +42,7 @@ public class Budget implements Cloneable{
     }
 
     public double totalExpenditure(){
-        double texpenditure = 0;
+        long texpenditure = 0;
         List<BudgetItem> expenditure = new ArrayList<>();
         for (BudgetItem item : this.items){
             if (item.getType().equals("EXPENDITURE")){

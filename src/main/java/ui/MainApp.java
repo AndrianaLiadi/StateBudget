@@ -1,4 +1,4 @@
-package src.main.java.ui;
+package ui;
 
 //βασικη απεικονιση της εφαρμογης με home page about κλπ
 import javax.swing.*;

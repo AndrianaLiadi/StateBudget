@@ -55,8 +55,8 @@ public class BudgetItem implements Cloneable {
         subItems.add(newItem);
     }
 
-    public double getTotal() {
-        double total = this.amount;
+    public long getTotal() {
+        long total = this.amount;
         for (BudgetItem i: subItems){
             total = total + i.getTotal();
         }
