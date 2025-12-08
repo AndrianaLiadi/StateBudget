@@ -1,6 +1,4 @@
-package ui;
-
-import controller.AppController;
+package src.main.java.ui;
 
 import javax.swing.*;
 
