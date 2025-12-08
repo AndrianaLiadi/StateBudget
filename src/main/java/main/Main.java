@@ -37,11 +37,11 @@ public class Main {
         }
 
 
-        public Budget() {
+        Budget(); {
 
         } // kataskevastis Budget
         
-        Budget budget = new Budget()// dhmioygia antikeimenou budget gia thn klish ths klashs budget//
+        Budget budget = new Budget();// dhmioygia antikeimenou budget gia thn klish ths klashs budget//
     
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
 
