@@ -1,7 +1,5 @@
 package src.main.java.ui;
 
-import controller.AppController;
-
 import javax.swing.*;
 import java.awt.*;
 
