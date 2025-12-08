@@ -1,5 +1,6 @@
 package main;
 
+import ui.BudgetChangeTable;
 import data.BudgetDataLoader;
 import model.Budget;
 import model.BudgetChange;
@@ -91,13 +92,18 @@ public class Main {
         // egarmogh allagvn kai sunopsi
         scenario.applyChanges();
         scenario.generateSummary();
+ 
+
+        BudgetChangeTable table = new BudgetChangeTable(scenario.getChanges());
+
+        table.printTable(); // ektypvsh tou pinaka proypologismou meta tiw allages tou scenariou
 
         System.out.println("\n=== Σύνοψη ===");
         System.out.println(scenario.getSummary());
 
         }
    
-
+    
          
 
     scanner.close();
