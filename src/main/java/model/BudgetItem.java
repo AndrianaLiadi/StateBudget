@@ -1,6 +1,6 @@
-package src.main.java.model;
+package model;
 
-import java.util.Scanner;
+
 import java.util.ArrayList;
 import java.util.List;
 
