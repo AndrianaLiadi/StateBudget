@@ -71,6 +71,15 @@ public class Budget implements Cloneable{
         return filteredItems;
     }
 
+    public BudgetItem getItemByCode(String code) {
+        for (BudgetItem item : this.items) {
+            if (item.getCode().equals(code)) {
+            return item;
+            }
+        }
+        return null;
+    }
+
     @Override
     public Budget clone() {
         try {
