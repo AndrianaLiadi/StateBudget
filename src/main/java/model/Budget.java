@@ -73,6 +73,7 @@ public class Budget implements Cloneable{
                 break;
             }
         }
+        scanner.close();
         return f;
     }
 
