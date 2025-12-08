@@ -1,5 +1,6 @@
 package main;
 
+import ui.BudgetTablePrinter;
 import ui.BudgetChangeTable;
 import data.BudgetDataLoader;
 import model.Budget;
@@ -34,14 +35,15 @@ public class Main {
             System.out.println(" Αποτυχία φόρτωσης από CSV");
             scanner.close();
             return; }
-        
+//emfanish tou pinaka tou kratikou proupologismou       
+        System.out.println("Εδώ παρέχεται ο πίνακας του Κρατικού Προϋπολογισμού");
 
+        BudgetTablePrinter printer = new BudgetTablePrinter();
+        printer.printBudget(budget);
     
+// emfanish tou kratikou proupologismou sto commandline
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
-
         System.out.println( "Εδώ παρατίθενται τα συνολικά έσοδα:" +  budget.totalRevenue());
-
-        
         System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
         
