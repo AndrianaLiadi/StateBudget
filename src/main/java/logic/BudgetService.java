@@ -33,12 +33,12 @@ public class BudgetService {
         for (BudgetItem itemA : budgetA.getItems()) {
             String code = itemA.getCode();
             processedCodes.add(code);
-            BudgetItem itemB = budgetB.getItembyCode(code); 
+            BudgetItem itemB = budgetB.getItembyCode(); 
             long amountA = itemA.getAmount();
             //gia an diagrafhke to kondylio
             long amountB = (itemB != null) ? itemB.getAmount() : 0L;
             if (amountA != amountB) {
-                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB, itemA.getType());
                 differences.add(change);
             }
         }
@@ -48,7 +48,7 @@ public class BudgetService {
             if (!processedCodes.contains(code)) {
                 long amountA = 0L;
                 long amountB = itemB.getAmount();
-                BudgetChange change = new BudgetChange(code, itemB.getName(), amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemB.getName(), amountA, amountB, itemB.getType());
                 differences.add(change);
             }
         }
