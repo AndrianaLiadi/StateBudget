@@ -37,7 +37,11 @@ public class Main {
         }
 
 
-        Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
+        public Budget() {
+
+        } // kataskevastis Budget
+        
+        Budget budget = new Budget()// dhmioygia antikeimenou budget gia thn klish ths klashs budget//
     
         System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
 
@@ -89,7 +93,7 @@ public class Main {
             System.out.println("Θέλετε να προσθέσετε άλλη αλλαγή; (y/n)");
             String answer = scanner.nextLine().trim().toLowerCase();
             if (!answer.equals("y")) addMore = false;
-        }
+        
 
         // egarmogh allagvn kai sunopsi
         scenario.applyChanges();
@@ -107,9 +111,8 @@ public class Main {
                 app.setVisible(true);
             }
         }); //emfanish parathyrou ui
-
+    }
 
     scanner.close();
     }
-}
 
