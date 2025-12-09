@@ -1,6 +1,6 @@
 package ui;
 
-import src.main.java.model.BudgetChange;
+import model.BudgetChange;
 
 import javax.swing.*;
 import java.awt.*;
