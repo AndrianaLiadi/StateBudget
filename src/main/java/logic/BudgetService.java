@@ -33,7 +33,7 @@ public class BudgetService {
         for (BudgetItem itemA : budgetA.getItems()) {
             String code = itemA.getCode();
             processedCodes.add(code);
-            BudgetItem itemB = budgetB.getItembyCode(); 
+            BudgetItem itemB = budgetB.getItemByCode(code); 
             long amountA = itemA.getAmount();
             //gia an diagrafhke to kondylio
             long amountB = (itemB != null) ? itemB.getAmount() : 0L;

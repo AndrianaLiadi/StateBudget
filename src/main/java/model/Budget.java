@@ -1,7 +1,5 @@
-package src.main.java.model;
+package model;
 
-import src.main.java.model.BudgetItem;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,20 +60,6 @@ public class Budget implements Cloneable{
             return deficit;
         }
     }
-    
-    public BudgetItem getItembyCode(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the Code of the Item");
-        String code = scanner.nextLine();
-        BudgetItem f = null;
-        for (BudgetItem item : this.getItems()){
-            if (item.getCode().equals(code)) {
-                f = item;
-                break;
-            }
-        }
-        return f;
-    }
 
     public List<BudgetItem> getItemsByType(String type) {
         List<BudgetItem> filteredItems = new ArrayList<>();
@@ -85,6 +69,15 @@ public class Budget implements Cloneable{
             }
         }
         return filteredItems;
+    }
+
+    public BudgetItem getItemByCode(String code) {
+        for (BudgetItem item : this.items) {
+            if (item.getCode().equals(code)) {
+            return item;
+            }
+        }
+        return null;
     }
 
     @Override

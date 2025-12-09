@@ -1,6 +1,5 @@
-package src.main.java.model;
+package model;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -79,8 +78,4 @@ public class BudgetItem implements Cloneable {
             return null;
         }
     }
-
-
-
-
 }

@@ -1,6 +1,6 @@
 package ui;
 
-import src.main.java.model.BudgetItem;
+import model.BudgetItem;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
