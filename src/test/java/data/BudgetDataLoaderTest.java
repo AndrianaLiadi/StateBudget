@@ -43,4 +43,16 @@ public class BudgetDataLoaderTest {
             tempFile.delete();
         }
     }
+
+    @Test
+    void testLoadFromCSV_SuccessfulLoad() {
+        Budget budget = loader.loadFromCSV(tempFile.getAbsolutePath(), 2025);
+        assertNotNull(budget, "Το budget δεν πρέπει να είναι null");
+        assertEquals(2025, budget.getYear());
+        
+        List<BudgetItem> items = budget.getItems();
+        assertFalse(items.isEmpty(), "Η λίστα δεν πρέπει να είναι άδεια");
+        //the lines have to be 4
+        assertEquals(4, items.size());
+    }
 }
