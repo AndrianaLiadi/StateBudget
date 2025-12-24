@@ -13,5 +13,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BudgetServiceTest {
+    private BudgetService budgetService;
+    private ReportGenerator reportGenerator;
+
+    @BeforeEach
+    void setUp() {
+        reportGenerator = new ReportGenerator();
+        budgetService = new BudgetService(null, reportGenerator);
+    }
     
 }
