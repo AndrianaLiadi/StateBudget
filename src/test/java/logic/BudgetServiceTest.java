@@ -77,5 +77,22 @@ public class BudgetServiceTest {
         assertEquals(14_889_199_000L, benefitsChange.getNewValue());
         assertEquals(39_574_000L, benefitsChange.getDifference());
     }
+
+    @Test
+    void testAnalyzeImpact() {
+        List<BudgetItem> items = new ArrayList<>();
+        items.add(new BudgetItem("11", "Φόροι", "REVENUE", 56_597_000_000L));
+        Budget base = new Budget(2024, items);
+        List<BudgetItem> modifiedItems = new ArrayList<>();
+        modifiedItems.add(new BudgetItem("11", "Φόροι", "REVENUE", 60_000_000_000L));
+        Budget modified = new Budget(2025, modifiedItems);
+        String report = budgetService.analyzeImpact(base, modified, "Σενάριο Αύξησης Φόρων");
+        System.out.println(report);
+        assertNotNull(report);
+        assertTrue(report.contains("Σενάριο Αύξησης Φόρων"));
+        assertTrue(report.contains("Φόροι"));
+    }
 }
+
+
 
