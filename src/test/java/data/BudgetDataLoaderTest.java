@@ -55,4 +55,22 @@ public class BudgetDataLoaderTest {
         //the lines have to be 4
         assertEquals(4, items.size());
     }
+
+    @Test
+    void testLoadFromCSV_ParsingLogic() {
+        Budget budget = loader.loadFromCSV(tempFile.getAbsolutePath(), 2025);
+        List<BudgetItem> items = budget.getItems();
+        BudgetItem item11 = findItemByCode(items, "11");
+        assertNotNull(item11);
+        assertEquals("Φόροι", item11.getName());
+        assertEquals("REVENUE", item11.getType());
+        assertEquals(10000L, item11.getAmount());
+        BudgetItem item14 = findItemByCode(items, "14");
+        assertNotNull(item14);
+        assertEquals(2000L, item14.getAmount());
+        BudgetItem item21 = findItemByCode(items, "21");
+        assertNotNull(item21);
+        assertEquals("EXPENDITURE", item21.getType());
+        assertEquals(4000L, item21.getAmount());
+    }
 }
