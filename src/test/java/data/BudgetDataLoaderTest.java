@@ -73,4 +73,19 @@ public class BudgetDataLoaderTest {
         assertEquals("EXPENDITURE", item21.getType());
         assertEquals(4000L, item21.getAmount());
     }
+
+    @Test
+    void testLoadFromCSV_FileNotFound() {
+        Budget budget = loader.loadFromCSV("C:/fake/path/does_not_exist.csv", 2025);
+        assertNull(budget, "Αν δεν βρεθεί αρχείο, πρέπει να επιστρέφει null");
+    }
+
+    private BudgetItem findItemByCode(List<BudgetItem> items, String code) {
+        for (BudgetItem item : items) {
+            if (item.getCode().equals(code)) {
+                return item;
+            }
+        }
+        return null;
+    }
 }
