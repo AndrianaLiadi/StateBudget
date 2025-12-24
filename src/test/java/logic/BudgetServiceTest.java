@@ -92,6 +92,15 @@ public class BudgetServiceTest {
         assertTrue(report.contains("Σενάριο Αύξησης Φόρων"));
         assertTrue(report.contains("Φόροι"));
     }
+
+    private BudgetChange findChangeByCode(List<BudgetChange> changes, String code) {
+        for (BudgetChange change : changes) {
+            if (change.getItemCode().equals(code)) {
+                return change;
+            }
+        }
+        return null;
+    }
 }
 
 
