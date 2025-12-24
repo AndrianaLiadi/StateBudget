@@ -36,4 +36,11 @@ public class BudgetDataLoaderTest {
             writer.write("BadLine,Χωρίς Ποσό,,,\n");
         }
     }
+
+    @AfterEach
+    void tearDown() {
+        if (tempFile != null && tempFile.exists()) {
+            tempFile.delete();
+        }
+    }
 }
