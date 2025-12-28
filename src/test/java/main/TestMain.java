@@ -88,4 +88,32 @@ class TestMain {
         // Testing if budget has changed correctly 
         assertNotNull(scenario.getModifiedBudget());
     }
+
+    @Test
+    @DisplayName("Test κύριου προγράμματος με simulated input")
+    void testMainWithSimulatedInput() {
+      // Προσομοίωση user input
+        String simulatedInput = "2024\n" + 
+                               "test.csv\n" + 
+                               "1001\n" + 
+                               "1200000\n" + 
+                               "increase\n" + 
+                               "n\n";
+        
+        ByteArrayInputStream testIn = new ByteArrayInputStream(simulatedInput.getBytes());
+        System.setIn(testIn);
+        
+        ByteArrayOutputStream testOut = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(testOut));
+        
+        
+        try {
+            Main.main(new String[] {});
+        } catch (Exception e) {
+            fail("Το κύριο πρόγραμμα έριξε εξαίρεση: " + e.getMessage());
+        }
+        
+        String output = testOut.toString();
+        assertTrue(output.contains("Επεξεργάζεστε την προϋπολογισμό του έτους:2024"));
+    }
 }
