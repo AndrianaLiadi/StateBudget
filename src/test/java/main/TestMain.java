@@ -37,4 +37,15 @@ class TestMain {
             testBudget.addItem(item);
         }
     }
+
+    @Test
+    @DisplayName("Test δημιουργίας Scenario με budget")
+    void testScenarioCreation() {
+        Scenario scenario = new Scenario(testBudget, "Test Scenario");
+        
+        assertNotNull(scenario);
+        assertEquals("Test Scenario", scenario.getName());
+        assertEquals(testBudget, scenario.getOriginalBudget());
+        assertTrue(scenario.getChanges().isEmpty());
+    }
 }
