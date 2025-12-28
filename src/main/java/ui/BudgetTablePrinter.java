@@ -8,7 +8,7 @@ import java.util.List;
 public class BudgetTablePrinter {
 
 
-
+// ektiposi tou pinaka
     public void printBudget(Budget budget) {
 
         System.out.println("---------ΚΡΑΤΙΚΟΣ ΠΡΟΫΠΟΛΟΓΙΣΜΟΣ---------");
