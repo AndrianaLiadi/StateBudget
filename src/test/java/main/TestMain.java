@@ -67,4 +67,25 @@ class TestMain {
         assertEquals(1, scenario.getChanges().size());
         assertEquals(item.getCode(), scenario.getChanges().get(0).getCode());
     }
+    @Test
+    @DisplayName("Test εφαρμογής αλλαγών στο budget")
+    void testApplyChanges() {
+        Scenario scenario = new Scenario(testBudget, "Test Scenario");
+        
+        // Προσθήκη αλλαγής
+        BudgetItem item = testItems.get(0);
+        BudgetChange change = new BudgetChange(
+            item.getCode(),
+            item.getName(),
+            item.getAmount(),
+            1200000L,
+            "increase"
+        );
+        
+        scenario.getChanges().add(change);
+        scenario.applyChanges();
+        
+        // Testing if budget has changed correctly 
+        assertNotNull(scenario.getModifiedBudget());
+    }
 }
