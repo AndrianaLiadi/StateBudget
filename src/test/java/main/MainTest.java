@@ -21,21 +21,21 @@ class MainTest {
     void testMainCompleteFlow() {
         System.err.println(" Εκτέλεση πλήρους test...");
         
-        // ΠΛΗΡΗΣ είσοδος που ΔΟΥΛΕΥΕΙ (όπως είδαμε)
-        String input = "2024\n" +           // έτος
-                      "test.csv\n" +        // CSV αρχείο
-                      "\n" +                // ENTER μετά τον πίνακα
-                      "TestScenario\n" +    // όνομα σεναρίου
-                      "1001\n" +            // κωδικός αλλαγής (υπάρχει στο CSV)
-                      "1300000\n" +         // νέο ποσό
-                      "increase\n" +        // τύπος αλλαγής
-                      "n\n";                // όχι άλλη αλλαγή
+        // Input simulation  
+        String input = "2024\n" +           // year
+                      "test.csv\n" +        // csv path
+                      "\n" +                // enter 
+                      "TestScenario\n" +    // scenario name
+                      "1001\n" +            //changecode
+                      "1300000\n" +         //  new amount
+                      "increase\n" +        // change type
+                      "n\n";                // no other change
         
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         System.setOut(new PrintStream(out));
         
-        // Απλώς τρέξε το - δεν ελέγχουμε τίποτα άλλο
+        // Run Main
         assertDoesNotThrow(() -> {
             Main.main(new String[]{});
         });
@@ -47,7 +47,7 @@ class MainTest {
     @Test
     @DisplayName("Simple test that always works")
     void simpleTest() {
-        // Αυτό το test ΠΑΝΤΑ θα περάσει
+        //  Simple assertion alwawas runs 
         assertEquals(2, 1 + 1, "1+1 should be 2");
         System.out.println(" Simple math test passed!");
     }
