@@ -69,10 +69,10 @@ public class Main {
             System.out.println("Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
             System.out.println("εισάγετε καινούριο ποσό");
             long newAmount = scanner.nextLong();
-            scanner.nextLine(); // ΜΟΝΟ 1 φορά εδώ!
+            scanner.nextLine(); 
             
             System.out.println("Εισάγετε τύπο αλλαγής (increase/decrease):");
-            String changeType = scanner.nextLine(); // Αυτό λείπει από το test σου!
+            String changeType = scanner.nextLine(); 
 
             BudgetChange change = new BudgetChange(
                 item.getCode(),
