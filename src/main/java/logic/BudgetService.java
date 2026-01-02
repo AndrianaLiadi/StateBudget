@@ -1,13 +1,14 @@
-package src.main.java.logic;
+package logic;
 
-import src.main.java.data.BudgetDataLoader;
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
-import src.main.java.model.BudgetChange;
-import src.main.java.model.Scenario;
-import src.main.java.ui.ReportGenerator;
+import data.BudgetDataLoader;
+import model.Budget;
+import model.BudgetItem;
+import model.BudgetChange;
+import model.Scenario;
+import ui.ReportGenerator;
 import java.util.ArrayList;
 import java.util.List;
+
 public class BudgetService {
     private final BudgetDataLoader objloader;
     private final ReportGenerator reportGenerator;
@@ -32,12 +33,12 @@ public class BudgetService {
         for (BudgetItem itemA : budgetA.getItems()) {
             String code = itemA.getCode();
             processedCodes.add(code);
-            BudgetItem itemB = budgetB.getItembyCode(code); 
+            BudgetItem itemB = budgetB.getItemByCode(code); 
             long amountA = itemA.getAmount();
             //gia an diagrafhke to kondylio
             long amountB = (itemB != null) ? itemB.getAmount() : 0L;
             if (amountA != amountB) {
-                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemA.getName(), amountA, amountB, itemA.getType());
                 differences.add(change);
             }
         }
@@ -47,7 +48,7 @@ public class BudgetService {
             if (!processedCodes.contains(code)) {
                 long amountA = 0L;
                 long amountB = itemB.getAmount();
-                BudgetChange change = new BudgetChange(code, itemB.getName(), amountA, amountB);
+                BudgetChange change = new BudgetChange(code, itemB.getName(), amountA, amountB, itemB.getType());
                 differences.add(change);
             }
         }
@@ -62,6 +63,6 @@ public class BudgetService {
         scenario.setChanges(changes);
         scenario.generateSummary(); 
         //return report
-        return reportGenerator.generateSummary(scenario);
+        return reportGenerator.generateSummary(scenario, changes);
     }
 }

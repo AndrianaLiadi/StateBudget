@@ -1,61 +1,106 @@
-package src.main.java.main;
-import src.main.java.data.BudgetDataLoader;
-import src.main.java.ui.MainApp;
+package main;
 
-import java.io.IOException;
+import ui.BudgetTablePrinter;
+import ui.BudgetChangeTable;
+import data.BudgetDataLoader;
+import model.Budget;
+import model.BudgetChange;
+import model.BudgetItem;
+import model.Scenario;
+
+
 import java.util.Scanner; 
-import javax.swing.SwingUtilities; 
+
 
 
 public class Main {
-
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
+        int year = scanner.nextInt();
+        scanner.nextLine(); // Καθαρισμός buffer
+
+        // φόρτωση από CSV
+        BudgetDataLoader loader = new BudgetDataLoader();
+        System.out.println("Εισάγετε το path του αρχείου CSV");
+        String filePath = scanner.nextLine();
         
-    BudgetDataLoader dataloader = new BudgetDataLoader(); 
-        String csvFilePath = "budget_data.csv"; 
-        String jsonOutputFilePath = "budget_output.json";
-        String jsonInputFilePath = "budget_output.json";
-
-        int year = 2024; // etos proypologismou//
-
-        // fortosh apo CSV//
-        Budget loadedBudget = null;
-        try {
-            loadedBudget = dataLoader.loadFromCSV(csvFilePath, year);
-        } catch (IOException e) {
-            e.printStackTrace();
-            return; // stamataei an den fortothei to archeio//
+        Budget budget = loader.loadFromCSV(filePath, year);
+        if (budget == null) {
+            System.out.println("Αποτυχία φόρτωσης από CSV");
+            scanner.close();
+            return;
         }
+        
+        // εμφάνιση πίνακα
+        System.out.println("Εδώ παρέχεται ο πίνακας του Κρατικού Προϋπολογισμού");
+        BudgetTablePrinter printer = new BudgetTablePrinter();
+        printer.printBudget(budget);
+    
+        // βασικές πληροφορίες
+        System.out.println("Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
+        System.out.println("Εδώ παρατίθενται τα συνολικά έσοδα:" + budget.totalRevenue());
+        System.out.println("Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
-        // Apothikefsfh se jason//
-        if (loadedBudget != null) {
-                 try {
-                dataLoader.saveToJSON(loadedBudget, jsonOutputFilePath);
+        System.out.println("\nΔώστε το σεναριό σας!");
+        String scenarioName = scanner.nextLine();
+        Scenario scenario = new Scenario(budget, scenarioName);
+
+        boolean addMore = true;
+
+        while (addMore) {
+            System.out.println("\nΕισάγετε κωδικό σεναρίου αλλαγής!");
+            String code = scanner.nextLine();
+
+            BudgetItem item = null;
+            for (BudgetItem bItem : budget.getItems()) {
+                if (bItem.getCode().equals(code)) {
+                    item = bItem;
+                    break;
+                }
+            }
+
+            if (item == null) {
+                System.out.println("Το στοιχείο δεν βρέθηκε! Προσπάθειστε ξανά!");
+                continue;
+            }
+
+            System.out.println("Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
+            System.out.println("εισάγετε καινούριο ποσό");
+            long newAmount = scanner.nextLong();
+            scanner.nextLine(); // ΜΟΝΟ 1 φορά εδώ!
             
-            } catch (IOException e) {
-                e.printStackTrace();
+            System.out.println("Εισάγετε τύπο αλλαγής (increase/decrease):");
+            String changeType = scanner.nextLine(); // Αυτό λείπει από το test σου!
+
+            BudgetChange change = new BudgetChange(
+                item.getCode(),
+                item.getName(),
+                item.getAmount(),
+                newAmount, 
+                changeType);
+            
+            scenario.getChanges().add(change);
+
+            System.out.println("Θέλετε να προσθέσετε άλλη αλλαγή; (y/n)");
+            String answer = scanner.nextLine().trim().toLowerCase();
+            if (!answer.equals("y")) {
+                addMore = false;
             }
         }
 
-            SwingUtilities.invokeLater(() -> {
-            MainApp app = new MainApp();
-            app.setVisible(true);
-        });
+        // εφαρμογή αλλαγών και σύνοψη
+        scenario.applyChanges();
+        scenario.generateSummary();
 
-        Budget budget = new Budget(); // dhmioygia antikeimenou budget gia thn klish ths klashs budget//
-        int year = budget.getYear(); 
-        System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
+        BudgetChangeTable table = new BudgetChangeTable(scenario.getChanges());
+        table.printTable();
 
-        int totalRev = budget.totalRevenue();
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έσοδα:" + totalRev);
+        System.out.println("\n=== Σύνοψη ===");
+        System.out.println(scenario.getSummary());
 
-        int totalExp = budget.totalExpenditure();
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + totalExp);
-
-        
-
-
-
-
+        scanner.close();
     }
-} 
+}
+

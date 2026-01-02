@@ -1,15 +1,16 @@
-package src.main.java.model;
+package model;
 
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Budget implements Cloneable{
 
     private List<BudgetItem> items;
+    private int year;
 
-    public Budget() {
-        this.items = new ArrayList<>();
+    public Budget(int year, List<BudgetItem> items){
+        this.items = items;
+        this.year = year;
     }
 
     public List<BudgetItem> getItems() {
@@ -20,17 +21,14 @@ public class Budget implements Cloneable{
         return this.getItems();
     }
 
-    public static int getYear() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the Budget Year");
-        int year = scanner.nextInt();
+    public int getYear() {
         return year; 
     }
 
-    public double totalRevenue(){
-        double trevenue = 0;
+    public long totalRevenue(){
+        long trevenue = 0;
         List<BudgetItem> revenue = new ArrayList<>();
-         for (BudgetItem item : this.items) {
+        for (BudgetItem item : this.items) {
             if (item.getType().equals("REVENUE")) {
                 revenue.add(item);
                 trevenue = trevenue + item.getAmount();
@@ -40,7 +38,7 @@ public class Budget implements Cloneable{
     }
 
     public double totalExpenditure(){
-        double texpenditure = 0;
+        long texpenditure = 0;
         List<BudgetItem> expenditure = new ArrayList<>();
         for (BudgetItem item : this.items){
             if (item.getType().equals("EXPENDITURE")){
@@ -62,19 +60,24 @@ public class Budget implements Cloneable{
             return deficit;
         }
     }
-    
-    public BudgetItem getItembyCode(){
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter the Code of the Item");
-        String code = scanner.nextLine();
-        BudgetItem f = null;
-        for (BudgetItem item : this.getItems()){
-            if (item.getCode().equals(code)) {
-                f = item;
-                break;
+
+    public List<BudgetItem> getItemsByType(String type) {
+        List<BudgetItem> filteredItems = new ArrayList<>();
+        for (BudgetItem item : items) {
+            if (item.getType() != null && item.getType().equals(type)) {
+                filteredItems.add(item);
             }
         }
-        return f;
+        return filteredItems;
+    }
+
+    public BudgetItem getItemByCode(String code) {
+        for (BudgetItem item : this.items) {
+            if (item.getCode().equals(code)) {
+            return item;
+            }
+        }
+        return null;
     }
 
     @Override

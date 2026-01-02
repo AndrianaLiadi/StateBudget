@@ -1,11 +1,12 @@
-package src.main.java.data;
+package data;
 
-import src.main.java.model.Budget;
-import src.main.java.model.BudgetItem;
-
+import model.Budget;
+import model.BudgetItem;
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,47 +31,48 @@ public class BudgetDataLoader {
         List<BudgetItem> items = new ArrayList<>();
         String line;
         String cvsSplitBy = ",";
-        String currentType = null; 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        String currentType = null;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
             while ((line = br.readLine()) != null) {
+                if (line.startsWith("\uFEFF")) {
+                    line = line.substring(1);
+                }
+
                 String[] data = line.split(cvsSplitBy, -1);
-                //gia na mh vlepw kenes h mh xrhsimes grammes:
+
                 if (data.length < 2) {
                     continue;
                 }
+
                 String codePart = data[0].trim();
                 String name = data[1].trim();
-                //elegxw gia na eimaste sigouroi oti to poso einai sth sthlh 5
                 String amountStr = (data.length > 4) ? data[4] : null;
-                //orizw currentType analoga me to arxeio
+
                 if (codePart.contains("ΕΣΟΔΑ")) {
                     currentType = "REVENUE";
-                    continue; 
+                    continue;
                 }
                 if (codePart.contains("ΕΞΟΔΑ")) {
                     currentType = "EXPENDITURE";
                     continue;
                 }
-                //ftiaxnw to budgetitem
+
                 if (currentType != null && !codePart.isEmpty() && amountStr != null && !amountStr.trim().isEmpty()) {
                     try {
-                        //vgazw teleies gia eukolia
                         String cleanCode = codePart.replaceAll("\\.", "").trim();
-                        //metatrepw se long
                         long amount = cleanAndParseAmount(amountStr);
-                        //ftiaxnw twra to antikeimeno
+                        
                         BudgetItem item = new BudgetItem(cleanCode, name, currentType, amount);
                         items.add(item);
                     } catch (NumberFormatException e) {
-                        System.err.println("Προσοχή: Δεν μπόρεσε να διαβαστεί το ποσό στη γραμμή: " + line);
                     }
                 }
             }
-            //return to budget!
             return new Budget(year, items);
         } catch (IOException e) {
-            System.err.println("Σφάλμα κατά την ανάγνωση του αρχείου: " + e.getMessage());
+            System.err.println(e.getMessage());
             return null;
         }
     }

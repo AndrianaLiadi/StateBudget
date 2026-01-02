@@ -1,17 +1,19 @@
-package src.main.java.model;
+package model;
 
 public class BudgetChange {
 
     private String itemCode;
     private String itemName; 
+    private String type;
     private long oldValue;
     private long newValue;
 
-    public BudgetChange(String itemCode, String itemName, long oldValue, long newValue) {
+    public BudgetChange(String itemCode, String itemName, long oldValue, long newValue, String type) {
         this.itemCode = itemCode;
         this.itemName = itemName;
         this.oldValue = oldValue;
         this.newValue = newValue;
+        this.type = type;
     }
 
     public String getItemCode() {
@@ -32,6 +34,10 @@ public class BudgetChange {
 
     public long getDifference() {
         return newValue - oldValue;
+    }
+    
+    public String getType() {
+        return type;
     }
     //dinetai i posostiaia metavoli
     public double getPercentageChange() {
