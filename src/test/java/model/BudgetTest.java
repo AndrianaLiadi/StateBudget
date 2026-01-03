@@ -15,10 +15,10 @@ class BudgetTest {
     @BeforeEach
     void setUp() {
         items = new ArrayList<>();
-        items.add(new BudgetItem("R01", "REVENUE", 1000));
-        items.add(new BudgetItem("R02", "REVENUE", 500));
-        items.add(new BudgetItem("E01", "EXPENDITURE", 800));
-        items.add(new BudgetItem("E02", "EXPENDITURE", 200));
+        items.add(new BudgetItem("R01", "Income 1", "REVENUE", 1000));
+        items.add(new BudgetItem("R02", "Income 2", "REVENUE", 500));
+        items.add(new BudgetItem("E01", "Expense 1", "EXPENDITURE", 800));
+        items.add(new BudgetItem("E02", "Expense 2", "EXPENDITURE", 200));
 
         budget = new Budget(2023, items);
     }
