@@ -13,7 +13,17 @@
 # mvn clean compile -compilation of classes
 # mvn exec:java -execution during developement 
 # mvn package -convert into .jar 
+# mvn jacoco:report -checking test coverege
+# mvn checkstyle:check -checking code's formating 
 # java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar -execution of .jar 
+
+# Working on five packages (model, data, logic, main, ui) 
+# model: 
+# data: loads data from csv
+# logic:  
+# main: includes main method (execution of the programm)
+# ui: screens visible to the user  
+
 
 
 # .gitignore
