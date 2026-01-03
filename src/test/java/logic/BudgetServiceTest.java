@@ -3,7 +3,6 @@ package logic;
 import model.Budget;
 import model.BudgetChange;
 import model.BudgetItem;
-import logic.ReportGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
