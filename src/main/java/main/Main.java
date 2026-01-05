@@ -14,42 +14,37 @@ import java.util.Scanner;
 
 
 public class Main {
-
     public static void main(String[] args) {
-    
-   Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-    System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
+        System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
         int year = scanner.nextInt();
-        scanner.nextLine(); 
+        scanner.nextLine(); // Καθαρισμός buffer
 
-    
-// fortwsh apo  CSV
-        BudgetDataLoader loader = new BudgetDataLoader(); // dhmioyrgia adikeimenou ths BudgetdataLoader
+        // φόρτωση από CSV
+        BudgetDataLoader loader = new BudgetDataLoader();
         System.out.println("Εισάγετε το path του αρχείου CSV");
         String filePath = scanner.nextLine();
         
         Budget budget = loader.loadFromCSV(filePath, year);
-
         if (budget == null) {
-            System.out.println(" Αποτυχία φόρτωσης από CSV");
+            System.out.println("Αποτυχία φόρτωσης από CSV");
             scanner.close();
-            return; }
-//emfanish tou pinaka tou kratikou proupologismou       
+            return;
+        }
+        
+        // εμφάνιση πίνακα
         System.out.println("Εδώ παρέχεται ο πίνακας του Κρατικού Προϋπολογισμού");
-
         BudgetTablePrinter printer = new BudgetTablePrinter();
         printer.printBudget(budget);
     
-// emfanish tou kratikou proupologismou sto commandline
-        System.out.println( "Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έσοδα:" +  budget.totalRevenue());
-        System.out.println( "Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
+        // βασικές πληροφορίες
+        System.out.println("Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
+        System.out.println("Εδώ παρατίθενται τα συνολικά έσοδα:" + budget.totalRevenue());
+        System.out.println("Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
-        
         System.out.println("\nΔώστε το σεναριό σας!");
         String scenarioName = scanner.nextLine();
-
         Scenario scenario = new Scenario(budget, scenarioName);
 
         boolean addMore = true;
@@ -67,49 +62,45 @@ public class Main {
             }
 
             if (item == null) {
-                System.out.println("Το στοιχείο δεν βρέθηκε! Προσπάθείστε ξανά!");
+                System.out.println("Το στοιχείο δεν βρέθηκε! Προσπάθειστε ξανά!");
                 continue;
             }
 
-            System.out.println(" Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
+            System.out.println("Εισάγετε ποσό " + item.getName() + " (" + item.getCode() + "): " + item.getAmount());
             System.out.println("εισάγετε καινούριο ποσό");
             long newAmount = scanner.nextLong();
-            String changeType = scanner.nextLine();
-            scanner.nextLine();
-        
-
-
-        BudgetChange change = new BudgetChange(
-        item.getCode(),
-        item.getName(),
-        item.getAmount(),
-        newAmount, 
-        changeType);
+            scanner.nextLine(); 
             
-        scenario.getChanges().add(change);
+            System.out.println("Εισάγετε τύπο αλλαγής (increase/decrease):");
+            String changeType = scanner.nextLine(); 
+
+            BudgetChange change = new BudgetChange(
+                item.getCode(),
+                item.getName(),
+                item.getAmount(),
+                newAmount, 
+                changeType);
+            
+            scenario.getChanges().add(change);
 
             System.out.println("Θέλετε να προσθέσετε άλλη αλλαγή; (y/n)");
             String answer = scanner.nextLine().trim().toLowerCase();
-            if (!answer.equals("y")) addMore = false;
-        
+            if (!answer.equals("y")) {
+                addMore = false;
+            }
+        }
 
-        // egarmogh allagvn kai sunopsi
+        // εφαρμογή αλλαγών και σύνοψη
         scenario.applyChanges();
         scenario.generateSummary();
- 
 
         BudgetChangeTable table = new BudgetChangeTable(scenario.getChanges());
-
-        table.printTable(); // ektypvsh tou pinaka proypologismou meta tiw allages tou scenariou
+        table.printTable();
 
         System.out.println("\n=== Σύνοψη ===");
         System.out.println(scenario.getSummary());
 
-        }
-   
-    
-         
-
-    scanner.close();
+        scanner.close();
     }
 }
+
