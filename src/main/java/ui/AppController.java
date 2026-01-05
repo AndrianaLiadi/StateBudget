@@ -2,10 +2,10 @@ package ui;
 
 import model.Scenario;
 import model.Budget;
-
+import java.util.ArrayList;
 import javax.swing.*;
 
-
+import data.BudgetDataLoader;
 
 import java.awt.*;
 // this class is the backbone of ui
@@ -33,8 +33,18 @@ public class AppController extends JFrame {
 
         layout = new CardLayout();
         container = new JPanel(layout);
-      
-      
+
+        BudgetDataLoader loader = new BudgetDataLoader();
+
+        baseBudget = loader.loadFromCSV("src/main/resources/budget.csv", 2025);
+
+        if (baseBudget == null) {
+            JOptionPane.showMessageDialog(this,
+            "Αποτυχία φόρτωσης προϋπολογισμού (baseBudget). Έλεγξε το path του CSV.",
+            "Error", JOptionPane.ERROR_MESSAGE);
+            baseBudget = new Budget(2025, new ArrayList<>());
+        }
+
 
         container.add(new RegistrationScreen(this), REGISTRATION);
         container.add(new LandingScreen(this), LANDING);
