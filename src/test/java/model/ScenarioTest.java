@@ -10,7 +10,7 @@ public class ScenarioTest {
     @Test
     public void checkInitialState() {
         List<BudgetItem> items = new ArrayList<>();
-        items.add(new BudgetItem("CODE1", "Item 1", "Type A", 100.0));
+        items.add(new BudgetItem("CODE1", "Item 1", "Type A", (long)100.0));
         Budget b = new Budget(2024, items);
         
         Scenario s = new Scenario(b, "First Scenario");
@@ -23,12 +23,12 @@ public class ScenarioTest {
     @Test
     public void checkApplyChangesLogic() {
         List<BudgetItem> items = new ArrayList<>();
-        items.add(new BudgetItem("10", "Salary", "Expense", 500.0));
+        items.add(new BudgetItem("10", "Salary", "Expense", (long)500.0));
         Budget base = new Budget(2024, items);
         Scenario scen = new Scenario(base, "Test");
 
         List<BudgetChange> changeList = new ArrayList<>();
-        changeList.add(new BudgetChange("10", "Salary", "Expense", 500.0, 600.0));
+        changeList.add(new BudgetChange("10", "Salary", (long)500.0, (long)600.0, "expense"));
         scen.setChanges(changeList);
 
         scen.applyChanges();
@@ -44,7 +44,7 @@ public class ScenarioTest {
         Scenario sc = new Scenario(base, "EmptyBase");
 
         List<BudgetChange> ch = new ArrayList<>();
-        ch.add(new BudgetChange("NEW", "Extra", "Income", 0, 200));
+        ch.add(new BudgetChange("NEW", "Extra", 0, 200, "Income"));
         sc.setChanges(ch);
 
         sc.applyChanges();
@@ -63,7 +63,7 @@ public class ScenarioTest {
         assertTrue(s.getSummary().contains("Δεν υπάρχει καμία αλλαγή"));
 
         List<BudgetChange> list = new ArrayList<>();
-        list.add(new BudgetChange("1", "TestItem", "T1", 10, 20));
+        list.add(new BudgetChange("1", "TestItem", 20, 10, "T1"));
         s.setChanges(list);
         
         s.generateSummary();

@@ -1,12 +1,20 @@
 package ui;
 
-import javax.swing.*;
-import java.awt.*;
+import model.Scenario;
+import model.Budget;
 
+import javax.swing.*;
+
+
+
+import java.awt.*;
+// this class is the backbone of ui
 public class AppController extends JFrame {
 
     private CardLayout layout;
     private JPanel container;
+    private Scenario currentScenario;
+    private Budget baseBudget;
 
     public static final String REGISTRATION = "registration";
     public static final String LANDING = "landing";
@@ -25,17 +33,20 @@ public class AppController extends JFrame {
 
         layout = new CardLayout();
         container = new JPanel(layout);
+      
+      
 
         container.add(new RegistrationScreen(this), REGISTRATION);
         container.add(new LandingScreen(this), LANDING);
         container.add(new HomeScreen(this), HOME);
         container.add(new BudgetScreen(this), BUDGET);
-        container.add(new ScenarioScreen(this), SCENARIO);
-        container.add(new ReportScreen(this), REPORTS);
+        container.add(new ScenarioScreen(this, baseBudget), SCENARIO);
+        container.add(new ReportScreen(this, null), REPORTS);
         container.add(new AboutScreen(this), ABOUT);
         container.add(new ContactScreen(this), CONTACT);
 
         add(container);
+
 
         setupMenuBar();
         showScreen(REGISTRATION);
@@ -88,4 +99,13 @@ public class AppController extends JFrame {
 
         setJMenuBar(menuBar);
     }
+    public void showReportScreen(Scenario scenario) {
+    this.currentScenario = scenario;
+
+    container.add(new ReportScreen(this, currentScenario), REPORTS);
+    showScreen(REPORTS);
+
+    container.revalidate();
+    container.repaint();
+}
 }
