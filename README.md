@@ -18,9 +18,9 @@
 # java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar -execution of .jar 
 
 # Working on five packages (model, data, logic, main, ui) 
-# model: 
+# model: budget and methods for changes 
 # data: loads data from csv
-# logic:  
+# logic: mansages loading, analysis and comparison of data
 # main: includes main method (execution of the programm)
 # ui: screens visible to the user  
 
