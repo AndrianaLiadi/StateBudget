@@ -1,12 +1,14 @@
 package ui;
 
+
 import javax.swing.*;
 import java.awt.*;
-
+// this class is the backbone of ui
 public class AppController extends JFrame {
 
     private CardLayout layout;
     private JPanel container;
+
 
     public static final String REGISTRATION = "registration";
     public static final String LANDING = "landing";
@@ -26,6 +28,7 @@ public class AppController extends JFrame {
         layout = new CardLayout();
         container = new JPanel(layout);
 
+
         container.add(new RegistrationScreen(this), REGISTRATION);
         container.add(new LandingScreen(this), LANDING);
         container.add(new HomeScreen(this), HOME);
@@ -36,6 +39,7 @@ public class AppController extends JFrame {
         container.add(new ContactScreen(this), CONTACT);
 
         add(container);
+
 
         setupMenuBar();
         showScreen(REGISTRATION);
