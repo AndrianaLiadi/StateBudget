@@ -1,4 +1,4 @@
-package ui;
+package logic;
 
 import model.BudgetChange;
 import model.Scenario;

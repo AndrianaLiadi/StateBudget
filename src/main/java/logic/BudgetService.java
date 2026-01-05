@@ -5,7 +5,7 @@ import model.Budget;
 import model.BudgetItem;
 import model.BudgetChange;
 import model.Scenario;
-import ui.ReportGenerator;
+
 import java.util.ArrayList;
 import java.util.List;
 

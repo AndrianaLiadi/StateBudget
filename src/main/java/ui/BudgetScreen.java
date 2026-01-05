@@ -1,36 +1,92 @@
 package ui;
 
-import model.BudgetItem;
-
+import data.BudgetDataLoader;
+import model.Budget;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-
+//this class shows the budget of the goverment 
 public class BudgetScreen extends JPanel {
 
+    private JTextArea area;
+    private JComboBox<Integer> yearCombo;
+    private final BudgetDataLoader loader = new BudgetDataLoader();
     public BudgetScreen(AppController controller) {
 
-        setLayout(new BorderLayout());
 
-        JLabel title = new JLabel("Προβολή Κρατικού Προϋπολογισμού", SwingConstants.CENTER);
+       setLayout(new BorderLayout());
 
-        String[] cols = {"Code", "Name", "Type", "Amount", "Total"};
+JLabel title = new JLabel("Προβολή Κρατικού Προϋπολογισμού", SwingConstants.CENTER);
+title.setFont(new Font("Arial", Font.BOLD, 16));
 
-        DefaultTableModel model = new DefaultTableModel(cols, 0);
+//  Year selector
+JPanel top = new JPanel();
+top.add(new JLabel("Έτος:"));
 
-        BudgetItem i1 = new BudgetItem("001", "Salary Tax", "REVENUE", 2000000L);
-        BudgetItem i2 = new BudgetItem("002", "Education Spending", "EXPENDITURE", 1200000L);
+Integer[] years = {2019, 2020, 2021, 2022, 2023, 2024, 2025};
+yearCombo = new JComboBox<>(years);
+yearCombo.setSelectedItem(2025);
+top.add(yearCombo);
 
-        model.addRow(new Object[]{i1.getCode(), i1.getName(), i1.getType(), i1.getAmount(), i1.getTotal()});
-        model.addRow(new Object[]{i2.getCode(), i2.getName(), i2.getType(), i2.getAmount(), i2.getTotal()});
+JPanel header = new JPanel();
+header.setLayout(new BoxLayout(header, BoxLayout.Y_AXIS));
+title.setAlignmentX(Component.CENTER_ALIGNMENT);
+top.setAlignmentX(Component.CENTER_ALIGNMENT);
+header.add(title);
+header.add(top);
 
-        JTable table = new JTable(model);
+area = new JTextArea();
+area.setEditable(false);
+area.setFont(new Font("Consolas", Font.PLAIN, 14));
+area.setCaretPosition(0);
 
-        JButton back = new JButton("Back");
-        back.addActionListener(e -> controller.showScreen(AppController.HOME));
+add(header, BorderLayout.NORTH);
+add(new JScrollPane(area), BorderLayout.CENTER);
 
-        add(title, BorderLayout.NORTH);
-        add(new JScrollPane(table), BorderLayout.CENTER);
-        add(back, BorderLayout.SOUTH);
+JButton back = new JButton("Back");
+back.addActionListener(e -> controller.showScreen(AppController.HOME));
+add(back, BorderLayout.SOUTH);
+
+yearCombo.addActionListener(e -> loadAndShowSelectedYear());
+loadAndShowSelectedYear();
+
     }
+    private void loadAndShowSelectedYear() {
+    Integer year = (Integer) yearCombo.getSelectedItem();
+    if (year == null) return;
+
+    String filePath = "budget-" + year + ".csv";
+
+    Budget budget = loader.loadFromCSV(filePath, year);
+
+    if (budget == null) {
+        area.setText("Σφάλμα φόρτωσης αρχείου: " + filePath);
+        return;
+    }
+
+    String output = captureBudgetPrinterOutput(budget);
+    area.setText(output);
+    area.setCaretPosition(0);
+}
+
+
+
+private String captureBudgetPrinterOutput(Budget budget) {
+    BudgetTablePrinter printer = new BudgetTablePrinter();
+
+    PrintStream oldOut = System.out;
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    try (PrintStream ps = new PrintStream(baos, true, StandardCharsets.UTF_8)) {
+        System.setOut(ps);
+        printer.printBudget(budget);
+    } finally {
+        System.setOut(oldOut);
+    }
+
+    return baos.toString(StandardCharsets.UTF_8);
+}
+
 }
