@@ -4,6 +4,8 @@ import model.Scenario;
 import model.Budget;
 import java.util.ArrayList;
 import javax.swing.*;
+import java.util.Map;
+import java.util.HashMap;
 
 import data.BudgetDataLoader;
 
@@ -15,6 +17,7 @@ public class AppController extends JFrame {
     private JPanel container;
     private Scenario currentScenario;
     private Budget baseBudget;
+    private Map<Integer, Budget> budgetsByYear = new HashMap<>();
 
     public static final String REGISTRATION = "registration";
     public static final String LANDING = "landing";
@@ -36,7 +39,13 @@ public class AppController extends JFrame {
 
         BudgetDataLoader loader = new BudgetDataLoader();
 
-        baseBudget = loader.loadFromCSV("src/main/resources/budget.csv", 2025);
+        for (int year = 2019; year <= 2025; year++) {
+        String path = "budget-" + year + ".csv";
+        Budget budget = loader.loadFromCSV(path, year);
+
+        baseBudget = loader.loadFromCSV("budget.csv", 2025);
+
+
 
         if (baseBudget == null) {
             JOptionPane.showMessageDialog(this,
@@ -59,8 +68,8 @@ public class AppController extends JFrame {
 
 
         setupMenuBar();
-        showScreen(REGISTRATION);
-    }
+        showScreen(REGISTRATION);}
+        }
 
     public void showScreen(String screenName) {
         layout.show(container, screenName);
@@ -118,4 +127,4 @@ public class AppController extends JFrame {
     container.revalidate();
     container.repaint();
 }
-}
+    }
