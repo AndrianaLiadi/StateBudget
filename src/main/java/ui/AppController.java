@@ -43,7 +43,7 @@ public class AppController extends JFrame {
         String path = "budget-" + year + ".csv";
         Budget budget = loader.loadFromCSV(path, year);
 
-        baseBudget = loader.loadFromCSV("budget.csv", 2025);
+        baseBudget = loader.loadFromCSV(path, 2025);
 
 
 
