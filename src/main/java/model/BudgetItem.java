@@ -78,4 +78,15 @@ public class BudgetItem implements Cloneable {
             return null;
         }
     }
+
+
+    @Override
+    public String toString() {
+
+    if (name != null && !name.isBlank()) {
+        return name + " (" + code + ")";
+    }
+
+    return code != null ? code : super.toString();
+}
 }
