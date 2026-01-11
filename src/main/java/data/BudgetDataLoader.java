@@ -28,52 +28,57 @@ public class BudgetDataLoader {
 
     //pairnei to arxeio kai ftiaxnei to budget
     public Budget loadFromCSV(String filePath, int year) {
-        List<BudgetItem> items = new ArrayList<>();
-        String line;
-        String cvsSplitBy = ",";
-        String currentType = null;
+    List<BudgetItem> items = new ArrayList<>();
+    String line;
+    String csvSplitBy = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"; 
+    String currentType = null;
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
+    try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
 
-            while ((line = br.readLine()) != null) {
-                if (line.startsWith("\uFEFF")) {
-                    line = line.substring(1);
-                }
+        while ((line = br.readLine()) != null) {
+            if (line.startsWith("\uFEFF")) {
+                line = line.substring(1);
+            }
 
-                String[] data = line.split(cvsSplitBy, -1);
+            String[] data = line.split(csvSplitBy, -1);
 
-                if (data.length < 2) {
-                    continue;
-                }
+            if (data.length < 2) {
+                continue;
+            }
 
-                String codePart = data[0].trim();
-                String name = data[1].trim();
-                String amountStr = (data.length > 4) ? data[4] : null;
+            String codePart = data[0].replaceAll("\"", "").trim();
+            String name = data[1].replaceAll("\"", "").trim();
+            
+            String amountStr = null;
+            if (data.length > 4) {
+                amountStr = data[4];
+            } else if (data.length > 2) {
+                amountStr = data[data.length - 1]; 
+            }
 
-                if (codePart.contains("ΕΣΟΔΑ")) {
-                    currentType = "REVENUE";
-                    continue;
-                }
-                if (codePart.contains("ΕΞΟΔΑ")) {
-                    currentType = "EXPENDITURE";
-                    continue;
-                }
+            if (codePart.contains("ΕΣΟΔΑ")) {
+                currentType = "REVENUE";
+                continue;
+            }
+            if (codePart.contains("ΕΞΟΔΑ")) {
+                currentType = "EXPENDITURE";
+                continue;
+            }
 
-                if (currentType != null && !codePart.isEmpty() && amountStr != null && !amountStr.trim().isEmpty()) {
-                    try {
-                        String cleanCode = codePart.replaceAll("\\.", "").trim();
-                        long amount = cleanAndParseAmount(amountStr);
-                        
-                        BudgetItem item = new BudgetItem(cleanCode, name, currentType, amount);
-                        items.add(item);
-                    } catch (NumberFormatException e) {
-                    }
+            if (currentType != null && !codePart.isEmpty()) {
+                try {
+                    String cleanCode = codePart.replaceAll("\\.", "").trim();
+                    long amount = cleanAndParseAmount(amountStr);
+
+                    items.add(new BudgetItem(cleanCode, name, currentType, amount));
+                } catch (NumberFormatException e) {
                 }
             }
-            return new Budget(year, items);
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-            return null;
         }
+        return new Budget(year, items);
+    } catch (IOException e) {
+        System.err.println(e.getMessage());
+        return null;
     }
+}
 }
