@@ -11,50 +11,71 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetDataLoader {
-    private long cleanAndParseAmount(String amountStr) throws NumberFormatException {
+
+    private long cleanAndParseAmount(String amountStr) {
         if (amountStr == null || amountStr.trim().isEmpty()) {
             return 0;
         }
 
-        // afairesh perittwn
-        String cleaned = amountStr.replaceAll("\\.", "").replaceAll("»", "").trim();
+        String cleaned = amountStr.replaceAll("\\.", "")
+                                  .replaceAll("»", "")
+                                  .replaceAll("\"", "")
+                                  .trim();
+        
         if (cleaned.contains(",")) {
             cleaned = cleaned.substring(0, cleaned.indexOf(','));
         }
 
-        //ta kanw long
-        return Long.parseLong(cleaned);
+        if (cleaned.isEmpty()) {
+            return 0;
+        }
+
+        try {
+            return Long.parseLong(cleaned);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
     }
 
-    //pairnei to arxeio kai ftiaxnei to budget
+    private List<String> parseCsvLine(String line) {
+        List<String> result = new ArrayList<>();
+        StringBuilder currentField = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (char c : line.toCharArray()) {
+            if (c == '\"') {
+                inQuotes = !inQuotes; 
+            } else if (c == ',' && !inQuotes) {
+                result.add(currentField.toString());
+                currentField.setLength(0); 
+            } else {
+                currentField.append(c);
+            }
+        }
+        result.add(currentField.toString()); 
+        return result;
+    }
+
     public Budget loadFromCSV(String filePath, int year) {
         List<BudgetItem> items = new ArrayList<>();
-        String line;
-        String csvSplitBy = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"; 
         String currentType = null;
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
-
+            String line;
             while ((line = br.readLine()) != null) {
                 if (line.startsWith("\uFEFF")) {
                     line = line.substring(1);
                 }
 
-                String[] data = line.split(csvSplitBy, -1);
+                List<String> data = parseCsvLine(line);
 
-                if (data.length < 2) {
+                if (data.size() < 2) {
                     continue;
                 }
 
-                String codePart = data[0].replaceAll("\"", "").trim();
-                String name = data[1].replaceAll("\"", "").trim();
-                
-                String amountStr = null;
-                if (data.length > 4) {
-                    amountStr = data[4];
-                } else if (data.length > 2) {
-                    amountStr = data[data.length - 1]; 
-                }
+                String codePart = data.get(0).replaceAll("\"", "").trim();
+                String name = data.get(1).replaceAll("\"", "").trim();
+                String amountStr = data.get(data.size() - 1);
 
                 if (codePart.contains("ΕΣΟΔΑ")) {
                     currentType = "REVENUE";
@@ -65,20 +86,21 @@ public class BudgetDataLoader {
                     continue;
                 }
 
-                if (currentType != null && !codePart.isEmpty()) {
-                    try {
-                        String cleanCode = codePart.replaceAll("\\.", "").trim();
-                        long amount = cleanAndParseAmount(amountStr);
+                if (name.isEmpty()) {
+                    continue; 
+                }
 
-                        items.add(new BudgetItem(cleanCode, name, currentType, amount));
-                    } catch (NumberFormatException e) {
-                    }
+                if (currentType != null && !codePart.isEmpty()) {
+                    long amount = cleanAndParseAmount(amountStr);
+                    String cleanCode = codePart.replaceAll("\\.", "").trim();
+                    BudgetItem item = new BudgetItem(cleanCode, name, currentType, amount);
+                    items.add(item);
                 }
             }
             return new Budget(year, items);
         } catch (IOException e) {
             System.err.println(e.getMessage());
-            return null;
+            return new Budget(year, new ArrayList<>());
         }
     }
 }
