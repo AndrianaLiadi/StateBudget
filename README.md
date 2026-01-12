@@ -8,7 +8,7 @@
 
 
 # Structure
-## Utilization of Maven for build structure 
+## Utilization of ***Maven*** for build structure 
 ### mvn clean install  -installing maven on the repository 
 ### mvn clean compile -compilation of classes
 ### mvn exec:java -execution during developement 
@@ -17,11 +17,12 @@
 ### mvn checkstyle:check -checking code's formating 
 ### java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar -execution of .jar
 
-### file .gitignore where target and class files are saved to avoid conflicts 
-### pom.xml 
+### file .gitignore where target and class files are saved to avoid conflicts
+### csv files of Hellenic's Republic budget from 2019-2025 are saved on the repository
+### ***pom.xml*** 
 
 
-## Working on five packages (model, data, logic, main, ui) 
+## Working on five ***packages*** (model, data, logic, main, ui) 
 ### model: budget and methods for changes 
 ### data: loads data from csv
 ### logic: mansages loading, analysis and comparison of data
@@ -36,7 +37,6 @@
 ### ui: 14 classes
 ### <sub>*on package main there is 1 class running on terminal and another for the GUI for safety reasons, depending on pom.xml which one is used<sub>
 
-### csv files of Hellenic's Republic budget from 2019-2025 are saved on the repository
 
  ## Tests 
  ### Each class has their own test on a seperate file called test including:
@@ -46,6 +46,20 @@
  ### main: 2 classes
  ### ui: 14 classes
  ### test.csv: structure of csv files to run on tests
+
+
+# Algorithms and Data Structure 
+### The application utilizes a hierarchical data structure based on the Composite Pattern, enabling:
+#### Recursive calculations of amounts by category
+### Dynamic organization of the budget in multiple levels
+### Change history with automatic percentage change calculations
+
+## Key Algorithims 
+### Linear processing for total calculations
+### Recursive traversal for hierarchical computations
+### Deep cloning for safe object duplication
+### Comparison and analysis of percentage changes
+
 
  
 
