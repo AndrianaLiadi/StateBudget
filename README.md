@@ -8,7 +8,6 @@
 
 
 # Structure
-
 ## Utilization of Maven for build structure 
 ### mvn clean install  -installing maven on the repository 
 ### mvn clean compile -compilation of classes
@@ -35,7 +34,7 @@
 ### logic: 2 classes
 ### main: 2 classes
 ### ui: 14 classes
-### *on package main there is 1 class running on terminal and another for the GUI for safety reasons, depending on pom.xml which one is used.
+### <sub>*on package main there is 1 class running on terminal and another for the GUI for safety reasons, depending on pom.xml which one is used<sub>
 
 ### csv files of Hellenic's Republic budget from 2019-2025 are saved on the repository
 
