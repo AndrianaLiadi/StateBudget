@@ -18,7 +18,7 @@ public class ChartPanel extends JPanel {
     public ChartPanel(Budget base, Budget modified) {
         this.base = base;
         this.modified = modified;
-        setPreferredSize(new Dimension(1000, 760));
+        setPreferredSize(new Dimension(1050, 780));
         setBackground(Color.WHITE);
     }
 
@@ -50,23 +50,11 @@ public class ChartPanel extends JPanel {
             Map<String, String> baseLabelMap = toLabelByCode(baseItems);
             Map<String, String> modLabelMap = toLabelByCode(modItems);
 
-            List<String> allCodes = new ArrayList<>();
-            for (String c : baseMap.keySet()) allCodes.add(c);
-            for (String c : modMap.keySet()) if (!baseMap.containsKey(c)) allCodes.add(c);
-
+            List<String> allCodes = unionCodes(baseMap, modMap);
             if (allCodes.isEmpty()) {
                 drawCenteredText(g2, "No items to display.", getWidth(), getHeight());
                 return;
             }
-
-            allCodes.sort((a, b) -> {
-                long aMax = Math.max(baseMap.getOrDefault(a, 0L), modMap.getOrDefault(a, 0L));
-                long bMax = Math.max(baseMap.getOrDefault(b, 0L), modMap.getOrDefault(b, 0L));
-                if (aMax != bMax) return Long.compare(bMax, aMax);
-                long ad = Math.abs(modMap.getOrDefault(a, 0L) - baseMap.getOrDefault(a, 0L));
-                long bd = Math.abs(modMap.getOrDefault(b, 0L) - baseMap.getOrDefault(b, 0L));
-                return Long.compare(bd, ad);
-            });
 
             int pad = 18;
             int headerH = 54;
@@ -77,25 +65,25 @@ public class ChartPanel extends JPanel {
             int barX = pad;
             int barY = pad + headerH;
             int barW = fullW - 2 * pad;
-            int barH = (int) Math.round((fullH - 2 * pad - headerH) * 0.42);
+            int barH = (int) Math.round((fullH - 2 * pad - headerH) * 0.38);
 
-            int deltaX = pad;
-            int deltaY = barY + barH + 14;
-            int deltaW = fullW - 2 * pad;
-            int deltaH = (int) Math.round((fullH - 2 * pad - headerH) * 0.25);
+            int changesX = pad;
+            int changesY = barY + barH + 14;
+            int changesW = fullW - 2 * pad;
+            int changesH = (int) Math.round((fullH - 2 * pad - headerH) * 0.30);
 
             int pieX = pad;
-            int pieY = deltaY + deltaH + 14;
+            int pieY = changesY + changesH + 14;
             int pieW = fullW - 2 * pad;
             int pieH = fullH - pad - pieY;
 
             drawHeader(g2, pad, pad, fullW - 2 * pad);
 
-            AggregatedData topForBars = buildTopWithOthers(allCodes, baseMap, modMap, baseLabelMap, modLabelMap, 12);
-            drawBarChart(g2, barX, barY, barW, barH, topForBars.codes, topForBars.baseMap, topForBars.modMap, topForBars.labelMap);
+            AggregatedData bars = buildTopWithOthers(allCodes, baseMap, modMap, baseLabelMap, modLabelMap, 10);
+            drawBarChart(g2, barX, barY, barW, barH, bars);
 
-            DeltaData changed = buildChangedOnly(allCodes, baseMap, modMap, baseLabelMap, modLabelMap, 14);
-            drawDeltaChart(g2, deltaX, deltaY, deltaW, deltaH, changed);
+            ChangeData changes = buildChanges(allCodes, baseMap, modMap, baseLabelMap, modLabelMap, 18);
+            drawChangesTable(g2, changesX, changesY, changesW, changesH, changes);
 
             drawPieSection(g2, pieX, pieY, pieW, pieH, allCodes, baseMap, modMap, baseLabelMap, modLabelMap);
 
@@ -114,21 +102,15 @@ public class ChartPanel extends JPanel {
 
         g2.setFont(getFont().deriveFont(Font.PLAIN, 12f));
         g2.setColor(subColor);
-        g2.drawString("Σύγκριση Base προϋπολογισμού με Scenario (με καθαρή απεικόνιση αλλαγών)", x + 6, y + 40);
+        g2.drawString("Σύγκριση Base προϋπολογισμού με Scenario — ξεκάθαρη απεικόνιση αλλαγών χρήστη", x + 6, y + 40);
 
         g2.setColor(new Color(230, 230, 230));
         g2.drawLine(x, y + 48, x + w, y + 48);
     }
 
-    private void drawBarChart(Graphics2D g2,
-                              int x, int y, int w, int h,
-                              List<String> codes,
-                              Map<String, Long> baseMap,
-                              Map<String, Long> modMap,
-                              Map<String, String> labelMap) {
-
+    private void drawBarChart(Graphics2D g2, int x, int y, int w, int h, AggregatedData d) {
         Color axisColor = new Color(60, 60, 60);
-        Color gridColor = new Color(232, 232, 232);
+        Color gridColor = new Color(234, 234, 234);
         Color textColor = new Color(35, 35, 35);
 
         Color baseFill = new Color(90, 140, 255);
@@ -139,12 +121,12 @@ public class ChartPanel extends JPanel {
 
         Font titleFont = getFont().deriveFont(Font.BOLD, 15f);
         Font axisFont = getFont().deriveFont(Font.PLAIN, 12f);
-        Font smallFont = getFont().deriveFont(Font.PLAIN, 11f);
+        Font labelFont = getFont().deriveFont(Font.PLAIN, 11f);
 
         int padLeft = 92;
         int padRight = 18;
         int padTop = 18;
-        int padBottom = 64;
+        int padBottom = 56;
 
         int plotX = x + padLeft;
         int plotY = y + padTop;
@@ -156,9 +138,9 @@ public class ChartPanel extends JPanel {
         g2.drawString("Top κατηγορίες (Base vs Scenario) + Λοιπά", x + 6, y + 16);
 
         long rawMax = 0;
-        for (String code : codes) {
-            rawMax = Math.max(rawMax, baseMap.getOrDefault(code, 0L));
-            rawMax = Math.max(rawMax, modMap.getOrDefault(code, 0L));
+        for (String code : d.codes) {
+            rawMax = Math.max(rawMax, d.baseMap.getOrDefault(code, 0L));
+            rawMax = Math.max(rawMax, d.modMap.getOrDefault(code, 0L));
         }
         if (rawMax <= 0) rawMax = 1;
 
@@ -188,25 +170,25 @@ public class ChartPanel extends JPanel {
         g2.setColor(textColor);
         g2.drawString("Ποσό", x + 10, plotY + 12);
 
-        int n = codes.size();
-        int groupW = Math.max(64, plotW / Math.max(1, n));
-        int barW = Math.max(14, (groupW - 16) / 2);
+        int n = d.codes.size();
+        int groupW = Math.max(80, plotW / Math.max(1, n));
+        int barW = Math.max(14, (groupW - 18) / 2);
         int gap = 6;
 
         int totalGroupsW = groupW * n;
         int startX = plotX + Math.max(0, (plotW - totalGroupsW) / 2);
 
         for (int i = 0; i < n; i++) {
-            String code = codes.get(i);
+            String code = d.codes.get(i);
 
-            long baseVal = baseMap.getOrDefault(code, 0L);
-            long modVal = modMap.getOrDefault(code, 0L);
+            long baseVal = d.baseMap.getOrDefault(code, 0L);
+            long modVal = d.modMap.getOrDefault(code, 0L);
 
             int baseH = (int) Math.round((baseVal / (double) niceMax) * plotH);
             int modH = (int) Math.round((modVal / (double) niceMax) * plotH);
 
             int xGroup = startX + i * groupW;
-            int xBase = xGroup + 6;
+            int xBase = xGroup + 8;
             int xMod = xBase + barW + gap;
 
             int yBase = plotY + plotH - baseH;
@@ -215,126 +197,168 @@ public class ChartPanel extends JPanel {
             drawRoundedBar(g2, xBase, yBase, barW, baseH, baseFill, baseBorder);
             drawRoundedBar(g2, xMod, yMod, barW, modH, scenFill, scenBorder);
 
-            String shortLabel = shorten(labelMap.getOrDefault(code, code), 18);
-            g2.setFont(smallFont);
+            String label = d.labelMap.getOrDefault(code, code);
+            String line1 = shorten(label, 22);
+            String line2 = "";
+            if (label.length() > 22) line2 = shorten(label.substring(22), 22);
+
+            g2.setFont(labelFont);
             g2.setColor(textColor);
-            int lw = g2.getFontMetrics().stringWidth(shortLabel);
-            int lx = xGroup + (groupW - lw) / 2;
-            int ly = plotY + plotH + 18;
-            g2.drawString(shortLabel, lx, ly);
+
+            int lw1 = g2.getFontMetrics().stringWidth(line1);
+            int lx1 = xGroup + (groupW - lw1) / 2;
+            int ly1 = plotY + plotH + 16;
+            g2.drawString(line1, lx1, ly1);
+
+            if (!line2.isEmpty()) {
+                int lw2 = g2.getFontMetrics().stringWidth(line2);
+                int lx2 = xGroup + (groupW - lw2) / 2;
+                int ly2 = ly1 + 14;
+                g2.drawString(line2, lx2, ly2);
+            }
         }
 
-        drawLegend(g2, x + 8, y + h - 18);
+        drawLegend(g2, x + 8, y + h - 14);
     }
 
-    private void drawDeltaChart(Graphics2D g2, int x, int y, int w, int h, DeltaData dd) {
+    private void drawChangesTable(Graphics2D g2, int x, int y, int w, int h, ChangeData cd) {
         Color textColor = new Color(35, 35, 35);
-        Color gridColor = new Color(235, 235, 235);
-        Color axisColor = new Color(70, 70, 70);
+        Color border = new Color(220, 220, 220);
+        Color headerBg = new Color(248, 248, 248);
+        Color grid = new Color(238, 238, 238);
 
         Color posFill = new Color(255, 145, 85);
         Color posBorder = new Color(190, 90, 45);
-
         Color negFill = new Color(90, 140, 255);
         Color negBorder = new Color(55, 95, 190);
 
         Font titleFont = getFont().deriveFont(Font.BOLD, 15f);
-        Font labelFont = getFont().deriveFont(Font.PLAIN, 12f);
+        Font headerFont = getFont().deriveFont(Font.BOLD, 12f);
+        Font rowFont = getFont().deriveFont(Font.PLAIN, 12f);
         Font valueFont = getFont().deriveFont(Font.BOLD, 12f);
-
-        int padLeft = 260;
-        int padRight = 24;
-        int padTop = 18;
-        int padBottom = 18;
-
-        int plotX = x + padLeft;
-        int plotY = y + padTop;
-        int plotW = Math.max(10, w - padLeft - padRight);
-        int plotH = Math.max(10, h - padTop - padBottom);
 
         g2.setFont(titleFont);
         g2.setColor(textColor);
-        g2.drawString("Αλλαγές που έκανε ο χρήστης (Scenario - Base)", x + 6, y + 16);
+        g2.drawString("Αλλαγές χρήστη στο Scenario (μόνο ό,τι άλλαξε)", x + 6, y + 16);
 
-        if (dd.codes.isEmpty()) {
-            g2.setFont(labelFont);
+        int boxY = y + 22;
+        int boxH = h - 26;
+
+        g2.setColor(Color.WHITE);
+        g2.fillRoundRect(x, boxY, w, boxH, 12, 12);
+        g2.setColor(border);
+        g2.drawRoundRect(x, boxY, w, boxH, 12, 12);
+
+        if (cd.rows.isEmpty()) {
+            g2.setFont(rowFont);
             g2.setColor(new Color(120, 120, 120));
-            g2.drawString("Δεν υπάρχουν αλλαγές (Δ=0 σε όλες τις κατηγορίες).", x + 6, y + 40);
+            g2.drawString("Δεν υπάρχουν αλλαγές (Scenario = Base σε όλες τις κατηγορίες).", x + 12, boxY + 34);
             return;
         }
 
-        long maxAbs = 1;
-        for (long d : dd.deltaByCode.values()) maxAbs = Math.max(maxAbs, Math.abs(d));
-        long niceMax = niceCeil(maxAbs);
+        int headerH = 28;
+        int tableX = x + 10;
+        int tableY = boxY + 10;
+        int tableW = w - 20;
+        int tableH = boxH - 20;
 
-        int ticks = 4;
-        int zeroX = plotX + plotW / 2;
+        int nameW = Math.min(420, (int) (tableW * 0.44));
+        int baseW = Math.min(150, (int) (tableW * 0.16));
+        int scenW = Math.min(150, (int) (tableW * 0.16));
+        int deltaW = tableW - nameW - baseW - scenW;
 
-        g2.setFont(labelFont);
-        for (int i = -ticks; i <= ticks; i++) {
-            double t = i / (double) ticks;
-            int xx = zeroX + (int) Math.round(t * (plotW / 2.0));
-            long val = Math.round(t * niceMax);
+        int nameX = tableX;
+        int baseX = nameX + nameW;
+        int scenX = baseX + baseW;
+        int deltaX = scenX + scenW;
 
-            g2.setColor(gridColor);
-            g2.drawLine(xx, plotY, xx, plotY + plotH);
+        g2.setColor(headerBg);
+        g2.fillRoundRect(tableX, tableY, tableW, headerH, 10, 10);
+        g2.setColor(border);
+        g2.drawRoundRect(tableX, tableY, tableW, headerH, 10, 10);
 
-            g2.setColor(new Color(95, 95, 95));
-            String s = fmtCompact(Math.abs(val));
-            if (i < 0) s = "-" + s;
-            if (i > 0) s = "+" + s;
-            int sw = g2.getFontMetrics().stringWidth(s);
-            g2.drawString(s, xx - sw / 2, plotY - 4);
+        g2.setFont(headerFont);
+        g2.setColor(textColor);
+        g2.drawString("Κατηγορία", nameX + 8, tableY + 18);
+        g2.drawString("Base", baseX + 8, tableY + 18);
+        g2.drawString("Scenario", scenX + 8, tableY + 18);
+        g2.drawString("Δ (Scenario - Base)", deltaX + 8, tableY + 18);
+
+        int rowsAreaY = tableY + headerH;
+        int rowsAreaH = tableH - headerH;
+
+        int maxRowsVisible = Math.max(4, rowsAreaH / 28);
+        List<ChangeRow> rows = cd.rows;
+        if (rows.size() > maxRowsVisible) {
+            rows = rows.subList(0, maxRowsVisible);
         }
 
-        g2.setColor(axisColor);
-        g2.drawLine(zeroX, plotY, zeroX, plotY + plotH);
+        long maxAbs = 1;
+        for (ChangeRow r : rows) maxAbs = Math.max(maxAbs, Math.abs(r.delta));
+        long niceMax = niceCeil(maxAbs);
 
-        int n = dd.codes.size();
-        int rowH = Math.max(22, plotH / Math.max(1, n));
-        int barH = Math.max(10, rowH - 10);
+        int rowH = 28;
 
-        for (int i = 0; i < n; i++) {
-            String code = dd.codes.get(i);
-            long delta = dd.deltaByCode.getOrDefault(code, 0L);
+        for (int i = 0; i < rows.size(); i++) {
+            int ry = rowsAreaY + i * rowH;
+            g2.setColor(i % 2 == 0 ? Color.WHITE : new Color(252, 252, 252));
+            g2.fillRect(tableX, ry, tableW, rowH);
 
-            int cy = plotY + i * rowH + rowH / 2;
+            g2.setColor(grid);
+            g2.drawLine(tableX, ry + rowH, tableX + tableW, ry + rowH);
 
-            String label = shorten(dd.labelByCode.getOrDefault(code, code), 34);
-            g2.setFont(labelFont);
+            ChangeRow r = rows.get(i);
+
+            g2.setFont(rowFont);
             g2.setColor(textColor);
-            g2.drawString(label, x + 10, cy + 5);
 
-            double frac = delta / (double) niceMax;
-            int len = (int) Math.round(Math.abs(frac) * (plotW / 2.0));
+            String name = shorten(r.label, 46);
+            g2.drawString(name, nameX + 8, ry + 19);
 
-            int bx, by, bw;
-            by = cy - barH / 2;
-            bw = Math.max(0, len);
+            String b = fmtFull(r.baseValue);
+            String m = fmtFull(r.modValue);
 
-            if (delta >= 0) {
-                bx = zeroX;
-                drawRoundedBar(g2, bx, by, bw, barH, posFill, posBorder);
+            g2.drawString(b, baseX + 8, ry + 19);
+            g2.drawString(m, scenX + 8, ry + 19);
+
+            int barPad = 10;
+            int barAreaX = deltaX + barPad;
+            int barAreaW = deltaW - 2 * barPad;
+            int barCY = ry + rowH / 2;
+
+            int zeroX = barAreaX + barAreaW / 2;
+
+            g2.setColor(new Color(220, 220, 220));
+            g2.drawLine(zeroX, ry + 6, zeroX, ry + rowH - 6);
+
+            double frac = r.delta / (double) niceMax;
+            int len = (int) Math.round(Math.min(1.0, Math.abs(frac)) * (barAreaW / 2.0));
+            int bh = 14;
+            int by = barCY - bh / 2;
+
+            if (r.delta >= 0) {
+                drawRoundedBar(g2, zeroX, by, len, bh, posFill, posBorder);
             } else {
-                bx = zeroX - bw;
-                drawRoundedBar(g2, bx, by, bw, barH, negFill, negBorder);
+                drawRoundedBar(g2, zeroX - len, by, len, bh, negFill, negBorder);
             }
 
             g2.setFont(valueFont);
-            g2.setColor(new Color(40, 40, 40));
-            String v = (delta >= 0 ? "+" : "") + fmtCompact(delta);
-            int vw = g2.getFontMetrics().stringWidth(v);
-            int tx = (delta >= 0) ? (zeroX + bw + 8) : (zeroX - bw - vw - 8);
-            int ty = cy + 5;
+            g2.setColor(textColor);
+            String dv = (r.delta >= 0 ? "+" : "") + fmtFull(r.delta);
+            int dvw = g2.getFontMetrics().stringWidth(dv);
+            int tx = (r.delta >= 0) ? (zeroX + len + 8) : (zeroX - len - dvw - 8);
+            tx = Math.max(barAreaX, Math.min(barAreaX + barAreaW - dvw, tx));
+            g2.drawString(dv, tx, ry + 19);
+        }
 
-            if (tx < plotX) tx = plotX;
-            if (tx + vw > plotX + plotW) tx = plotX + plotW - vw;
-            g2.drawString(v, tx, ty);
+        if (cd.hiddenCount > 0) {
+            g2.setFont(getFont().deriveFont(Font.PLAIN, 12f));
+            g2.setColor(new Color(110, 110, 110));
+            g2.drawString("…και " + cd.hiddenCount + " ακόμη αλλαγές (δεν χωράνε στο παράθυρο).", x + 12, boxY + boxH - 10);
         }
     }
 
-    private void drawPieSection(Graphics2D g2,
-                                int x, int y, int w, int h,
+    private void drawPieSection(Graphics2D g2, int x, int y, int w, int h,
                                 List<String> codes,
                                 Map<String, Long> baseMap,
                                 Map<String, Long> modMap,
@@ -523,6 +547,13 @@ public class ChartPanel extends JPanel {
         return map;
     }
 
+    private static List<String> unionCodes(Map<String, Long> baseMap, Map<String, Long> modMap) {
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+        set.addAll(baseMap.keySet());
+        set.addAll(modMap.keySet());
+        return new ArrayList<>(set);
+    }
+
     private static String pickLabel(String code, Map<String, String> baseLabelMap, Map<String, String> modLabelMap) {
         if (code == null) return "";
         String s = baseLabelMap.get(code);
@@ -532,6 +563,7 @@ public class ChartPanel extends JPanel {
     }
 
     private static void drawRoundedBar(Graphics2D g2, int x, int y, int w, int h, Color fill, Color border) {
+        if (w < 0) w = 0;
         if (h < 0) h = 0;
         int arc = Math.min(12, Math.min(w, h));
         g2.setColor(fill);
@@ -601,12 +633,19 @@ public class ChartPanel extends JPanel {
         return sign + fmtFull(av);
     }
 
-    private static AggregatedData buildTopWithOthers(List<String> sortedCodes,
+    private static AggregatedData buildTopWithOthers(List<String> allCodes,
                                                      Map<String, Long> baseMap,
                                                      Map<String, Long> modMap,
                                                      Map<String, String> baseLabelMap,
                                                      Map<String, String> modLabelMap,
                                                      int topN) {
+
+        List<String> sorted = new ArrayList<>(allCodes);
+        sorted.sort((a, b) -> {
+            long aMax = Math.max(baseMap.getOrDefault(a, 0L), modMap.getOrDefault(a, 0L));
+            long bMax = Math.max(baseMap.getOrDefault(b, 0L), modMap.getOrDefault(b, 0L));
+            return Long.compare(bMax, aMax);
+        });
 
         LinkedHashMap<String, Long> baseOut = new LinkedHashMap<>();
         LinkedHashMap<String, Long> modOut = new LinkedHashMap<>();
@@ -616,8 +655,8 @@ public class ChartPanel extends JPanel {
         long baseOther = 0;
         long modOther = 0;
 
-        for (int i = 0; i < sortedCodes.size(); i++) {
-            String code = sortedCodes.get(i);
+        for (int i = 0; i < sorted.size(); i++) {
+            String code = sorted.get(i);
             long b = baseMap.getOrDefault(code, 0L);
             long m = modMap.getOrDefault(code, 0L);
 
@@ -632,7 +671,7 @@ public class ChartPanel extends JPanel {
             }
         }
 
-        if (sortedCodes.size() > topN) {
+        if (sorted.size() > topN) {
             String otherCode = "__OTHER__";
             codesOut.add(otherCode);
             baseOut.put(otherCode, baseOther);
@@ -643,44 +682,32 @@ public class ChartPanel extends JPanel {
         return new AggregatedData(codesOut, baseOut, modOut, labelOut);
     }
 
-    private static DeltaData buildChangedOnly(List<String> allCodes,
-                                             Map<String, Long> baseMap,
-                                             Map<String, Long> modMap,
-                                             Map<String, String> baseLabelMap,
-                                             Map<String, String> modLabelMap,
-                                             int maxRows) {
+    private static ChangeData buildChanges(List<String> allCodes,
+                                          Map<String, Long> baseMap,
+                                          Map<String, Long> modMap,
+                                          Map<String, String> baseLabelMap,
+                                          Map<String, String> modLabelMap,
+                                          int maxRows) {
 
-        List<String> changed = new ArrayList<>();
-        Map<String, Long> deltaByCode = new LinkedHashMap<>();
-        Map<String, String> labelByCode = new LinkedHashMap<>();
-
+        List<ChangeRow> rows = new ArrayList<>();
         for (String code : allCodes) {
             long b = baseMap.getOrDefault(code, 0L);
             long m = modMap.getOrDefault(code, 0L);
             long d = m - b;
             if (d != 0) {
-                changed.add(code);
+                rows.add(new ChangeRow(code, pickLabel(code, baseLabelMap, modLabelMap), b, m, d));
             }
         }
 
-        changed.sort((a, b) -> Long.compare(
-                Math.abs(modMap.getOrDefault(b, 0L) - baseMap.getOrDefault(b, 0L)),
-                Math.abs(modMap.getOrDefault(a, 0L) - baseMap.getOrDefault(a, 0L))
-        ));
+        rows.sort((r1, r2) -> Long.compare(Math.abs(r2.delta), Math.abs(r1.delta)));
 
-        if (changed.size() > maxRows) {
-            changed = new ArrayList<>(changed.subList(0, maxRows));
+        int hidden = 0;
+        if (rows.size() > maxRows) {
+            hidden = rows.size() - maxRows;
+            rows = new ArrayList<>(rows.subList(0, maxRows));
         }
 
-        for (String code : changed) {
-            long b = baseMap.getOrDefault(code, 0L);
-            long m = modMap.getOrDefault(code, 0L);
-            long d = m - b;
-            deltaByCode.put(code, d);
-            labelByCode.put(code, pickLabel(code, baseLabelMap, modLabelMap));
-        }
-
-        return new DeltaData(changed, deltaByCode, labelByCode);
+        return new ChangeData(rows, hidden);
     }
 
     private static class AggregatedData {
@@ -697,16 +724,31 @@ public class ChartPanel extends JPanel {
         }
     }
 
-    private static class DeltaData {
-        final List<String> codes;
-        final Map<String, Long> deltaByCode;
-        final Map<String, String> labelByCode;
+    private static class ChangeData {
+        final List<ChangeRow> rows;
+        final int hiddenCount;
 
-        DeltaData(List<String> codes, Map<String, Long> deltaByCode, Map<String, String> labelByCode) {
-            this.codes = codes;
-            this.deltaByCode = deltaByCode;
-            this.labelByCode = labelByCode;
+        ChangeData(List<ChangeRow> rows, int hiddenCount) {
+            this.rows = rows;
+            this.hiddenCount = hiddenCount;
+        }
+    }
+
+    private static class ChangeRow {
+        final String code;
+        final String label;
+        final long baseValue;
+        final long modValue;
+        final long delta;
+
+        ChangeRow(String code, String label, long baseValue, long modValue, long delta) {
+            this.code = code;
+            this.label = label;
+            this.baseValue = baseValue;
+            this.modValue = modValue;
+            this.delta = delta;
         }
     }
 }
+
 
