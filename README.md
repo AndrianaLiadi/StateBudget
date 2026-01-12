@@ -6,7 +6,8 @@
 
 # How it works 
 
-
+### git clone - cloning repository on our devices 
+### cd StateBudget  -
 # Structure
 ## Utilization of ***Maven*** for build structure 
 ### mvn clean install  -installing maven on the repository 
@@ -19,7 +20,7 @@
 
 ### file .gitignore where target and class files are saved to avoid conflicts
 ### csv files of Hellenic's Republic budget from 2019-2025 are saved on the repository
-### ***pom.xml*** 
+### ***pom.xml*** - maven configuration
 
 
 ## Working on five ***packages*** (model, data, logic, main, ui) 
@@ -29,12 +30,12 @@
 ### main: includes main method (execution of the programm) 
 ### ui: screens visible to the user  
 
-## 23 classes in total 
+## 22 classes in total 
 ### model: 4 classes
 ### data: 1 class
 ### logic: 2 classes
 ### main: 2 classes
-### ui: 14 classes
+### ui: 13 classes
 ### <sub>*on package main there is 1 class running on terminal and another for the GUI for safety reasons, depending on pom.xml which one is used<sub>
 
 
@@ -44,9 +45,46 @@
  ### data: 1 class
  ### logic: 2 classes
  ### main: 2 classes
- ### ui: 14 classes
+ ### ui: 13 classes
  ### test.csv: structure of csv files to run on tests
 
+### StateBudget
+### ├── src/main/java/
+### │   ├── model                    
+### │   │   ├── Budget.java           
+### │   │   ├── BudgetItem.java       
+### │   │   ├── BudgetChange.java     
+### │   │   └── Scenario.java         
+### │   ├── data                    
+### │   │   └── BudgetDataLoader.java 
+### │   ├── logic                    
+### │   │   ├── BudgetService.java  
+### │   │   └── ReportGenerator.java  
+### │   └── main 
+### │   │    ├── Main.java
+### │   │   └── MainGUI.java
+### │   ├── ui
+### │        ├── AboutScreen.java
+### │        ├── AppController.java
+### │        ├── BudgetChangesScreen.java
+### │        ├── BudgetChabgeTable.java
+### │        ├── BudgetScreen.java
+### │        ├── BudgetTablePrinter.java
+### │        ├── ChartPanel.java
+### │        ├── ContactScreen.java
+### │        ├── HomeScreen.java
+### │        ├── LandingScreen.java
+### │        ├── RegistrationScreen.java
+### │        ├── ReportScreen.java
+### │        └── ScenarioScreen.java
+### │         
+### ├── src/test/java/                
+### ├── data/                        
+### │   └── sample_budget.csv
+### ├── pom.xml                       
+### ├── .gitignore                     
+    └── README.md  
+ 
 
 # Algorithms and Data Structure 
 ## Data Structure
