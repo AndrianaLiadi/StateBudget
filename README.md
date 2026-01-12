@@ -81,9 +81,9 @@
 ### Builder Pattern - Incremental report construction
 
 ## Data Storage Structures
-### **ArrayList<BudgetItem>** - Sequential access for calculations
-### **List<BudgetItem>** - Hierarchical List, tree organization of categories/subcategories
-### **List<BudgetChange>** - Chronological change tracking
+### **ArrayList BudgetItem** - Sequential access for calculations
+### **List BudgetItem** - Hierarchical List, tree organization of categories/subcategories
+### **List BudgetChange** - Chronological change tracking
 
 ## Performance Characteristics
 ### Space Complexity: Proportional to data size with streaming optimizations
