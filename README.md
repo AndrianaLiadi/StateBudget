@@ -1,5 +1,5 @@
 # StateBudget
-### The purpose of this applicattion is to encourage people to study the state budget of the Hellenic Republic among the years 2019-2025 in order to get familiar with economic statements. Our app adresses all ages but mostly young people so that in a fun way understand the importansce of ecomomic management and delve into political topics. 
+The purpose of this applicattion is to encourage people to study the state budget of the Hellenic Republic among the years 2019-2025 in order to get familiar with economic statements. Our app adresses all ages but mostly young people so that in a fun way understand the importansce of ecomomic management and delve into political topics. 
 
 # Service 
 ### StateBudegetManager loads data from csv files and launch the corresponding table of annual budget. Users can make changes on this tables by creating scenarios with altered information, compare yearly data and view complex diagrams.
