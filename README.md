@@ -49,19 +49,52 @@
 
 
 # Algorithms and Data Structure 
-### The application utilizes a hierarchical data structure based on the Composite Pattern, enabling:
-#### Recursive calculations of amounts by category
-### Dynamic organization of the budget in multiple levels
-### Change history with automatic percentage change calculations
+## Data Structure
+### Hierarchical Budget Model (Composite Pattern) - Tree structure for budget organization
+### Immutable Change Tracking - Historical audit trail with mathematical metrics
+### Scenario Management - Version control for budget variations
+### Report Generation - Structured financial documentation
 
 ## Key Algorithims 
-### Linear processing for total calculations
-### Recursive traversal for hierarchical computations
-### Deep cloning for safe object duplication
-### Comparison and analysis of percentage changes
+### Data Processing Pipeline (O(n) complexity)
+### CSV parsing with Unicode support and data cleaning
+### Stream-based loading for memory-efficient large file handling
+### Automatic type detection (Revenue/Expenditure categorization)
+### Budget comparison with O(N+M) pairwise item matching
+### Recursive aggregation for hierarchical sum calculations
+### Percentage change computation with edge-case handling (zero-division protection)
+### Surplus/deficit analysis with net impact calculation
+### Deep cloning for safe scenario creation
+### Change application with item search and update operations
+### Automatic summary generation from change sets
+### Multi-pass aggregation by financial categories
+### Formatted output generation with proper financial notation
+### File export with automatic filename sanitization
 
+## Design Patterns Implemented
+### Composite Pattern (BudgetItem hierarchy) -Hierachical budget items, enables tree-like structures
+### Prototype Pattern (Cloneable interface) - supports object duplication
+### Memento-like Pattern (BudgetChange) - tracks state changes
+### Strategy Pattern - Extensible comparison and export methods
+### Factory Pattern - Budget object creation from multiple sources
+### Observer Pattern - Automatic summary updates on changes
+### Builder Pattern - Incremental report construction
 
- 
+## Data Storage Structures
+### **ArrayList<BudgetItem>** - Sequential access for calculations
+### **List<BudgetItem>** - Hierarchical List, tree organization of categories/subcategories
+### **List<BudgetChange>** - Chronological change tracking
+
+## Performance Characteristics
+### Space Complexity: Proportional to data size with streaming optimizations
+### Time Complexity: Linear for most operations
+### Memory Safety: Deep copying prevents data corruption
+### Error Handling: Protected calculations (zero-division prevention)
+
+## Mathematical Operations
+### Financial calculations: Absolute/percentage changes, net impact
+### Statistical aggregation: Category-wise summation, hierarchical totals
+### Data validation: Input cleaning, edge-case handling, error resilience
 
 
 
