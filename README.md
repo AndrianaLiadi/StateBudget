@@ -48,42 +48,81 @@
  ### ui: 13 classes
  ### test.csv: structure of csv files to run on tests
 
-### StateBudget
-### ├── src/main/java/
-### │   ├── model                    
-### │   │   ├── Budget.java           
-### │   │   ├── BudgetItem.java       
-### │   │   ├── BudgetChange.java     
-### │   │   └── Scenario.java         
-### │   ├── data                    
-### │   │   └── BudgetDataLoader.java 
-### │   ├── logic                    
-### │   │   ├── BudgetService.java  
-### │   │   └── ReportGenerator.java  
-### │   └── main 
-### │   │    ├── Main.java
-### │   │   └── MainGUI.java
-### │   ├── ui
-### │        ├── AboutScreen.java
-### │        ├── AppController.java
-### │        ├── BudgetChangesScreen.java
-### │        ├── BudgetChabgeTable.java
-### │        ├── BudgetScreen.java
-### │        ├── BudgetTablePrinter.java
-### │        ├── ChartPanel.java
-### │        ├── ContactScreen.java
-### │        ├── HomeScreen.java
-### │        ├── LandingScreen.java
-### │        ├── RegistrationScreen.java
-### │        ├── ReportScreen.java
-### │        └── ScenarioScreen.java
-### │         
-### ├── src/test/java/                
-### ├── data/                        
-### │   └── sample_budget.csv
-### ├── pom.xml                       
-### ├── .gitignore                     
-    └── README.md  
+StateBudget
+ ├── settings
+ │   ├── org.eclipse.core.resources.prefs
+ │   ├── org.eclipse.jdt.core.prefs
+ │   └── org.eclipse.m2e.core.prefs
+ ├── .vscode
+ │     └── {} settings.json
+ ├── src/main/java/
+ │   ├── model                    
+ │   │   ├── Budget.java           
+ │   │   ├── BudgetItem.java       
+ │   │   ├── BudgetChange.java     
+ │   │   └── Scenario.java         
+ │   ├── data                    
+ │   │   └── BudgetDataLoader.java 
+ │   ├── logic                    
+ │   │   ├── BudgetService.java  
+ │   │   └── ReportGenerator.java  
+ │   ├── main 
+ │   │    ├── Main.java
+ │   │   └── MainGUI.java
+ │   └── ui
+ │        ├── AboutScreen.java
+ │        ├── AppController.java
+ │        ├── BudgetChangesScreen.java
+ │        ├── BudgetChabgeTable.java
+ │        ├── BudgetScreen.java
+ │        ├── BudgetTablePrinter.java
+ │        ├── ChartPanel.java
+ │        ├── ContactScreen.java
+ │        ├── HomeScreen.java
+ │        ├── LandingScreen.java
+ │        ├── RegistrationScreen.java
+ │        ├── ReportScreen.java
+ │        └── ScenarioScreen.java
+ │         
+ ├── src/test/java/                
+ ├── data                        
+ │    └── BudgetDataLoader.java
+ ├── logic
+ │    ├── BudgetServiceTest.java 
+ │    └── ReportGeneratorTest.java
+ ├── main
+ │    ├── MainTest.java
+ │    └── MainGUITest.java 
+ ├── model
+ │    ├── BudgetChangeTest.java
+ │    ├── BudgetItemTest.java
+ │    ├── BudgetTest.java
+ │    └── ScenarioTest.java
+ └── ui
+ │    ├── AboutScreenTest.java
+ │    ├── AppControlerTest.java
+ │    ├── BudgetChangesScreenTest.java
+ │    ├── BudgetChangeTableTest.java
+ │    ├── BudgetScreenTest.java 
+ │    ├── BudgetTablePrinterTest.java
+ │    ├── ChartPanelTest.java
+ │    ├── ContactScreenTest.java
+ │    ├── HomeScreenTest.java
+ │    ├── LandingScreenTest.java
+ │    ├── RegistrationScreenTest.java
+ │    ├── ReportScreenTest.java
+ │    └── ScenarioScreenTest.java
+ ├── budget-2019.csv
+ ├── budget-2020.csv
+ ├── budget-2021.csv
+ ├── budget-2022.csv
+ ├── budget-2023.csv
+ ├── budget-2024.csv
+ ├── budget-2025.csv 
+ ├── test.csv 
+ ├── pom.xml                       
+ ├── .gitignore                     
+ └── README.md  
  
 
 # Algorithms and Data Structure 
