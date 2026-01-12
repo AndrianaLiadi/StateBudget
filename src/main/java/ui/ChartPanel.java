@@ -6,6 +6,7 @@ import model.BudgetItem;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Arc2D;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
@@ -74,7 +75,7 @@ public class ChartPanel extends JPanel {
                 baseMap.put(code, bv);
                 modMap.put(code, mv);
 
-                String label = null;
+                String label;
                 if (b != null && b.label != null && !b.label.isBlank()) label = b.label;
                 else if (m != null && m.label != null && !m.label.isBlank()) label = m.label;
                 else label = code;
@@ -91,12 +92,12 @@ public class ChartPanel extends JPanel {
             int barX = pad;
             int barY = pad + headerH;
             int barW = fullW - 2 * pad;
-            int barH = (int) Math.round((fullH - 2 * pad - headerH) * 0.36);
+            int barH = (int) Math.round((fullH - 2 * pad - headerH) * 0.34);
 
             int changesX = pad;
             int changesY = barY + barH + 14;
             int changesW = fullW - 2 * pad;
-            int changesH = (int) Math.round((fullH - 2 * pad - headerH) * 0.34);
+            int changesH = (int) Math.round((fullH - 2 * pad - headerH) * 0.36);
 
             int pieX = pad;
             int pieY = changesY + changesH + 14;
@@ -106,9 +107,9 @@ public class ChartPanel extends JPanel {
             drawHeader(g2, pad, pad, fullW - 2 * pad);
 
             AggregatedData bars = buildTopWithOthers(allCodes, baseMap, modMap, labelMap, 10);
-            drawBarChart(g2, barX, barY, barW, barH, bars);
+            drawBarChartNoXLabels(g2, barX, barY, barW, barH, bars);
 
-            ChangeData changes = buildChanges(allCodes, baseMap, modMap, labelMap, 20);
+            ChangeData changes = buildChanges(allCodes, baseMap, modMap, labelMap, 40);
             drawChangesTable(g2, changesX, changesY, changesW, changesH, changes);
 
             drawPieSection(g2, pieX, pieY, pieW, pieH, allCodes, baseMap, modMap, labelMap);
@@ -128,13 +129,13 @@ public class ChartPanel extends JPanel {
 
         g2.setFont(getFont().deriveFont(Font.PLAIN, 12f));
         g2.setColor(subColor);
-        g2.drawString("Σύγκριση Base με Scenario — περιλαμβάνει και αλλαγές σε υποκατηγορίες", x + 6, y + 40);
+        g2.drawString("Σύγκριση Base με Scenario — καθαρό chart + αναλυτικός πίνακας αλλαγών", x + 6, y + 40);
 
         g2.setColor(new Color(230, 230, 230));
         g2.drawLine(x, y + 48, x + w, y + 48);
     }
 
-    private void drawBarChart(Graphics2D g2, int x, int y, int w, int h, AggregatedData d) {
+    private void drawBarChartNoXLabels(Graphics2D g2, int x, int y, int w, int h, AggregatedData d) {
         Color axisColor = new Color(60, 60, 60);
         Color gridColor = new Color(234, 234, 234);
         Color textColor = new Color(35, 35, 35);
@@ -147,12 +148,11 @@ public class ChartPanel extends JPanel {
 
         Font titleFont = getFont().deriveFont(Font.BOLD, 15f);
         Font axisFont = getFont().deriveFont(Font.PLAIN, 12f);
-        Font labelFont = getFont().deriveFont(Font.PLAIN, 11f);
 
         int padLeft = 92;
         int padRight = 18;
         int padTop = 18;
-        int padBottom = 62;
+        int padBottom = 42;
 
         int plotX = x + padLeft;
         int plotY = y + padTop;
@@ -161,7 +161,7 @@ public class ChartPanel extends JPanel {
 
         g2.setFont(titleFont);
         g2.setColor(textColor);
-        g2.drawString("Top κατηγορίες (Base vs Scenario) + Λοιπά", x + 6, y + 16);
+        g2.drawString("Σύγκριση Top κατηγοριών (Base vs Scenario) + Λοιπά", x + 6, y + 16);
 
         long rawMax = 0;
         for (String code : d.codes) {
@@ -197,8 +197,8 @@ public class ChartPanel extends JPanel {
         g2.drawString("Ποσό", x + 10, plotY + 12);
 
         int n = d.codes.size();
-        int groupW = Math.max(95, plotW / Math.max(1, n));
-        int barW = Math.max(16, (groupW - 20) / 2);
+        int groupW = Math.max(70, plotW / Math.max(1, n));
+        int barW = Math.max(14, (groupW - 18) / 2);
         int gap = 6;
 
         int totalGroupsW = groupW * n;
@@ -206,7 +206,6 @@ public class ChartPanel extends JPanel {
 
         for (int i = 0; i < n; i++) {
             String code = d.codes.get(i);
-
             long baseVal = d.baseMap.getOrDefault(code, 0L);
             long modVal = d.modMap.getOrDefault(code, 0L);
 
@@ -214,7 +213,7 @@ public class ChartPanel extends JPanel {
             int modH = (int) Math.round((modVal / (double) niceMax) * plotH);
 
             int xGroup = startX + i * groupW;
-            int xBase = xGroup + 10;
+            int xBase = xGroup + 8;
             int xMod = xBase + barW + gap;
 
             int yBase = plotY + plotH - baseH;
@@ -222,31 +221,13 @@ public class ChartPanel extends JPanel {
 
             drawRoundedBar(g2, xBase, yBase, barW, baseH, baseFill, baseBorder);
             drawRoundedBar(g2, xMod, yMod, barW, modH, scenFill, scenBorder);
-
-            String label = d.labelMap.getOrDefault(code, code);
-            label = label.replace("\n", " ").replace("\r", " ").trim();
-
-            String line1 = shorten(label, 26);
-            String line2 = "";
-            if (label.length() > 26) line2 = shorten(label.substring(26), 26);
-
-            g2.setFont(labelFont);
-            g2.setColor(textColor);
-
-            int lw1 = g2.getFontMetrics().stringWidth(line1);
-            int lx1 = xGroup + (groupW - lw1) / 2;
-            int ly1 = plotY + plotH + 16;
-            g2.drawString(line1, lx1, ly1);
-
-            if (!line2.isEmpty()) {
-                int lw2 = g2.getFontMetrics().stringWidth(line2);
-                int lx2 = xGroup + (groupW - lw2) / 2;
-                int ly2 = ly1 + 14;
-                g2.drawString(line2, lx2, ly2);
-            }
         }
 
         drawLegend(g2, x + 8, y + h - 14);
+
+        g2.setFont(getFont().deriveFont(Font.PLAIN, 12f));
+        g2.setColor(new Color(100, 100, 100));
+        g2.drawString("Τα ονόματα κατηγοριών και οι ακριβείς τιμές φαίνονται αναλυτικά στον πίνακα αλλαγών.", x + 260, y + h - 14);
     }
 
     private void drawChangesTable(Graphics2D g2, int x, int y, int w, int h, ChangeData cd) {
@@ -267,7 +248,7 @@ public class ChartPanel extends JPanel {
 
         g2.setFont(titleFont);
         g2.setColor(textColor);
-        g2.drawString("Αλλαγές χρήστη στο Scenario (Base → Scenario και Δ)", x + 6, y + 16);
+        g2.drawString("Αλλαγές χρήστη στο Scenario (μόνο ό,τι άλλαξε — includes subcategories)", x + 6, y + 16);
 
         int boxY = y + 22;
         int boxH = h - 26;
@@ -290,7 +271,7 @@ public class ChartPanel extends JPanel {
         int tableW = w - 20;
         int tableH = boxH - 20;
 
-        int nameW = Math.min(520, (int) (tableW * 0.50));
+        int nameW = Math.min(560, (int) (tableW * 0.52));
         int baseW = Math.min(170, (int) (tableW * 0.16));
         int scenW = Math.min(170, (int) (tableW * 0.16));
         int deltaW = tableW - nameW - baseW - scenW;
@@ -316,7 +297,8 @@ public class ChartPanel extends JPanel {
         int rowsAreaH = tableH - headerH;
 
         int rowH = 28;
-        int maxVisible = Math.max(4, rowsAreaH / rowH);
+        int maxVisible = Math.max(6, rowsAreaH / rowH);
+
         List<ChangeRow> rows = cd.rows;
         int hidden = cd.hiddenCount;
 
@@ -344,7 +326,7 @@ public class ChartPanel extends JPanel {
             g2.setColor(textColor);
 
             String name = r.label.replace("\n", " ").replace("\r", " ").trim();
-            name = shorten(name, 60);
+            name = shorten(name, 70);
             g2.drawString(name, nameX + 8, ry + 19);
 
             g2.drawString(fmtFull(r.baseValue), baseX + 8, ry + 19);
@@ -379,7 +361,7 @@ public class ChartPanel extends JPanel {
         if (hidden > 0) {
             g2.setFont(getFont().deriveFont(Font.PLAIN, 12f));
             g2.setColor(new Color(110, 110, 110));
-            g2.drawString("…και " + hidden + " ακόμη αλλαγές (μετακίνησε/μεγάλωσε το παράθυρο για να φανούν περισσότερες).", x + 12, boxY + boxH - 10);
+            g2.drawString("…και " + hidden + " ακόμη αλλαγές.", x + 12, boxY + boxH - 10);
         }
     }
 
@@ -490,7 +472,6 @@ public class ChartPanel extends JPanel {
 
             String label = labelMap.getOrDefault(code, code);
             label = label.replace("\n", " ").replace("\r", " ").trim();
-
             double pct = total > 0 ? (val * 100.0 / total) : 0.0;
 
             g2.setColor(colorForCode(code));
@@ -573,12 +554,28 @@ public class ChartPanel extends JPanel {
             }
         }
 
-        List<BudgetItem> subs = item.getSubitems();
+        List<BudgetItem> subs = getChildren(item);
         if (subs != null && !subs.isEmpty()) {
             for (BudgetItem s : subs) {
                 if (s != null) collectNode(s, out);
             }
         }
+    }
+
+    private static List<BudgetItem> getChildren(BudgetItem item) {
+        try {
+            Method m = item.getClass().getMethod("getSubitems");
+            Object res = m.invoke(item);
+            if (res instanceof List) return (List<BudgetItem>) res;
+        } catch (Exception ignored) {
+        }
+        try {
+            Method m = item.getClass().getMethod("getSubItems");
+            Object res = m.invoke(item);
+            if (res instanceof List) return (List<BudgetItem>) res;
+        } catch (Exception ignored) {
+        }
+        return Collections.emptyList();
     }
 
     private static long sumPositive(Map<String, Long> map, List<String> codes) {
@@ -781,7 +778,4 @@ public class ChartPanel extends JPanel {
         }
     }
 }
-
-
-
 
