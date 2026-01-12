@@ -19,9 +19,9 @@ public class Main {
 
         System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
         int year = scanner.nextInt();
-        scanner.nextLine(); // Καθαρισμός buffer
+        scanner.nextLine(); // buffer
 
-        // φόρτωση από CSV
+        // loads from CSV
         BudgetDataLoader loader = new BudgetDataLoader();
         System.out.println("Εισάγετε το path του αρχείου CSV");
         String filePath = scanner.nextLine();
@@ -33,12 +33,12 @@ public class Main {
             return;
         }
         
-        // εμφάνιση πίνακα
+        // presentation of table
         System.out.println("Εδώ παρέχεται ο πίνακας του Κρατικού Προϋπολογισμού");
         BudgetTablePrinter printer = new BudgetTablePrinter();
         printer.printBudget(budget);
     
-        // βασικές πληροφορίες
+        // presenting expenses and revenues
         System.out.println("Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
         System.out.println("Εδώ παρατίθενται τα συνολικά έσοδα:" + budget.totalRevenue());
         System.out.println("Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
@@ -90,7 +90,7 @@ public class Main {
             }
         }
 
-        // εφαρμογή αλλαγών και σύνοψη
+        // apply changes and report summary
         scenario.applyChanges();
         scenario.generateSummary();
 
