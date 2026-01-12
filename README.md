@@ -7,15 +7,17 @@
 # How it works 
 
 
+# Structure
 
-# Utilization of Maven for structure 
+# Utilization of Maven for build structure 
 # mvn clean install  -installing maven on the repository 
 # mvn clean compile -compilation of classes
 # mvn exec:java -execution during developement 
 # mvn package -convert into .jar
 # mvn jacoco:report -checking test coverege
 # mvn checkstyle:check -checking code's formating 
-# java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar -execution of .jar 
+# java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar -execution of .jar
+# file .gitignore where target and class files are saved to avoid conflicts 
 
 # Working on five packages (model, data, logic, main, ui) 
 # model: budget and methods for changes 
@@ -24,7 +26,21 @@
 # main: includes main method (execution of the programm)
 # ui: screens visible to the user  
 
-# 
+# 23 classes in total 
+# model: 4 classes
+# data: 1 class
+# logic: 2 classes
+# main: 2 classes
+# ui: 14 classes
+
+ # Tests 
+ # Each class has their own test on a seperate file called test including:
+ # model: 4 classes
+ # data: 1 class
+ # logic: 2 classes
+ # main: 2 classes
+ # ui: 14 classes
+ 
 
 
-# .gitignore
+
