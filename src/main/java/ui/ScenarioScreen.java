@@ -7,19 +7,45 @@ import model.Scenario;
 
 import javax.swing.*;
 import java.awt.*;
-//this class shows the scenarios
+
+/**
+ * Η κλάση ScenarioScreen παρέχει τη διεπαφή χρήστη για τη δημιουργία και προσομοίωση σεναρίων.
+ * <p>
+ * Σε αυτή την οθόνη, ο χρήστης μπορεί:
+ * <ul>
+ * <li>Να επιλέξει ένα κονδύλιο από τον βασικό προϋπολογισμό.</li>
+ * <li>Να ορίσει μια νέα τιμή για το συγκεκριμένο κονδύλιο.</li>
+ * <li>Να δει μια λίστα με τις αλλαγές που έχει προγραμματίσει.</li>
+ * <li>Να εκτελέσει το σενάριο για να δει τα αποτελέσματα (μετάβαση στο ReportScreen).</li>
+ * </ul>
+ * </p>
+ */
 public class ScenarioScreen extends JPanel {
 
     private final Scenario scenario;
 
+    /**
+     * Κατασκευαστής της οθόνης σεναρίων.
+     * <p>
+     * Αρχικοποιεί ένα νέο αντικείμενο {@link Scenario} βασισμένο στον προϋπολογισμό (baseBudget).
+     * Στήνει τα γραφικά στοιχεία (Dropdowns, TextFields, Buttons) και ορίζει τη λογική
+     * για την προσθήκη αλλαγών και την εκτέλεση της προσομοίωσης.
+     * </p>
+     *
+     * @param controller Ο κεντρικός ελεγκτής της εφαρμογής για την πλοήγηση.
+     * @param baseBudget Ο βασικός προϋπολογισμός πάνω στον οποίο θα γίνουν οι αλλαγές.
+     */
     public ScenarioScreen(AppController controller, Budget baseBudget) {
+        // Δημιουργία νέου σεναρίου κατά την είσοδο στην οθόνη
         this.scenario = new Scenario(baseBudget, "Σενάριο Χρήστη");
 
         setLayout(new BorderLayout());
 
-       
+        
         JLabel title = new JLabel("Scenario Simulation", SwingConstants.CENTER);
+        title.setFont(new Font("Arial", Font.BOLD, 16));
 
+        // Dropdown με τα διαθέσιμα κονδύλια
         JComboBox<BudgetItem> itemBox = new JComboBox<>(
                 baseBudget.getItems().toArray(new BudgetItem[0])
         );
@@ -30,19 +56,23 @@ public class ScenarioScreen extends JPanel {
         JButton runScenario = new JButton("Εκτέλεση σεναρίου");
         JButton back = new JButton("Back");
 
+        // Μοντέλο λίστας για την εμφάνιση των αλλαγών στο UI
         DefaultListModel<String> changesModel = new DefaultListModel<>();
         JList<String> changesList = new JList<>(changesModel);
         changesList.setVisibleRowCount(8);
 
         
+        // Λογική κουμπιού "Προσθήκη αλλαγής"
         addChange.addActionListener(ev -> {
             try {
                 BudgetItem item = (BudgetItem) itemBox.getSelectedItem();
                 if (item == null) return;
 
+                // Ανάγνωση και έλεγχος της τιμής
                 long newValue = Long.parseLong(newValueField.getText().trim());
                 long oldValue = item.getAmount();
 
+                // Δημιουργία αντικειμένου αλλαγής
                 BudgetChange change = new BudgetChange(
                         item.getCode(),
                         item.getName(),
@@ -51,9 +81,10 @@ public class ScenarioScreen extends JPanel {
                         item.getType()
                 );
 
+                // Προσθήκη στο σενάριο
                 scenario.getChanges().add(change);
 
-                
+                // Ενημέρωση της λίστας στην οθόνη
                 changesModel.addElement(
                         item.getName() + " (" + item.getCode() + "): " + oldValue + " → " + newValue
                 );
@@ -69,15 +100,16 @@ public class ScenarioScreen extends JPanel {
             }
         });
 
+        // Λογική κουμπιού "Εκτέλεση σεναρίου"
         runScenario.addActionListener(ev -> {
-            scenario.applyChanges();
-            scenario.generateSummary();
-            controller.showReportScreen(scenario); 
+            scenario.applyChanges();     // Εφαρμογή αλλαγών
+            scenario.generateSummary();  // Δημιουργία κειμένου σύνοψης
+            controller.showReportScreen(scenario); // Μετάβαση στην οθόνη αποτελεσμάτων
         });
 
         back.addActionListener(ev -> controller.showScreen(AppController.HOME));
 
-       
+        // --- Στήσιμο Layout (Εμφάνιση) ---
         JPanel top = new JPanel();
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -101,4 +133,3 @@ public class ScenarioScreen extends JPanel {
         add(back, BorderLayout.SOUTH);
     }
 }
-
