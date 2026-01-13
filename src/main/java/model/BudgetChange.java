@@ -103,7 +103,7 @@ public class BudgetChange {
 
     /**
      * Ορίζει μια νέα τιμή για το κονδύλιο στο σενάριο.
-     * @param newValue Το νέο ποσό.
+     * @param newValue Το νέο ποσό. 
      */
     public void setNewValue(long newValue) {
         this.newValue = newValue;
