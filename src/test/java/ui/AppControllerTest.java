@@ -8,10 +8,28 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Κλάση ελέγχου (Test Class) για την κλάση {@link AppController}.
+ * <p>
+ * Ελέγχει τον κεντρικό ελεγκτή της διεπαφής χρήστη.
+ * Επειδή το AppController είναι κλάση Swing (κληρονομεί από JFrame), όλα τα tests
+ * πρέπει να τρέχουν εντός του Swing Event Dispatch Thread (EDT) για να αποφευχθούν
+ * προβλήματα συγχρονισμού (concurrency issues). Γι' αυτό χρησιμοποιείται η
+ * {@code SwingUtilities.invokeAndWait}.
+ * </p>
+ */
 class AppControllerTest {
 
     private AppController app;
 
+    /**
+     * Αρχικοποίηση πριν από κάθε test.
+     * <p>
+     * Δημιουργεί ένα νέο στιγμιότυπο του {@link AppController} μέσα στο EDT.
+     * Το παράθυρο ορίζεται ως μη ορατό (setVisible(false)) για να μην πετάγονται
+     * παράθυρα στην οθόνη κατά την εκτέλεση των tests.
+     * </p>
+     */
     @BeforeEach
     void setUp() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
@@ -20,6 +38,13 @@ class AppControllerTest {
         });
     }
 
+    /**
+     * Καθαρισμός μετά από κάθε test.
+     * <p>
+     * Καλεί την {@code dispose()} για να καταστρέψει το παράθυρο και να ελευθερώσει
+     * τους πόρους του συστήματος.
+     * </p>
+     */
     @AfterEach
     void tearDown() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
@@ -29,6 +54,13 @@ class AppControllerTest {
         });
     }
 
+    /**
+     * Ελέγχει ότι ο AppController αρχικοποιείται σωστά.
+     * <p>
+     * Επιβεβαιώνει ότι το αντικείμενο δεν είναι null και ότι οι βασικές ιδιότητες
+     * του παραθύρου (τίτλος, διαστάσεις) έχουν τις αναμενόμενες τιμές.
+     * </p>
+     */
     @Test
     void testAppControllerInitialization() {
         assertNotNull(app);
@@ -37,6 +69,12 @@ class AppControllerTest {
         assertEquals(500, app.getHeight());
     }
 
+    /**
+     * Ελέγχει την πλοήγηση στην αρχική οθόνη (HOME).
+     * <p>
+     * Επιβεβαιώνει ότι η μέθοδος {@code showScreen} εκτελείται χωρίς σφάλματα.
+     * </p>
+     */
     @Test
     void testShowHomeScreenDoesNotThrow() {
         assertDoesNotThrow(() -> {
@@ -46,6 +84,9 @@ class AppControllerTest {
         });
     }
 
+    /**
+     * Ελέγχει την πλοήγηση στην οθόνη του προϋπολογισμού (BUDGET).
+     */
     @Test
     void testShowBudgetScreenDoesNotThrow() {
         assertDoesNotThrow(() -> {
@@ -55,6 +96,9 @@ class AppControllerTest {
         });
     }
 
+    /**
+     * Ελέγχει την πλοήγηση στην οθόνη των σεναρίων (SCENARIO).
+     */
     @Test
     void testShowScenarioScreenDoesNotThrow() {
         assertDoesNotThrow(() -> {
@@ -64,6 +108,13 @@ class AppControllerTest {
         });
     }
 
+    /**
+     * Ελέγχει την εμφάνιση της οθόνης αναφορών (ReportScreen) όταν δεν υπάρχει σενάριο.
+     * <p>
+     * Περνάμε {@code null} ως σενάριο για να βεβαιωθούμε ότι η εφαρμογή το διαχειρίζεται
+     * σωστά και δεν καταρρέει (αναμένεται να εμφανίσει κατάλληλο μήνυμα στο UI).
+     * </p>
+     */
     @Test
     void testShowReportScreenWithNullScenario() {
         assertDoesNotThrow(() -> {
