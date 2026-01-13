@@ -76,6 +76,6 @@ class AboutScreenTest {
         assertNotNull(backButton);
 
         JButton finalBackButton = backButton;
-        assertDoesNotThrow(finalBackButton::doClick);
+        assertDoesNotThrow(() ->finalBackButton.doClick());
     }
 }
