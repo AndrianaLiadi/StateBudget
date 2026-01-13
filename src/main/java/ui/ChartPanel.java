@@ -11,11 +11,29 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Η κλάση ChartPanel είναι ένα προσαρμοσμένο γραφικό συστατικό (Custom Swing Component)
+ * που είναι υπεύθυνο για την οπτικοποίηση των δεδομένων του προϋπολογισμού.
+ * <p>
+ * Χρησιμοποιεί τη βιβλιοθήκη Graphics2D για να σχεδιάσει:
+ * <ul>
+ * <li>Ένα ραβδόγραμμα (Bar Chart) για τη σύγκριση των κυριότερων κατηγοριών.</li>
+ * <li>Έναν αναλυτικό πίνακα αλλαγών που δείχνει τις διαφορές μεταξύ του βασικού και του τροποποιημένου σεναρίου.</li>
+ * <li>Δύο διαγράμματα πίτας (Pie Charts) για την απεικόνιση της κατανομής των πόρων.</li>
+ * </ul>
+ * </p>
+ */
 public class ChartPanel extends JPanel {
 
     private final Budget base;
     private final Budget modified;
 
+    /**
+     * Κατασκευαστής του ChartPanel.
+     *
+     * @param base     Ο βασικός προϋπολογισμός (αναφοράς).
+     * @param modified Ο τροποποιημένος προϋπολογισμός (σενάριο).
+     */
     public ChartPanel(Budget base, Budget modified) {
         this.base = base;
         this.modified = modified;
@@ -23,12 +41,20 @@ public class ChartPanel extends JPanel {
         setBackground(Color.WHITE);
     }
 
+    /**
+     * Η μέθοδος paintComponent καλείται αυτόματα από το Swing για να ζωγραφίσει το περιεχόμενο.
+     * <p>
+     * Εδώ γίνεται ο υπολογισμός των δεδομένων, η ενεργοποίηση του Anti-aliasing για καλύτερη
+     * ποιότητα γραφικών και η κλήση των επιμέρους μεθόδων σχεδίασης (Header, Charts, Tables).
+     * </p>
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
 
         Graphics2D g2 = (Graphics2D) g.create();
         try {
+            // Ενεργοποίηση Anti-aliasing για ομαλά γραφικά και κείμενο
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 
@@ -45,6 +71,7 @@ public class ChartPanel extends JPanel {
                 return;
             }
 
+            // Συλλογή και άθροιση όλων των κόμβων (κατηγοριών) αναδρομικά
             Map<String, NodeAgg> baseNodes = new LinkedHashMap<>();
             Map<String, NodeAgg> modNodes = new LinkedHashMap<>();
 
@@ -61,6 +88,7 @@ public class ChartPanel extends JPanel {
                 return;
             }
 
+            // Προετοιμασία Maps για γρήγορη προσπέλαση τιμών
             Map<String, Long> baseMap = new LinkedHashMap<>();
             Map<String, Long> modMap = new LinkedHashMap<>();
             Map<String, String> labelMap = new LinkedHashMap<>();
@@ -83,6 +111,7 @@ public class ChartPanel extends JPanel {
                 labelMap.put(code, label);
             }
 
+            // Υπολογισμός διαστάσεων (Layout)
             int pad = 18;
             int headerH = 54;
 
@@ -104,6 +133,7 @@ public class ChartPanel extends JPanel {
             int pieW = fullW - 2 * pad;
             int pieH = fullH - pad - pieY;
 
+            // Σχεδίαση των τμημάτων
             drawHeader(g2, pad, pad, fullW - 2 * pad);
 
             AggregatedData bars = buildTopWithOthers(allCodes, baseMap, modMap, labelMap, 10);
@@ -119,6 +149,9 @@ public class ChartPanel extends JPanel {
         }
     }
 
+    /**
+     * Σχεδιάζει τον τίτλο και τον υπότιτλο της αναφοράς.
+     */
     private void drawHeader(Graphics2D g2, int x, int y, int w) {
         Color textColor = new Color(25, 25, 25);
         Color subColor = new Color(90, 90, 90);
@@ -135,6 +168,10 @@ public class ChartPanel extends JPanel {
         g2.drawLine(x, y + 48, x + w, y + 48);
     }
 
+    /**
+     * Σχεδιάζει το ραβδόγραμμα σύγκρισης για τις κορυφαίες κατηγορίες.
+     * Δεν εμφανίζει ετικέτες στον άξονα Χ για καθαρότερη εμφάνιση.
+     */
     private void drawBarChartNoXLabels(Graphics2D g2, int x, int y, int w, int h, AggregatedData d) {
         Color axisColor = new Color(60, 60, 60);
         Color gridColor = new Color(234, 234, 234);
@@ -230,6 +267,10 @@ public class ChartPanel extends JPanel {
         g2.drawString("Τα ονόματα κατηγοριών και οι ακριβείς τιμές φαίνονται αναλυτικά στον πίνακα αλλαγών.", x + 260, y + h - 14);
     }
 
+    /**
+     * Σχεδιάζει τον πίνακα με τις αλλαγές (deltas).
+     * Περιλαμβάνει στήλες για Κατηγορία, Τιμή Βάσης, Τιμή Σεναρίου και Διαφορά (Bar chart μέσα στο κελί).
+     */
     private void drawChangesTable(Graphics2D g2, int x, int y, int w, int h, ChangeData cd) {
         Color textColor = new Color(35, 35, 35);
         Color border = new Color(220, 220, 220);
@@ -365,6 +406,9 @@ public class ChartPanel extends JPanel {
         }
     }
 
+    /**
+     * Σχεδιάζει την ενότητα με τα διαγράμματα πίτας (Pie Charts).
+     */
     private void drawPieSection(Graphics2D g2, int x, int y, int w, int h,
                                 List<String> codes,
                                 Map<String, Long> baseMap,
@@ -425,6 +469,9 @@ public class ChartPanel extends JPanel {
         g2.drawString("Σύνολο: " + fmtFull(modTotal), right.x + 12, right.y + right.height - 14);
     }
 
+    /**
+     * Βοηθητική μέθοδος για τη σχεδίαση ενός μεμονωμένου διαγράμματος πίτας.
+     */
     private void drawPie(Graphics2D g2, Rectangle area, List<String> codes, Map<String, Long> map, long total) {
         g2.setColor(new Color(245, 245, 245));
         g2.fillOval(area.x, area.y, area.width, area.height);
@@ -455,6 +502,9 @@ public class ChartPanel extends JPanel {
         g2.drawOval(area.x, area.y, area.width, area.height);
     }
 
+    /**
+     * Σχεδιάζει το υπόμνημα (legend) για το διάγραμμα πίτας.
+     */
     private void drawPieLegend(Graphics2D g2, int x, int y,
                                List<String> codes, Map<String, Long> map, long total,
                                Map<String, String> labelMap) {
@@ -493,6 +543,9 @@ public class ChartPanel extends JPanel {
         }
     }
 
+    /**
+     * Σχεδιάζει το γενικό υπόμνημα χρωμάτων (Base vs Scenario).
+     */
     private void drawLegend(Graphics2D g2, int x, int y) {
         Color textColor = new Color(35, 35, 35);
 
@@ -525,10 +578,16 @@ public class ChartPanel extends JPanel {
         g2.drawString("Scenario", bx + 20, y);
     }
 
+    /**
+     * Επιστρέφει μια ασφαλή λίστα (κενή αν είναι null).
+     */
     private static List<BudgetItem> safeList(List<BudgetItem> items) {
         return items == null ? Collections.emptyList() : items;
     }
 
+    /**
+     * Αναδρομική συλλογή όλων των κόμβων (Items) και άθροιση των ποσών τους.
+     */
     private static void collectAllNodes(List<BudgetItem> roots, Map<String, NodeAgg> out) {
         for (BudgetItem r : roots) {
             if (r == null) continue;
@@ -562,6 +621,10 @@ public class ChartPanel extends JPanel {
         }
     }
 
+    /**
+     * Χρήση Reflection για την ανάκτηση υποκατηγοριών, ώστε να καλυφθούν διαφορετικές
+     * ονομασίες μεθόδων (getSubitems vs getSubItems).
+     */
     private static List<BudgetItem> getChildren(BudgetItem item) {
         try {
             Method m = item.getClass().getMethod("getSubitems");
@@ -584,6 +647,9 @@ public class ChartPanel extends JPanel {
         return s;
     }
 
+    /**
+     * Υπολογίζει μια στρογγυλοποιημένη τιμή (π.χ. για τον άξονα Υ) ώστε να είναι ευανάγνωστη.
+     */
     private static long niceCeil(long v) {
         if (v <= 0) return 1;
         long pow10 = 1;
@@ -601,6 +667,9 @@ public class ChartPanel extends JPanel {
         return res;
     }
 
+    /**
+     * Παράγει ένα μοναδικό χρώμα με βάση τον κωδικό του αντικειμένου (deterministic color).
+     */
     private static Color colorForCode(String code) {
         int h = (code == null ? 0 : code.hashCode());
         int r = 80 + Math.abs(h * 31) % 140;
@@ -632,6 +701,9 @@ public class ChartPanel extends JPanel {
         return sign + fmtFull(av);
     }
 
+    /**
+     * Βοηθητική μέθοδος σχεδίασης ράβδου με στρογγυλεμένες γωνίες.
+     */
     private static void drawRoundedBar(Graphics2D g2, int x, int y, int w, int h, Color fill, Color border) {
         if (w < 0) w = 0;
         if (h < 0) h = 0;
@@ -650,6 +722,9 @@ public class ChartPanel extends JPanel {
         g2.drawString(text, x, y);
     }
 
+    /**
+     * Φιλτράρει και ταξινομεί τα δεδομένα για να κρατήσει τα Top N και να ομαδοποιήσει τα υπόλοιπα.
+     */
     private static AggregatedData buildTopWithOthers(List<String> allCodes,
                                                      Map<String, Long> baseMap,
                                                      Map<String, Long> modMap,
@@ -698,11 +773,14 @@ public class ChartPanel extends JPanel {
         return new AggregatedData(codesOut, baseOut, modOut, labelOut);
     }
 
+    /**
+     * Εντοπίζει και συλλέγει μόνο τα στοιχεία που έχουν αλλάξει τιμή.
+     */
     private static ChangeData buildChanges(List<String> allCodes,
-                                          Map<String, Long> baseMap,
-                                          Map<String, Long> modMap,
-                                          Map<String, String> labelMap,
-                                          int maxRows) {
+                                           Map<String, Long> baseMap,
+                                           Map<String, Long> modMap,
+                                           Map<String, String> labelMap,
+                                           int maxRows) {
 
         List<ChangeRow> rows = new ArrayList<>();
         for (String code : allCodes) {
@@ -725,6 +803,8 @@ public class ChartPanel extends JPanel {
 
         return new ChangeData(rows, hidden);
     }
+
+    // --- Inner Helper Classes (Data Holders) ---
 
     private static class NodeAgg {
         final String code;
@@ -778,4 +858,3 @@ public class ChartPanel extends JPanel {
         }
     }
 }
-
