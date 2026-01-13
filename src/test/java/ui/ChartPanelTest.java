@@ -39,8 +39,7 @@ class ChartPanelTest {
 
         assertNotNull(panel);
         assertEquals(Color.WHITE, panel.getBackground());
-        // Σημείωση: Βεβαιώσου ότι αυτές οι διαστάσεις ταιριάζουν με αυτές στην κλάση ChartPanel
-        assertEquals(new Dimension(650, 420), panel.getPreferredSize());
+        assertEquals(new Dimension(1100, 820), panel.getPreferredSize());
     }
 
     /**
@@ -121,7 +120,7 @@ class ChartPanelTest {
      * @param panel Το panel που θα τεσταριστεί.
      */
     private void paint(JPanel panel) {
-        panel.setSize(700, 500); // Ορισμός μεγέθους για να έχει χώρο να ζωγραφίσει
+        panel.setSize(1100, 820); // Ορισμός μεγέθους για να έχει χώρο να ζωγραφίσει
 
         BufferedImage image = new BufferedImage(
                 panel.getWidth(),
