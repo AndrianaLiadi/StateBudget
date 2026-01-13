@@ -10,7 +10,14 @@ import java.util.HashMap;
 import data.BudgetDataLoader;
 
 import java.awt.*;
-// this class is the backbone of ui
+
+/**
+ * Η κλάση AppController αποτελεί τη "ραχοκοκαλιά" (backbone) του UI.
+ * <p>
+ * Λειτουργεί ως το κεντρικό παράθυρο (JFrame) και διαχειρίζεται την πλοήγηση
+ * μεταξύ των διαφόρων οθονών της εφαρμογής.
+ * </p>
+ */
 public class AppController extends JFrame {
 
     private CardLayout layout;
@@ -28,6 +35,13 @@ public class AppController extends JFrame {
     public static final String ABOUT = "about";
     public static final String CONTACT = "contact";
 
+    /**
+     * Κατασκευαστής της κλάσης AppController.
+     * <p>
+     * Ρυθμίζει το παράθυρο, φορτώνει τα δεδομένα από τα CSV αρχεία και
+     * αρχικοποιεί όλες τις οθόνες της εφαρμογής.
+     * </p>
+     */
     public AppController() {
         setTitle("State Budget App");
         setSize(700, 500);
@@ -71,10 +85,17 @@ public class AppController extends JFrame {
         showScreen(REGISTRATION);}
         }
 
+    /**
+     * Αλλάζει την τρέχουσα προβαλλόμενη οθόνη.
+     * @param screenName Το όνομα της οθόνης που θέλουμε να εμφανιστεί.
+     */
     public void showScreen(String screenName) {
         layout.show(container, screenName);
     }
 
+    /**
+     * Δημιουργεί και ρυθμίζει το μενού πλοήγησης (Menu Bar) στο πάνω μέρος.
+     */
     private void setupMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -118,6 +139,11 @@ public class AppController extends JFrame {
 
         setJMenuBar(menuBar);
     }
+    
+    /**
+     * Εμφανίζει την οθόνη αναφορών για ένα συγκεκριμένο σενάριο.
+     * @param scenario Το σενάριο προς προβολή.
+     */
     public void showReportScreen(Scenario scenario) {
     this.currentScenario = scenario;
 
