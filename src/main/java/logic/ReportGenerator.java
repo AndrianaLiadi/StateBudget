@@ -6,8 +6,27 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Η κλάση ReportGenerator είναι υπεύθυνη για τη δημιουργία και την εξαγωγή αναφορών.
+ * <p>
+ * Αναλαμβάνει τη σύνταξη κειμενικών αναφορών που περιλαμβάνουν συγκεντρωτικά στοιχεία
+ * και αναλυτικές λίστες αλλαγών μεταξύ των σεναρίων του προϋπολογισμού.
+ * </p>
+ */
 public class ReportGenerator {
 
+    /**
+     * Δημιουργεί μια αναλυτική κειμενική αναφορά (summary) για ένα συγκεκριμένο σενάριο.
+     * <p>
+     * Η μέθοδος υπολογίζει τις συνολικές μεταβολές στα έσοδα και τα έξοδα,
+     * την καθαρή επίπτωση στον προϋπολογισμό και παραθέτει λίστα με όλες τις
+     * επιμέρους αλλαγές ανά κονδύλιο.
+     * </p>
+     *
+     * @param scenario Το αντικείμενο του σεναρίου για το οποίο δημιουργείται η αναφορά.
+     * @param changes  Η λίστα με τις αλλαγές {@link BudgetChange} που έχουν εντοπιστεί.
+     * @return Ένα String που περιέχει ολόκληρη τη μορφοποιημένη αναφορά.
+     */
     public String generateSummary(Scenario scenario, List<BudgetChange> changes) {
         StringBuilder sb = new StringBuilder();
 
@@ -57,6 +76,16 @@ public class ReportGenerator {
         return sb.toString();
     }
 
+    /**
+     * Εξάγει το περιεχόμενο της αναφοράς σε αρχείο κειμένου.
+     * <p>
+     * Δημιουργεί ένα αρχείο (με κατάληξη .txt) χρησιμοποιώντας το όνομα του σεναρίου
+     * ως μέρος του ονόματος του αρχείου.
+     * </p>
+     *
+     * @param scenario Το σενάριο (χρησιμοποιείται για την ονομασία του αρχείου).
+     * @param content  Το κειμενικό περιεχόμενο της αναφοράς που θα αποθηκευτεί.
+     */
     public void exportToPDF(Scenario scenario, String content) {
         String filename = "Report_" + scenario.getitemName().replaceAll("\\s+", "_") + ".txt";
 
