@@ -8,20 +8,35 @@ import model.BudgetChange;
 import model.BudgetItem;
 import model.Scenario;
 
-
 import java.util.Scanner; 
 
-
-
+/**
+ * Η κλάση {@code Main} αποτελεί το σημείο εισόδου (entry point) της εφαρμογής κονσόλας (CLI).
+ * <p>
+ * Συντονίζει τη συνολική ροή εκτέλεσης του προγράμματος:
+ * <ol>
+ * <li>Ζητάει δεδομένα εισόδου από τον χρήστη (έτος, αρχείο CSV).</li>
+ * <li>Φορτώνει και παρουσιάζει τον αρχικό προϋπολογισμό.</li>
+ * <li>Επιτρέπει τη διαδραστική δημιουργία σεναρίων με προσθήκη αλλαγών.</li>
+ * <li>Υπολογίζει και παρουσιάζει τα αποτελέσματα και τις διαφορές του σεναρίου.</li>
+ * </ol>
+ * </p>
+ */
 public class Main {
+
+    /**
+     * Η κύρια μέθοδος που εκτελείται κατά την εκκίνηση της εφαρμογής.
+     * * @param args Τα ορίσματα γραμμής εντολών (δεν χρησιμοποιούνται στην παρούσα έκδοση).
+     */
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
+        // 1. Εισαγωγή βασικών στοιχείων
         System.out.println("Εισάγετε το έτος του κρατικού προυπολογισμού:");
         int year = scanner.nextInt();
-        scanner.nextLine(); // buffer
+        scanner.nextLine(); // buffer consumption
 
-        // loads from CSV
+        // 2. Φόρτωση δεδομένων από CSV
         BudgetDataLoader loader = new BudgetDataLoader();
         System.out.println("Εισάγετε το path του αρχείου CSV");
         String filePath = scanner.nextLine();
@@ -33,22 +48,24 @@ public class Main {
             return;
         }
         
-        // presentation of table
+        // 3. Παρουσίαση αρχικού πίνακα
         System.out.println("Εδώ παρέχεται ο πίνακας του Κρατικού Προϋπολογισμού");
         BudgetTablePrinter printer = new BudgetTablePrinter();
         printer.printBudget(budget);
     
-        // presenting expenses and revenues
+        // 4. Εμφάνιση συγκεντρωτικών στοιχείων
         System.out.println("Επεξεργάζεστε την προϋπολογισμό του έτους:" + year);
         System.out.println("Εδώ παρατίθενται τα συνολικά έσοδα:" + budget.totalRevenue());
         System.out.println("Εδώ παρατίθενται τα συνολικά έξοδα:" + budget.totalExpenditure());
 
+        // 5. Δημιουργία Σεναρίου
         System.out.println("\nΔώστε το σεναριό σας!");
         String scenarioName = scanner.nextLine();
         Scenario scenario = new Scenario(budget, scenarioName);
 
         boolean addMore = true;
 
+        // 6. Βρόχος προσθήκης αλλαγών
         while (addMore) {
             System.out.println("\nΕισάγετε κωδικό σεναρίου αλλαγής!");
             String code = scanner.nextLine();
@@ -90,10 +107,11 @@ public class Main {
             }
         }
 
-        // apply changes and report summary
+        // 7. Εφαρμογή αλλαγών και παραγωγή αναφοράς
         scenario.applyChanges();
         scenario.generateSummary();
 
+        // 8. Εκτύπωση αποτελεσμάτων
         BudgetChangeTable table = new BudgetChangeTable(scenario.getChanges());
         table.printTable();
 
@@ -103,4 +121,3 @@ public class Main {
         scanner.close();
     }
 }
-
