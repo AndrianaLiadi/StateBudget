@@ -10,8 +10,26 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Η κλάση BudgetDataLoader είναι υπεύθυνη για τη φόρτωση δεδομένων προϋπολογισμού από αρχεία.
+ * <p>
+ * Αναλαμβάνει το άνοιγμα αρχείων CSV, την ανάλυση (parsing) των γραμμών τους,
+ * τον καθαρισμό των δεδομένων (π.χ. αφαίρεση ειδικών χαρακτήρων από τα ποσά)
+ * και τη δημιουργία αντικειμένων {@link Budget}.
+ * </p>
+ */
 public class BudgetDataLoader {
 
+    /**
+     * Καθαρίζει μια συμβολοσειρά ποσού και τη μετατρέπει σε ακέραιο αριθμό (long).
+     * <p>
+     * Αφαιρεί τελείες, εισαγωγικά και ειδικούς χαρακτήρες. Αν το ποσό περιέχει
+     * δεκαδικό μέρος (υποδιαστολή με κόμμα), αυτό αποκόπτεται.
+     * </p>
+     *
+     * @param amountStr Η αρχική συμβολοσειρά που περιέχει το ποσό.
+     * @return Το ποσό ως {@code long}. Επιστρέφει 0 αν η είσοδος είναι κενή ή μη έγκυρη.
+     */
     private long cleanAndParseAmount(String amountStr) {
         if (amountStr == null || amountStr.trim().isEmpty()) {
             return 0;
@@ -22,6 +40,7 @@ public class BudgetDataLoader {
                                   .replaceAll("\"", "")
                                   .trim();
         
+        // Αφαίρεση δεκαδικών αν υπάρχουν
         if (cleaned.contains(",")) {
             cleaned = cleaned.substring(0, cleaned.indexOf(','));
         }
@@ -37,6 +56,16 @@ public class BudgetDataLoader {
         }
     }
 
+    /**
+     * Αναλύει μια γραμμή CSV λαμβάνοντας υπόψη πεδία που βρίσκονται εντός εισαγωγικών.
+     * <p>
+     * Αυτή η μέθοδος είναι απαραίτητη γιατί απλό {@code split(",")} θα αποτύγχανε
+     * αν ένα πεδίο (π.χ. όνομα κατηγορίας) περιείχε κόμμα μέσα του.
+     * </p>
+     *
+     * @param line Η γραμμή κειμένου από το αρχείο CSV.
+     * @return Μια λίστα με τα επιμέρους πεδία της γραμμής.
+     */
     private List<String> parseCsvLine(String line) {
         List<String> result = new ArrayList<>();
         StringBuilder currentField = new StringBuilder();
@@ -56,6 +85,17 @@ public class BudgetDataLoader {
         return result;
     }
 
+    /**
+     * Φορτώνει τα δεδομένα του προϋπολογισμού από ένα αρχείο CSV.
+     * <p>
+     * Η μέθοδος διαβάζει το αρχείο, αναγνωρίζει αν πρόκειται για ΕΣΟΔΑ ή ΕΞΟΔΑ
+     * με βάση το περιεχόμενο, και δημιουργεί τη λίστα με τα αντικείμενα {@link BudgetItem}.
+     * </p>
+     *
+     * @param filePath Η διαδρομή του αρχείου CSV στο δίσκο.
+     * @param year     Το οικονομικό έτος στο οποίο αναφέρεται ο προϋπολογισμός.
+     * @return Ένα αντικείμενο {@link Budget} που περιέχει όλα τα φορτωμένα στοιχεία.
+     */
     public Budget loadFromCSV(String filePath, int year) {
         List<BudgetItem> items = new ArrayList<>();
         String currentType = null;
@@ -63,6 +103,7 @@ public class BudgetDataLoader {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
+                // Αφαίρεση του BOM (Byte Order Mark) αν υπάρχει στην αρχή του αρχείου
                 if (line.startsWith("\uFEFF")) {
                     line = line.substring(1);
                 }
@@ -77,6 +118,7 @@ public class BudgetDataLoader {
                 String name = data.get(1).replaceAll("\"", "").trim();
                 String amountStr = data.get(data.size() - 1);
 
+                // Ανίχνευση αλλαγής τύπου (Έσοδα/Έξοδα)
                 if (codePart.contains("ΕΣΟΔΑ")) {
                     currentType = "REVENUE";
                     continue;
