@@ -2,6 +2,8 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Container;
+
 import javax.swing.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +50,7 @@ class ContactScreenTest {
 
     @Test
     void testBackButtonExists() {
-        JButton backButton = findButtonByText(contactScreen, "Back");
+        JButton backButton = findButtonByText((Container)contactScreen, "Back");
         assertNotNull(backButton);
     }
 
@@ -57,7 +59,7 @@ class ContactScreenTest {
         JButton backButton = findButtonByText(contactScreen, "Back");
 
         assertNotNull(backButton);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
 

@@ -63,7 +63,7 @@ class LandingScreenTest {
         JButton homeButton = findButtonByText(landingScreen, "Home");
 
         assertNotNull(homeButton);
-        assertDoesNotThrow(homeButton::doClick);
+        assertDoesNotThrow(() ->homeButton.doClick());
     }
 
     @Test
@@ -71,7 +71,7 @@ class LandingScreenTest {
         JButton aboutButton = findButtonByText(landingScreen, "About");
 
         assertNotNull(aboutButton);
-        assertDoesNotThrow(aboutButton::doClick);
+        assertDoesNotThrow(() ->aboutButton.doClick());
     }
 
     @Test
@@ -79,12 +79,10 @@ class LandingScreenTest {
         JButton contactButton = findButtonByText(landingScreen, "Contact");
 
         assertNotNull(contactButton);
-        assertDoesNotThrow(contactButton::doClick);
+        assertDoesNotThrow(() ->contactButton.doClick());
     }
 
-    /* =======================
-       Helper methods
-       ======================= */
+    
 
     @SuppressWarnings("unchecked")
     private <T extends JComponent> T findComponent(Container root, Class<T> type) {

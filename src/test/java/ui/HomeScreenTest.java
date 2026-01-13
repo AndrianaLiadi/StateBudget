@@ -57,7 +57,7 @@ class HomeScreenTest {
         JButton budgetButton = findButtonByText(homeScreen, "Δες Προϋπολογισμό");
 
         assertNotNull(budgetButton);
-        assertDoesNotThrow(budgetButton::doClick);
+        assertDoesNotThrow(() ->budgetButton.doClick());
     }
 
     @Test
@@ -65,7 +65,7 @@ class HomeScreenTest {
         JButton backButton = findButtonByText(homeScreen, "Back");
 
         assertNotNull(backButton);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
 

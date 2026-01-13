@@ -45,8 +45,8 @@ class ChartPanelTest {
 
     @Test
     void testPaintComponentWithDataDoesNotThrow() {
-        BudgetItem b1 = new BudgetItem("A1", "Test A1", 1_000);
-        BudgetItem b2 = new BudgetItem("B1", "Test B1", 2_500);
+        BudgetItem b1 = new BudgetItem("A1", "Test A1", "Income", 1_000);
+        BudgetItem b2 = new BudgetItem("B1", "Test B1", "Expense", 2_500);
 
         Budget base = new Budget(2025, List.of(b1));
         Budget modified = new Budget(2025, List.of(b2));
@@ -58,8 +58,8 @@ class ChartPanelTest {
 
     @Test
     void testPaintComponentWithDuplicateCodesDoesNotThrow() {
-        BudgetItem b1 = new BudgetItem("X", "Item 1", 100);
-        BudgetItem b2 = new BudgetItem("X", "Item 2", 200);
+        BudgetItem b1 = new BudgetItem("X", "Item 1", "Icome", 100);
+        BudgetItem b2 = new BudgetItem("X", "Item 2", "Income", 200);
 
         Budget base = new Budget(2025, List.of(b1, b2));
         Budget modified = new Budget(2025, List.of(b1));

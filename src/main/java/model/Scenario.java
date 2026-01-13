@@ -32,6 +32,9 @@ public class Scenario {
     public Budget getModifiedBudget() {
         return modifiedBudget;
     }
+    public void setModifiedBudget(Budget modifiedBudget) {
+        this.modifiedBudget = modifiedBudget;
+    }
 
     public String getSummary() {
         return summary;

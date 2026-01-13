@@ -2,6 +2,8 @@ package ui;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Container;
+
 import javax.swing.*;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -52,10 +54,10 @@ class BudgetScreenTest {
 
     @Test
     void testBackButtonActionDoesNotThrow() {
-        JButton backButton = findButtonByText(budgetScreen, "Back");
+        JButton backButton = findButtonByText((Container)budgetScreen, "Back");
 
         assertNotNull(backButton);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
     @Test
@@ -77,7 +79,7 @@ class BudgetScreenTest {
 
     @SuppressWarnings("unchecked")
     private <T extends JComponent> T findComponent(Container root, Class<T> type) {
-        for (Component c : root.getComponents()) {
+        for (java.awt.Component c : root.getComponents()) {
             if (type.isInstance(c)) {
                 return (T) c;
             }
@@ -90,7 +92,7 @@ class BudgetScreenTest {
     }
 
     private JButton findButtonByText(Container root, String text) {
-        for (Component c : root.getComponents()) {
+        for (java.awt.Component c : root.getComponents()) {
             if (c instanceof JButton) {
                 JButton b = (JButton) c;
                 if (text.equals(b.getText())) {

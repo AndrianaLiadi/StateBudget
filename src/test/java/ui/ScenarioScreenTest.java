@@ -25,8 +25,8 @@ class ScenarioScreenTest {
         controller.setVisible(false);
 
 
-        BudgetItem item1 = new BudgetItem("A1", "Item A1", 1000);
-        BudgetItem item2 = new BudgetItem("B1", "Item B1", 2000);
+        BudgetItem item1 = new BudgetItem("A1", "Item A1", "Income", 1000);
+        BudgetItem item2 = new BudgetItem("B1", "Item B1", "Income", 2000);
         baseBudget = new Budget(2025, List.of(item1, item2));
 
         scenarioScreen = new ScenarioScreen(controller, baseBudget);
@@ -72,7 +72,7 @@ class ScenarioScreenTest {
         textField.setText("1500");
 
 
-        assertDoesNotThrow(addButton::doClick);
+        assertDoesNotThrow(() ->addButton.doClick());
 
 
         assertEquals("", textField.getText());
@@ -91,8 +91,8 @@ class ScenarioScreenTest {
         assertNotNull(runButton);
         assertNotNull(backButton);
 
-        assertDoesNotThrow(runButton::doClick);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->runButton.doClick());
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
 

@@ -53,7 +53,7 @@ class RegistrationScreenTest {
         JButton registerButton = findButtonByText(registrationScreen, "Register");
 
         assertNotNull(registerButton);
-        assertDoesNotThrow(registerButton::doClick);
+        assertDoesNotThrow(() ->registerButton.doClick());
     }
 
 

@@ -39,18 +39,18 @@ class ReportScreenTest {
         assertFalse(area.isEditable());
 
         assertNotNull(backButton);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
     @Test
     void testReportScreenWithScenario() {
-        BudgetItem item1 = new BudgetItem("A1", "Item A1", 1000);
-        BudgetItem item2 = new BudgetItem("B1", "Item B1", 2000);
+        BudgetItem item1 = new BudgetItem("A1", "Item A1", "Income", 1000);
+        BudgetItem item2 = new BudgetItem("B1", "Item B1", "Income", 2000);
 
         Budget base = new Budget(2025, List.of(item1));
         Budget modified = new Budget(2025, List.of(item2));
 
-        Scenario scenario = new Scenario("Test Scenario", base);
+        Scenario scenario = new Scenario(base, "Test Scenario");
         scenario.setModifiedBudget(modified);
 
         ReportScreen screen = new ReportScreen(controller, scenario);
@@ -66,7 +66,7 @@ class ReportScreenTest {
 
         assertNotNull(chart);
         assertNotNull(backButton);
-        assertDoesNotThrow(backButton::doClick);
+        assertDoesNotThrow(() ->backButton.doClick());
     }
 
 
