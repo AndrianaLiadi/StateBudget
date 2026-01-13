@@ -3,8 +3,26 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Η κλάση AboutScreen υλοποιεί την οθόνη "About" της εφαρμογής.
+ * <p>
+ * Παρουσιάζει στον χρήστη ένα αναλυτικό κείμενο που περιγράφει τον σκοπό του
+ * StateBudgetManager, τη λειτουργικότητα των σεναρίων και την εκπαιδευτική του αξία.
+ * Παρέχει επίσης δυνατότητα πλοήγησης πίσω στην αρχική οθόνη.
+ * </p>
+ */
 public class AboutScreen extends JPanel {
 
+    /**
+     * Κατασκευάζει το πάνελ της οθόνης "Σχετικά".
+     * <p>
+     * Διαμορφώνει τη διάταξη (layout), δημιουργεί την περιοχή κειμένου με την περιγραφή
+     * της εφαρμογής και προσθέτει το κουμπί επιστροφής.
+     * </p>
+     *
+     * @param controller Ο ελεγκτής της εφαρμογής ({@link AppController}) που χρησιμοποιείται
+     * για την πλοήγηση πίσω στην οθόνη υποδοχής (Landing Screen).
+     */
     public AboutScreen(AppController controller) {
 
         setLayout(new BorderLayout());
@@ -34,6 +52,9 @@ public class AboutScreen extends JPanel {
         textArea.setEditable(false);
         textArea.setLineWrap(true);
         textArea.setWrapStyleWord(true);
+        
+        // Προσθήκη padding για καλύτερη εμφάνιση
+        textArea.setMargin(new Insets(10, 10, 10, 10));
 
         JScrollPane scroll = new JScrollPane(textArea);
 

@@ -56,7 +56,7 @@ public class Scenario {
 
             BudgetItem targetItem = null;
             for (BudgetItem it : newItems) {
-                if (it.getCode().equals(it.getCode())) {
+                if (it.getCode().equals(change.getItemCode())) {
                     targetItem = it;
                     break;
                 }
