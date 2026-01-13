@@ -135,6 +135,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  └── README.md  
 	
  ## UML Diagram
+  Here is the UML diagram of the project. FINALUML.png
 
 # Algorithms and Data Structure 
 ## Data Structure
