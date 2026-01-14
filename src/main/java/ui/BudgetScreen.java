@@ -41,7 +41,7 @@ public class BudgetScreen extends JPanel {
         JPanel top = new JPanel();
         top.add(new JLabel("Έτος:"));
 
-        Integer[] years = {2019, 2020, 2021, 2022, 2023, 2024, 2025};
+        Integer[] years = {2020, 2021, 2022, 2023, 2024, 2025};
         yearCombo = new JComboBox<>(years);
         yearCombo.setSelectedItem(2025);
         top.add(yearCombo);
