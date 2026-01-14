@@ -2,94 +2,76 @@ package main;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Κλάση ελέγχου (Test Class) για την {@link Main}.
- *
- * <p>
- * Η παρούσα κλάση ελέγχει τη σωστή λειτουργία της εφαρμογής
- * σε περιβάλλον κονσόλας (CLI), προσομοιώνοντας την είσοδο χρήστη
- * και παρακολουθώντας την εκτέλεση χωρίς εξαιρέσεις.
- * </p>
- *
- * <p>
- * Τα tests αυτά συμβάλλουν σημαντικά στην κάλυψη κώδικα (code coverage)
- * και αξιολογούνται από εργαλεία όπως το JaCoCo.
- * </p>
+ * Κλάση ελέγχου για την Main.
+ * Δημιουργεί προσωρινά το test.csv, τρέχει την εφαρμογή και μετά το σβήνει.
  */
 class MainTest {
 
-    /**
-     * Sanity check test.
-     *
-     * <p>
-     * Επαληθεύει ότι το περιβάλλον του JUnit είναι σωστά ρυθμισμένο
-     * και ότι τα assertions λειτουργούν κανονικά.
-     * </p>
-     */
-    @Test
-    @DisplayName("Sanity test – περνάει πάντα")
-    void testAlwaysPassing() {
-        assertTrue(true);
+    private final String CSV_FILENAME = "test.csv";
+
+    @BeforeEach
+    void setupCSV() throws IOException {
+        // 1. Δημιουργία του αρχείου test.csv με τα δεδομένα που ζήτησες
+        // Χρησιμοποιούμε UTF-8 για να φαίνονται σωστά τα Ελληνικά
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(CSV_FILENAME), StandardCharsets.UTF_8))) {
+            writer.println("id,description,amount,category");
+            writer.println("1001,Μισθοί Δημόσιων Υπαλλήλων,1200000,Μισθοί");
+            writer.println("1002,Υγειονομική Περίθαλψη,800000,Υγεία");
+            writer.println("1003,Εκπαίδευση,500000,Εκπαίδευση");
+            writer.println("1004,Μεταφορές,300000,Υποδομές");
+            writer.println("1005,Άμυνα,400000,Ασφάλεια");
+        }
     }
 
-    /**
-     * Integration test για τη μέθοδο {@code Main.main()}.
-     *
-     * <p>
-     * Το test προσομοιώνει πλήρως τη ροή χρήσης της εφαρμογής:
-     * <ul>
-     *   <li>Εισαγωγή έτους</li>
-     *   <li>Φόρτωση CSV αρχείου</li>
-     *   <li>Δημιουργία σεναρίου</li>
-     *   <li>Προσθήκη μίας αλλαγής προϋπολογισμού</li>
-     *   <li>Ολοκλήρωση και παραγωγή σύνοψης</li>
-     * </ul>
-     * </p>
-     *
-     * <p>
-     * Το test ελέγχει ότι η εκτέλεση ολοκληρώνεται χωρίς να
-     * προκύψει εξαίρεση (Exception).
-     * </p>
-     */
+    @AfterEach
+    void cleanupCSV() {
+        // 2. Διαγραφή του αρχείου μετά το τέλος του test
+        File file = new File(CSV_FILENAME);
+        if (file.exists()) {
+            file.delete();
+        }
+    }
+
     @Test
-    @DisplayName("Πλήρης ροή εκτέλεσης της Main (CLI Integration Test)")
-    void testMainCompleteFlow() {
-
+    @DisplayName("Πλήρης έλεγχος Main με πραγματικό CSV")
+    void testMainWithRealFile() {
         /*
-         * Προσομοίωση εισόδου χρήστη.
-         * Η σειρά των τιμών ΠΡΕΠΕΙ να ταιριάζει ακριβώς
-         * με τις κλήσεις scanner.nextInt(), nextLine(), nextLong().
+         * ΠΡΟΣΟΜΟΙΩΣΗ ΕΙΣΟΔΟΥ ΧΡΗΣΤΗ
+         * Η σειρά πρέπει να ταιριάζει ΑΚΡΙΒΩΣ με τα scanner της Main:
          */
-        String input =
-                "2024\n" +          // Έτος προϋπολογισμού
-                "test.csv\n" +      // Όνομα αρχείου CSV
-                "TestScenario\n" +  // Όνομα σεναρίου
-                "1001\n" +          // Υπαρκτός κωδικός κονδυλίου
-                "1300000\n" +       // Νέο ποσό
-                "increase\n" +      // Τύπος αλλαγής
-                "n\n";              // Τερματισμός προσθήκης αλλαγών
+        String input = 
+            "2024" + System.lineSeparator() +      // 1. Έτος (nextInt)
+            CSV_FILENAME + System.lineSeparator() + // 2. Όνομα αρχείου (nextLine)
+            "MyScenario" + System.lineSeparator() + // 3. Όνομα Σεναρίου (nextLine)
+            "1001" + System.lineSeparator() +       // 4. Κωδικός που ΥΠΑΡΧΕΙ στο CSV (nextLine)
+            "1500000" + System.lineSeparator() +    // 5. Νέο ποσό (nextLong)
+            "increase" + System.lineSeparator() +   // 6. Τύπος αλλαγής (nextLine μετά το buffer)
+            "n" + System.lineSeparator();           // 7. Τερματισμός (nextLine)
 
-        // Ανακατεύθυνση εισόδου και εξόδου
-        System.setIn(new ByteArrayInputStream(input.getBytes()));
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        System.setOut(new PrintStream(output));
+        // Ρύθμιση εισόδου/εξόδου
+        ByteArrayInputStream in = new ByteArrayInputStream(input.getBytes());
+        System.setIn(in);
 
-        /*
-         * Εκτέλεση της Main.
-         * Το assertDoesNotThrow επιβεβαιώνει ότι η εφαρμογή
-         * ολοκληρώνεται χωρίς runtime σφάλματα.
-         */
+        // Προαιρετικά: Καταγραφή εξόδου για να δούμε αν τυπώθηκαν τα σωστά
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(out));
+
+        // ΕΚΤΕΛΕΣΗ
         assertDoesNotThrow(() -> Main.main(new String[]{}));
 
-        // Προαιρετικός έλεγχος: επιβεβαίωση ότι παράχθηκε έξοδος
-        assertFalse(output.toString().isEmpty());
+        // ΕΛΕΓΧΟΣ: Επιβεβαίωση ότι διάβασε το CSV και βρήκε το "Μισθοί"
+        String output = out.toString();
+        // Ελέγχουμε αν εμφανίστηκε το όνομα του κονδυλίου στην κονσόλα
+        // (σημαίνει ότι το βρήκε και ζήτησε ποσό)
+        assertTrue(output.contains("Μισθοί Δημόσιων Υπαλλήλων"), 
+            "Η εφαρμογή δεν βρήκε το κονδύλιο 1001 από το CSV!");
     }
 }
-
