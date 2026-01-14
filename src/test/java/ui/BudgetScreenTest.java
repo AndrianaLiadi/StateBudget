@@ -53,7 +53,7 @@ class BudgetScreenTest {
      * <p>
      * Επιβεβαιώνει ότι:
      * 1. Υπάρχει ένα JComboBox.
-     * 2. Περιέχει 7 επιλογές (έτη 2019-2025).
+     * 2. Περιέχει 7 επιλογές (έτη 2020-2025).
      * 3. Η προεπιλεγμένη τιμή είναι το 2025.
      * </p>
      */
@@ -119,7 +119,7 @@ class BudgetScreenTest {
         assertNotNull(combo);
 
         assertDoesNotThrow(() -> {
-            combo.setSelectedItem(2019);
+            combo.setSelectedItem(2020);
             combo.setSelectedItem(2023);
             combo.setSelectedItem(2025);
         });
