@@ -4,11 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,35 +27,33 @@ class MainTest {
         // 1. Δημιουργία CSV με τη ΣΩΣΤΗ δομή που αναμένει ο BudgetDataLoader
         File csvFile = tempDir.resolve("budget.csv").toFile();
         
-        try (FileWriter writer = new FileWriter(csvFile)) {
-            // Σωστή επικεφαλίδα που αναμένει ο BudgetDataLoader
-            writer.write("code,name,type,amount,revenue_or_expenditure\n");
+        // Χρήση UTF-8 για να διαβαστούν σωστά τα Ελληνικά από τον Loader
+        try (PrintWriter writer = new PrintWriter(new OutputStreamWriter(new FileOutputStream(csvFile), StandardCharsets.UTF_8))) {
+            // ΚΕΦΑΛΙΔΑ ΕΣΟΔΩΝ (Trigger για τον Loader)
+            writer.println("1. ΕΣΟΔΑ,,,");
             
-            // Ετικέτα για έσοδα
-            writer.write("\"ΕΣΟΔΑ\",\"\",\"\",\"\",\"\"\n");
+            // Items: Κωδικός, Όνομα, ..., ΠΟΣΟ (Το ποσό πρέπει να είναι ΠΑΝΤΑ τελευταίο)
+            writer.println("\"1001\",\"ΦΠΑ\",,\"25000000\"");
+            writer.println("\"1002\",\"Φόρος Εισοδήματος\",,\"15000000\"");
             
-            // Ένα item εσόδων με κωδικό 1001
-            writer.write("\"1001\",\"ΦΠΑ\",\"INCOME\",\"25000000\",\"revenue\"\n");
-            writer.write("\"1002\",\"Φόρος Εισοδήματος\",\"INCOME\",\"15000000\",\"revenue\"\n");
+            // ΚΕΦΑΛΙΔΑ ΕΞΟΔΩΝ
+            writer.println("2. ΕΞΟΔΑ,,,");
             
-            // Ετικέτα για έξοδα
-            writer.write("\"ΕΞΟΔΑ\",\"\",\"\",\"\",\"\"\n");
-            
-            // Δύο items εξόδων
-            writer.write("\"2001\",\"Μισθοί Δημόσιου\",\"EXPENSE\",\"12000000\",\"expenditure\"\n");
-            writer.write("\"2002\",\"Συντάξεις\",\"EXPENSE\",\"8000000\",\"expenditure\"\n");
+            // Items Εξόδων
+            writer.println("\"2001\",\"Μισθοί Δημόσιου\",,\"12000000\"");
+            writer.println("\"2002\",\"Συντάξεις\",,\"8000000\"");
         }
         
-        // 2. Προσομοίωση χρηστικής εισόδου
-        String input = String.join("\n",
+        // 2. Προσομοίωση χρηστικής εισόδου (User Input)
+        String input = String.join(System.lineSeparator(),
             "2024",                      // Έτος
             csvFile.getAbsolutePath(),   // Path προς το CSV
             "TestScenario",              // Όνομα σεναρίου
-            "1001",                      // Κωδικός προϋπολογισμού (υπάρχει στο CSV)
-            "30000000",                  // Νέο ποσό (αύξηση από 25.000.000 σε 30.000.000)
+            "1001",                      // Κωδικός (Υπάρχει στο CSV)
+            "30000000",                  // Νέο ποσό
             "increase",                  // Τύπος αλλαγής
             "n"                          // Τερματισμός
-        );
+        ) + System.lineSeparator();
         
         // 3. Αποθήκευση αρχικών System streams
         java.io.InputStream originalIn = System.in;
@@ -76,26 +71,25 @@ class MainTest {
             
             // 6. Έλεγχος ότι παράχθηκε έξοδος
             String consoleOutput = output.toString();
-            assertFalse(consoleOutput.isEmpty(),
-                "Η Main.main() θα έπρεπε να παράγει έξοδο");
+            assertFalse(consoleOutput.isEmpty(), "Η Main.main() θα έπρεπε να παράγει έξοδο");
             
-            // 7. Έλεγχος για βασικά μηνύματα
-            assertTrue(consoleOutput.contains("Προϋπολογισμού") || 
-                      consoleOutput.contains("Προυπολογισμού") ||
-                      consoleOutput.contains("συνολικά") ||
-                      consoleOutput.contains("Σύνοψη"),
-                "Η έξοδος πρέπει να περιέχει βασικά μηνύματα της εφαρμογής");
+            // 7. Έλεγχος ότι βρέθηκε το κονδύλιο (σημαντικό!)
+            // Αν ο Loader αποτύχει, θα λέει "Το στοιχείο δεν βρέθηκε"
+            boolean itemFound = consoleOutput.contains("εισάγετε καινούριο ποσό") || 
+                                consoleOutput.contains("amount");
+            assertTrue(itemFound, "Το Test απέτυχε να βρει το κονδύλιο 1001. Ελέγξτε τον Loader.");
+
+            // 8. Έλεγχος για βασικά μηνύματα ολοκλήρωσης
+            assertTrue(consoleOutput.contains("Σύνοψη") || consoleOutput.contains("Summary"),
+                "Η έξοδος πρέπει να περιέχει τη Σύνοψη στο τέλος");
                       
         } finally {
-            // 8. Επαναφορά αρχικών streams
+            // 9. Επαναφορά αρχικών streams
             System.setIn(originalIn);
             System.setOut(originalOut);
         }
     }
     
-    /**
-     * Απλό sanity test.
-     */
     @Test
     @DisplayName("Sanity test")
     void testAlwaysPassing() {
