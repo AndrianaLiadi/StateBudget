@@ -181,7 +181,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  ├── UMLFINAL  
  ├── LICENSE  
  ├── LICENSE-VIDEO.txt  
- ├── dependency-reduced-pom.xml
+ ├── dependency-reduced-pom.xml  
  ├── .classpath  
  └── README.md  
 	
