@@ -11,7 +11,7 @@ The purpose of this applicattion is to encourage people to study the state budge
 # Manual 
  User enters the app by adding personal info.  
 	By clicking on ***Home*** and "**Δες τον προϋπολογισμό**" appears national budget of 2025.  
- User can choose any year from 2019 to 2025 on the bar on top.  
+ User can choose any year from 2020 to 2025 on the bar on top.  
 	After than they can click on ***files*** and select ***Scenarios***.  
  There they make changes and apply.  
  Button ***Reports*** is used to view diagrams and comparison among years.  
@@ -168,8 +168,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  │  │   ├── LandingScreenTest.java  
  │  │   ├── RegistrationScreenTest.java  
  │  │   ├── ReportScreenTest.java  
- │  │   └── ScenarioScreenTest.java  
- ├── budget-2019.csv  
+ │  │   └── ScenarioScreenTest.java    
  ├── budget-2020.csv  
  ├── budget-2021.csv  
  ├── budget-2022.csv  
