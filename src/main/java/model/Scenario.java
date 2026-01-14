@@ -32,6 +32,9 @@ public class Scenario {
     public Budget getModifiedBudget() {
         return modifiedBudget;
     }
+    public void setModifiedBudget(Budget modifiedBudget) {
+        this.modifiedBudget = modifiedBudget;
+    }
 
     public String getSummary() {
         return summary;
@@ -53,7 +56,7 @@ public class Scenario {
 
             BudgetItem targetItem = null;
             for (BudgetItem it : newItems) {
-                if (it.getCode().equals(it.getCode())) {
+                if (it.getCode().equals(change.getItemCode())) {
                     targetItem = it;
                     break;
                 }

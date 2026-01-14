@@ -1,12 +1,30 @@
 package ui;
 
+import model.Scenario;
+import model.Budget;
+import java.util.ArrayList;
 import javax.swing.*;
+import java.util.Map;
+import java.util.HashMap;
+
+import data.BudgetDataLoader;
+
 import java.awt.*;
 
+/**
+ * Η κλάση AppController αποτελεί τη "ραχοκοκαλιά" (backbone) του UI.
+ * <p>
+ * Λειτουργεί ως το κεντρικό παράθυρο (JFrame) και διαχειρίζεται την πλοήγηση
+ * μεταξύ των διαφόρων οθονών της εφαρμογής.
+ * </p>
+ */
 public class AppController extends JFrame {
 
     private CardLayout layout;
     private JPanel container;
+    private Scenario currentScenario;
+    private Budget baseBudget;
+    private Map<Integer, Budget> budgetsByYear = new HashMap<>();
 
     public static final String REGISTRATION = "registration";
     public static final String LANDING = "landing";
@@ -17,6 +35,13 @@ public class AppController extends JFrame {
     public static final String ABOUT = "about";
     public static final String CONTACT = "contact";
 
+    /**
+     * Κατασκευαστής της κλάσης AppController.
+     * <p>
+     * Ρυθμίζει το παράθυρο, φορτώνει τα δεδομένα από τα CSV αρχεία και
+     * αρχικοποιεί όλες τις οθόνες της εφαρμογής.
+     * </p>
+     */
     public AppController() {
         setTitle("State Budget App");
         setSize(700, 500);
@@ -26,25 +51,51 @@ public class AppController extends JFrame {
         layout = new CardLayout();
         container = new JPanel(layout);
 
+        BudgetDataLoader loader = new BudgetDataLoader();
+
+        for (int year = 2019; year <= 2025; year++) {
+        String path = "budget-" + year + ".csv";
+        Budget budget = loader.loadFromCSV(path, year);
+
+        baseBudget = loader.loadFromCSV(path, 2025);
+
+
+
+        if (baseBudget == null) {
+            JOptionPane.showMessageDialog(this,
+            "Αποτυχία φόρτωσης προϋπολογισμού (baseBudget). Έλεγξε το path του CSV.",
+            "Error", JOptionPane.ERROR_MESSAGE);
+            baseBudget = new Budget(2025, new ArrayList<>());
+        }
+
+
         container.add(new RegistrationScreen(this), REGISTRATION);
         container.add(new LandingScreen(this), LANDING);
         container.add(new HomeScreen(this), HOME);
         container.add(new BudgetScreen(this), BUDGET);
-        container.add(new ScenarioScreen(this), SCENARIO);
-        container.add(new ReportScreen(this), REPORTS);
+        container.add(new ScenarioScreen(this, baseBudget), SCENARIO);
+        container.add(new ReportScreen(this, null), REPORTS);
         container.add(new AboutScreen(this), ABOUT);
         container.add(new ContactScreen(this), CONTACT);
 
         add(container);
 
-        setupMenuBar();
-        showScreen(REGISTRATION);
-    }
 
+        setupMenuBar();
+        showScreen(REGISTRATION);}
+        }
+
+    /**
+     * Αλλάζει την τρέχουσα προβαλλόμενη οθόνη.
+     * @param screenName Το όνομα της οθόνης που θέλουμε να εμφανιστεί.
+     */
     public void showScreen(String screenName) {
         layout.show(container, screenName);
     }
 
+    /**
+     * Δημιουργεί και ρυθμίζει το μενού πλοήγησης (Menu Bar) στο πάνω μέρος.
+     */
     private void setupMenuBar() {
         JMenuBar menuBar = new JMenuBar();
 
@@ -88,4 +139,18 @@ public class AppController extends JFrame {
 
         setJMenuBar(menuBar);
     }
+    
+    /**
+     * Εμφανίζει την οθόνη αναφορών για ένα συγκεκριμένο σενάριο.
+     * @param scenario Το σενάριο προς προβολή.
+     */
+    public void showReportScreen(Scenario scenario) {
+    this.currentScenario = scenario;
+
+    container.add(new ReportScreen(this, currentScenario), REPORTS);
+    showScreen(REPORTS);
+
+    container.revalidate();
+    container.repaint();
 }
+    }
