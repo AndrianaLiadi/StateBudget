@@ -226,7 +226,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
 # Additional Technical Report 
 There are zero **checkstyle** errors   
 We used **Java doc** couverege for more prisize exlanation  
-We checked our test couverage with **jacoco** reports - **98/100** are executed succesfully  
+We checked our test couverage with **jacoco** reports 
 **Test Couverage**  
 <img width="1162" height="261" alt="image" src="https://github.com/user-attachments/assets/78f9cb3a-5cc5-4507-9029-f415b1cec502" />
 
