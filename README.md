@@ -29,7 +29,7 @@ The purpose of this applicattion is to encourage people to study the state budge
 **mvn clean test** - execute test  
 **mvn jacoco:report** - checking test coverege  
 **mvn checkstyle:check** -checking code's formating  
-**csv files** of Hellenic's Republic budget from 2019-2025 are saved on the repository  
+**csv files** of Hellenic's Republic budget from 2020-2025 are saved on the repository  
 file **.gitignore** where target and class files are saved to avoid conflicts
 
 ## Repository's structure 
