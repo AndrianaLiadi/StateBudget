@@ -54,7 +54,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  **data:** 1 class  
  **logic:** 2 classes  
  **main:** 2 classes  
- **ui:** 13 classes  
+ **ui:** 10 classes  
  **test.csv:** structure of csv files to run on tests
  
 ## Diagram of Structure 
