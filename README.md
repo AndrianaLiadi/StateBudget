@@ -25,8 +25,8 @@ The purpose of this applicattion is to encourage people to study the state budge
 ***java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar*** -execution of .jar
 
 ***pom.xml*** - maven configuration  
-**mvn jacoco:report** - adding jaccoco  
-**mvn clean test** -checking test coverege  
+**mvn clean test** - execute test  
+**mvn jacoco:report** - checking test coverege  
 **mvn checkstyle:check** -checking code's formating  
 **csv files** of Hellenic's Republic budget from 2019-2025 are saved on the repository  
 file **.gitignore** where target and class files are saved to avoid conflicts
@@ -227,7 +227,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
 There are zero **checkstyle** errors   
 We used **Java doc** couverege for more prisize exlanation  
 We checked our test couverage with **jacoco** reports 
-**Test Couverage**  
+## Test Coverege 
 <img width="1162" height="261" alt="image" src="https://github.com/user-attachments/assets/78f9cb3a-5cc5-4507-9029-f415b1cec502" />
 
 Here is the promotional video of our application 
