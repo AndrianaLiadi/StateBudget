@@ -228,7 +228,15 @@ There are zero **checkstyle** errors
 We used **Java doc** couverege for more prisize exlanation  
 We checked our test couverage with **jacoco** reports  
 Here is the promotional video of our application 
-https://youtu.be/7u8bsMBlu-E?si=ViH-KmpZqLFJfvfC 
+https://youtu.be/7u8bsMBlu-E?si=ViH-KmpZqLFJfvfC  
+Το παρόν οπτικοακουστικό υλικό (βίντεο) και η παρουσίαση της εργασίας
+διατίθενται υπό την άδεια Creative Commons Αναφορά Δημιουργού 4.0 Διεθνές.
+
+The video and presentation content of this project are licensed under a
+Creative Commons Attribution 4.0 International License (CC BY 4.0).
+
+To view a copy of this license, visit:
+http://creativecommons.org/licenses/by/4.0/
 
 MIT License
 
