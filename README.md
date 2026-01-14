@@ -14,7 +14,8 @@ The purpose of this applicattion is to encourage people to study the state budge
  User can choose any year from 2019 to 2025 on the bar on top.  
 	After than they can click on ***files*** and select ***Scenarios***.  
  There they make changes and apply.  
- Button ***Reports*** is used to view diagrams and comparison among years.
+ Button ***Reports*** is used to view diagrams and comparison among years.  
+ Press button **Exit** to close the application
 
 # Structure
 ## Utilization of ***Maven*** for build structure 
