@@ -10,7 +10,7 @@ The purpose of this applicattion is to encourage people to study the state budge
 
 # Manual 
  User enters the app by adding personal info.\
-	By clicking on "**Δες τον προϋπολογισμό**" appears national budget of 2025.\
+	By clicking on ***Home*** and "**Δες τον προϋπολογισμό**" appears national budget of 2025.\
  User can choose any year from 2019 to 2025 on the bar on top.\
 	After than they can click on ***files*** and select ***Scenarios***.\
  There they make changes and apply.\
@@ -53,25 +53,72 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  **data:** 1 class\
  **logic:** 2 classes\
  **main:** 2 classes\
- **ui:** 13 classes\
+ **ui:** 13 classes
  **test.csv:** structure of csv files to run on tests
  
 ## Diagram of Structure 
-**StateBudget**\
- ├── settings\
+**StateBudget**  
+ ├── settings  
  │   ├── org.eclipse.core.resources.prefs\
  │   ├── org.eclipse.jdt.core.prefs\
  │   └── org.eclipse.m2e.core.prefs\
  ├── .vscode\
- │     └── {} settings.json\
- ├── src/main/java/\
+ │     └── {} settings.json  
+ ├── docs  
+ │   │   ├── data  
+ │   │   │     ├── BudgetDataLoader.html  
+ │   │   │     ├── package-summary.html    
+ │   │   │     └── package-tree.html    
+ │   │   ├── legal      
+ │   │   │      ├── COPYRIGHT  
+ │   │   │      ├──dejavufonts.md  
+ │	 │	 │	    ├──jquery.md  
+ │	 │	 │	    ├──jqueryui.md  
+ │	 │	 │	    └── LISCENCE  
+ │   │   ├── logic    
+ │   │   │      ├── BudgetService.html    
+ │   │   │      ├── ReportGenerator.html   
+ │   │   │      ├── package-summary.html    
+ │   │   │      └── package-tree.html    
+ │   │   ├── main    
+ │   │   │      ├── Main.html    
+ │   │   │      ├── MainGUI.html   
+ │   │   │      ├── package-summary.html    
+ │   │   │      └── package-tree.html    
+ │   │   ├── model  
+ │   │   │      ├── Budget.html   
+ │   │   │      ├── BudgetChange.html    
+ │   │   │      ├── BudgetItem.html    
+ │   │   │      ├── Scenario.html    
+ │   │   │      ├── package-summary.html    
+ │   │   │      └── package-tree.html    
+ │   │   ├──resource-files  
+ │   │   │       └── fonts    
+ │   │   ├── script-files  
+ │   │   ├── ui      
+ │   │   │    ├── AboutScreen.html  
+ │   │   │    ├── AppController.html  
+ │   │   │    ├── BudgetChangesScreen.html  
+ │   │   │    ├── BudgetChangeTable.html  
+ │   │   │    ├── BudgetScreen.html  
+ │   │   │    ├── BudgetTablePrinter.html  
+ │   │   │    ├── ChartPanel.html  
+ │   │   │    ├── ContactScreen.html  
+ │   │   │    ├── HomeScreen.html  
+ │   │   │    ├── LandingScreen.html  
+ │   │   │    ├── RegistrationScreen.html  
+ │   │   │    ├── ReportScreen.html  
+ │   │   │    ├── ScenarioScreen.html  
+ │   │   │    ├── package-summary.html  
+ │   │   │    └── package-tree.html  
+ ├── src/main/java/  
  │   ├── model                    
  │   │   ├── Budget.java         
  │   │   ├── BudgetItem.java     
  │   │   ├── BudgetChange.java    
  │   │   └── Scenario.java       
  │   ├── data                    
- │   │   └── BudgetDataLoader.java \
+ │   │   └── BudgetDataLoader.java  
  │   ├── logic                  
  │   │   ├── BudgetService.java  
  │   │   └── ReportGenerator.java  
@@ -95,7 +142,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  │          
  ├── src/test/java/                
  │  ├── data                         
- │  │    └── BudgetDataLoader.java
+ │  │    └── BudgetDataLoader.java  
  │  ├── logic  
  │  │    ├── BudgetServiceTest.java  
  │  │    └── ReportGeneratorTest.java  
@@ -135,7 +182,7 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  └── README.md  
 	
  ## UML Diagram
-  Here is the UML diagram of the project. FINALUML.png
+  Here is the UML diagram of the project.  https://github.com/AndrianaLiadi/StateBudget/blob/b8680a7efbd7104906331384760c2ebfa761e38e/FINALUML.png  
 
 # Algorithms and Data Structure 
 ## Data Structure
@@ -177,7 +224,10 @@ file **.gitignore** where target and class files are saved to avoid conflicts
 **Data validation:**  Input cleaning, edge-case handling, error resilience  
 
 # Additional Technical Report 
-There are zero checkstyle errors 
+There are zero **checkstyle** errors 
+We used **Java doc** couverege for more prisize exlanation
+We checked our test couverage with **jacoco** reports
+
 
 
 
