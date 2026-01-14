@@ -178,7 +178,9 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  ├── test.csv   
  ├── pom.xml                         
  ├── .gitignore  
- ├── UMLFINAL    
+ ├── UMLFINAL
+ ├── LICENSE
+ ├── LICENSE-VIDEO.txt
  ├── .classpath  
  └── README.md  
 	
