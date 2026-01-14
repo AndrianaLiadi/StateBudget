@@ -9,51 +9,51 @@ The purpose of this applicattion is to encourage people to study the state budge
 5. Creation of complex diagrams
 
 # Manual 
- User enters the app by adding personal info.\
-	By clicking on ***Home*** and "**Δες τον προϋπολογισμό**" appears national budget of 2025.\
- User can choose any year from 2019 to 2025 on the bar on top.\
-	After than they can click on ***files*** and select ***Scenarios***.\
- There they make changes and apply.\
+ User enters the app by adding personal info.  
+	By clicking on ***Home*** and "**Δες τον προϋπολογισμό**" appears national budget of 2025.  
+ User can choose any year from 2019 to 2025 on the bar on top.  
+	After than they can click on ***files*** and select ***Scenarios***.  
+ There they make changes and apply.  
  Button ***Reports*** is used to view diagrams and comparison among years.
 
 # Structure
 ## Utilization of ***Maven*** for build structure 
-**mvn clean install**  -installing maven on the repository\
-**mvn clean compile** -compilation of classes\
-**mvn exec:java** -execution during developement\ 
-**mvn package** -convert into .jar\
+**mvn clean install**  -installing maven on the repository  
+**mvn clean compile** -compilation of classes  
+**mvn exec:java** -execution during developement   
+**mvn package** -convert into .jar  
 ***java -jar target/StateBudgetMaven-0.0.1-SNAPSHOT.jar*** -execution of .jar
 
-***pom.xml*** - maven configuration\
-**mvn jacoco:report** - adding jaccoco\
-**mvn clean test** -checking test coverege\
-**mvn checkstyle:check** -checking code's formating\ 
-**csv files** of Hellenic's Republic budget from 2019-2025 are saved on the repository\
+***pom.xml*** - maven configuration  
+**mvn jacoco:report** - adding jaccoco  
+**mvn clean test** -checking test coverege  
+**mvn checkstyle:check** -checking code's formating  
+**csv files** of Hellenic's Republic budget from 2019-2025 are saved on the repository  
 file **.gitignore** where target and class files are saved to avoid conflicts
 
 ## Repository's structure 
-## Working on five ***packages*** (model, data, logic, main, ui)\ 
-**model:** budget and methods for changes\ 
-**data:** loads data from csv\
-**logic:** mansages loading, analysis and comparison of data\
-**main:** includes main method (execution of the programm)\ 
+## Working on five ***packages*** (model, data, logic, main, ui) 
+**model:** budget and methods for changes   
+**data:** loads data from csv  
+**logic:** mansages loading, analysis and comparison of data  
+**main:** includes main method (execution of the programm)  
 **uι:** screens visible to the user
 
 ## 22 classes in total 
-**model:** 4 classes\
-**data:** 1 class\
-**logic:** 2 classes\
-**main:** 2 classes\
-**ui:** 13 classes\
+**model:** 4 classes  
+**data:** 1 class  
+**logic:** 2 classes  
+**main:** 2 classes  
+**ui:** 13 classes  
 ### <sub>*on package main there is 1 class running on terminal and another for the GUI for safety reasons, depending on pom.xml which one is used<sub>
 
  ## Tests 
- Each class has their own test on a seperate file called test including:\
- **model:** 4 classes\
- **data:** 1 class\
- **logic:** 2 classes\
- **main:** 2 classes\
- **ui:** 13 classes
+ Each class has their own test on a seperate file called test including:  
+ **model:** 4 classes  
+ **data:** 1 class  
+ **logic:** 2 classes  
+ **main:** 2 classes  
+ **ui:** 13 classes  
  **test.csv:** structure of csv files to run on tests
  
 ## Diagram of Structure 
@@ -224,10 +224,11 @@ file **.gitignore** where target and class files are saved to avoid conflicts
 **Data validation:**  Input cleaning, edge-case handling, error resilience  
 
 # Additional Technical Report 
-There are zero **checkstyle** errors 
-We used **Java doc** couverege for more prisize exlanation
-We checked our test couverage with **jacoco** reports
-
+There are zero **checkstyle** errors   
+We used **Java doc** couverege for more prisize exlanation  
+We checked our test couverage with **jacoco** reports  
+Here is the promotional video of our application 
+https://youtu.be/7u8bsMBlu-E?si=ViH-KmpZqLFJfvfC  
 
 
 
