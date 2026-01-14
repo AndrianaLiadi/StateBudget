@@ -53,7 +53,7 @@ public class AppController extends JFrame {
 
         BudgetDataLoader loader = new BudgetDataLoader();
 
-        for (int year = 2019; year <= 2025; year++) {
+        for (int year = 2020; year <= 2025; year++) {
         String path = "budget-" + year + ".csv";
         Budget budget = loader.loadFromCSV(path, year);
 
