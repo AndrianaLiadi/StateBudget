@@ -177,7 +177,8 @@ file **.gitignore** where target and class files are saved to avoid conflicts
  ├── budget-2025.csv   
  ├── test.csv   
  ├── pom.xml                         
- ├── .gitignore   
+ ├── .gitignore  
+ ├── target  
  ├── .classpath  
  └── README.md  
 	
@@ -226,9 +227,10 @@ file **.gitignore** where target and class files are saved to avoid conflicts
 # Additional Technical Report 
 There are zero **checkstyle** errors   
 We used **Java doc** couverege for more prisize exlanation  
-We checked our test couverage with **jacoco** reports 
+We checked our test couverage with **jacoco** reports ( target- classes - index.html)
 ## Test Coverege 
-<img width="1162" height="261" alt="image" src="https://github.com/user-attachments/assets/78f9cb3a-5cc5-4507-9029-f415b1cec502" />
+<img width="1185" height="252" alt="image" src="https://github.com/user-attachments/assets/e6aba4fe-7cf4-4033-a9f8-5c3c9348abd5" />
+
 
 Here is the promotional video of our application 
 https://youtu.be/7u8bsMBlu-E?si=ViH-KmpZqLFJfvfC  
