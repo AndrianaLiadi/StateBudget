@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * <p>
  * UNIVERSAL VERSION:
  * - Διαβάζει αρχεία με κενή πρώτη στήλη (π.χ. 2024).
- * - Διαβάζει αρχεία με κολλημένα Κωδικό+Όνομα (π.χ. 2019 "11.Φόροι").
+ * - Διαβάζει αρχεία με κολλημένα Κωδικό+Όνομα (π.χ. 2020 "11.Φόροι").
  * - Διαβάζει κανονικά αρχεία (π.χ. 2023).
  * - Αγνοεί σκουπίδια BOM και χαρακτήρες όπως "»".
  * </p>
@@ -97,14 +97,12 @@ public class BudgetDataLoader {
                 String codePart = data.get(0).replaceAll("\"", "").trim();
                 String name = "";
                 
-                // --- ΛΟΓΙΚΗ ΓΙΑ 2019 (Κολλημένα) ---
                 Matcher matcher = mergedPattern.matcher(codePart);
                 if (matcher.find()) {
-                    // Βρήκαμε κολλημένα! (π.χ. Group 1: "11.", Group 2: "Φόροι")
                     codePart = matcher.group(1).trim();
                     name = matcher.group(2).trim();
                 } else {
-                    // --- ΛΟΓΙΚΗ ΓΙΑ 2024 (Κενή 1η στήλη) & 2023 (Κανονικό) ---
+                    
                     if (codePart.isEmpty() && data.size() > 1) {
                         codePart = data.get(1).replaceAll("\"", "").trim();
                         if (data.size() > 2) name = data.get(2).replaceAll("\"", "").trim();
