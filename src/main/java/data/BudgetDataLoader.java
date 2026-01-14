@@ -11,36 +11,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Η κλάση BudgetDataLoader είναι υπεύθυνη για τη φόρτωση δεδομένων προϋπολογισμού από αρχεία.
+ * Η κλάση BudgetDataLoader είναι υπεύθυνη για τη φόρτωση δεδομένων προϋπολογισμού από αρχεία CSV.
  * <p>
- * Αναλαμβάνει το άνοιγμα αρχείων CSV, την ανάλυση (parsing) των γραμμών τους,
- * τον καθαρισμό των δεδομένων (π.χ. αφαίρεση ειδικών χαρακτήρων από τα ποσά)
- * και τη δημιουργία αντικειμένων {@link Budget}.
+ * Αυτή η έκδοση είναι ενισχυμένη για να διαχειρίζεται:
+ * - BOM (Byte Order Mark) στην αρχή των αρχείων.
+ * - Ελληνικούς χαρακτήρες (UTF-8).
+ * - Διαφορετικές μορφές CSV (με κενές στήλες ή μετατοπισμένα δεδομένα).
  * </p>
  */
 public class BudgetDataLoader {
 
     /**
-     * Καθαρίζει μια συμβολοσειρά ποσού και τη μετατρέπει σε ακέραιο αριθμό (long).
-     * <p>
-     * Αφαιρεί τελείες, εισαγωγικά και ειδικούς χαρακτήρες. Αν το ποσό περιέχει
-     * δεκαδικό μέρος (υποδιαστολή με κόμμα), αυτό αποκόπτεται.
-     * </p>
-     *
-     * @param amountStr Η αρχική συμβολοσειρά που περιέχει το ποσό.
-     * @return Το ποσό ως {@code long}. Επιστρέφει 0 αν η είσοδος είναι κενή ή μη έγκυρη.
+     * Καθαρίζει και μετατρέπει το string του ποσού σε αριθμό.
      */
     private long cleanAndParseAmount(String amountStr) {
         if (amountStr == null || amountStr.trim().isEmpty()) {
             return 0;
         }
 
+        // Καθαρισμός: Αφαιρούμε τελείες (διαχωριστικά χιλιάδων), σύμβολα » και εισαγωγικά
         String cleaned = amountStr.replaceAll("\\.", "")
                                   .replaceAll("»", "")
                                   .replaceAll("\"", "")
                                   .trim();
         
-        // Αφαίρεση δεκαδικών αν υπάρχουν
+        // Αν υπάρχει κόμμα (υποδιαστολή), κρατάμε μόνο το ακέραιο μέρος
         if (cleaned.contains(",")) {
             cleaned = cleaned.substring(0, cleaned.indexOf(','));
         }
@@ -50,21 +45,16 @@ public class BudgetDataLoader {
         }
 
         try {
+            // Προσπαθούμε να το κάνουμε αριθμό
             return Long.parseLong(cleaned);
         } catch (NumberFormatException e) {
+            // Αν αποτύχει (π.χ. είναι γράμματα), επιστρέφουμε 0
             return 0;
         }
     }
 
     /**
-     * Αναλύει μια γραμμή CSV λαμβάνοντας υπόψη πεδία που βρίσκονται εντός εισαγωγικών.
-     * <p>
-     * Αυτή η μέθοδος είναι απαραίτητη γιατί απλό {@code split(",")} θα αποτύγχανε
-     * αν ένα πεδίο (π.χ. όνομα κατηγορίας) περιείχε κόμμα μέσα του.
-     * </p>
-     *
-     * @param line Η γραμμή κειμένου από το αρχείο CSV.
-     * @return Μια λίστα με τα επιμέρους πεδία της γραμμής.
+     * Εξυπνη ανάγνωση γραμμής CSV που σέβεται τα εισαγωγικά.
      */
     private List<String> parseCsvLine(String line) {
         List<String> result = new ArrayList<>();
@@ -73,75 +63,101 @@ public class BudgetDataLoader {
 
         for (char c : line.toCharArray()) {
             if (c == '\"') {
-                inQuotes = !inQuotes; 
+                inQuotes = !inQuotes; // Εναλλαγή κατάστασης εντός/εκτός εισαγωγικών
             } else if (c == ',' && !inQuotes) {
+                // Βρήκαμε κόμμα και ΔΕΝ είμαστε σε εισαγωγικά -> Τέλος πεδίου
                 result.add(currentField.toString());
-                currentField.setLength(0); 
+                currentField.setLength(0); // Καθαρισμός για το επόμενο
             } else {
                 currentField.append(c);
             }
         }
-        result.add(currentField.toString()); 
+        result.add(currentField.toString()); // Προσθήκη του τελευταίου πεδίου
         return result;
     }
 
     /**
-     * Φορτώνει τα δεδομένα του προϋπολογισμού από ένα αρχείο CSV.
-     * <p>
-     * Η μέθοδος διαβάζει το αρχείο, αναγνωρίζει αν πρόκειται για ΕΣΟΔΑ ή ΕΞΟΔΑ
-     * με βάση το περιεχόμενο, και δημιουργεί τη λίστα με τα αντικείμενα {@link BudgetItem}.
-     * </p>
-     *
-     * @param filePath Η διαδρομή του αρχείου CSV στο δίσκο.
-     * @param year     Το οικονομικό έτος στο οποίο αναφέρεται ο προϋπολογισμός.
-     * @return Ένα αντικείμενο {@link Budget} που περιέχει όλα τα φορτωμένα στοιχεία.
+     * Η κύρια μέθοδος φόρτωσης.
      */
     public Budget loadFromCSV(String filePath, int year) {
         List<BudgetItem> items = new ArrayList<>();
-        String currentType = null;
+        String currentType = null; // Κρατάει αν διαβάζουμε ΕΣΟΔΑ ή ΕΞΟΔΑ
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
             while ((line = br.readLine()) != null) {
-                // Αφαίρεση του BOM (Byte Order Mark) αν υπάρχει στην αρχή του αρχείου
+                // 1. Αφαίρεση BOM (Αόρατος χαρακτήρας στην αρχή)
                 if (line.startsWith("\uFEFF")) {
                     line = line.substring(1);
                 }
 
-                List<String> data = parseCsvLine(line);
+                if (line.trim().isEmpty()) continue;
 
-                if (data.size() < 2) {
-                    continue;
-                }
-
-                String codePart = data.get(0).replaceAll("\"", "").trim();
-                String name = data.get(1).replaceAll("\"", "").trim();
-                String amountStr = data.get(data.size() - 1);
-
-                // Ανίχνευση αλλαγής τύπου (Έσοδα/Έξοδα)
-                if (codePart.contains("ΕΣΟΔΑ")) {
+                // 2. Έλεγχος για αλλαγή κατηγορίας (ΕΣΟΔΑ / ΕΞΟΔΑ)
+                // Το ψάχνουμε σε όλη τη γραμμή για σιγουριά
+                if (line.contains("ΕΣΟΔΑ")) {
                     currentType = "REVENUE";
-                    continue;
+                    continue; // Πάμε στην επόμενη γραμμή
                 }
-                if (codePart.contains("ΕΞΟΔΑ")) {
+                if (line.contains("ΕΞΟΔΑ")) {
                     currentType = "EXPENDITURE";
                     continue;
                 }
 
-                if (name.isEmpty()) {
-                    continue; 
+                // 3. Ανάλυση της γραμμής σε στήλες
+                List<String> data = parseCsvLine(line);
+                
+                // Πρέπει να έχουμε τουλάχιστον 2 στήλες για να έχει νόημα
+                if (data.size() < 2) {
+                    continue;
                 }
 
-                if (currentType != null && !codePart.isEmpty()) {
-                    long amount = cleanAndParseAmount(amountStr);
-                    String cleanCode = codePart.replaceAll("\\.", "").trim();
-                    BudgetItem item = new BudgetItem(cleanCode, name, currentType, amount);
+                // 4. Εύρεση Κωδικού και Ονόματος (Ευέλικτη Λογική)
+                String codePart = data.get(0).replaceAll("\"", "").trim();
+                String name = "";
+                
+                // Αν η 1η στήλη είναι κενή (συχνό στο budget-2024.csv), ψάχνουμε στη 2η
+                if (codePart.isEmpty() && data.size() > 1) {
+                    codePart = data.get(1).replaceAll("\"", "").trim();
+                    // Αν ο κωδικός ήταν στη 2η, το όνομα θα είναι στην 3η (αν υπάρχει)
+                    if (data.size() > 2) {
+                        name = data.get(2).replaceAll("\"", "").trim();
+                    }
+                } else {
+                    // Κανονική περίπτωση: Κωδικός στην 1η, Όνομα στη 2η
+                    if (data.size() > 1) {
+                        name = data.get(1).replaceAll("\"", "").trim();
+                    }
+                }
+
+                // Καθαρισμός κωδικού από τελείες στο τέλος (π.χ. "11.")
+                codePart = codePart.replaceAll("\\.$", "").trim();
+
+                // Αν ακόμα δεν βρήκαμε τίποτα ουσιαστικό, αγνοούμε τη γραμμή
+                if (name.isEmpty() && codePart.isEmpty()) continue;
+
+                // 5. Εύρεση Ποσού (Πάντα στην τελευταία γεμάτη στήλη)
+                String amountStr = data.get(data.size() - 1);
+                long amount = cleanAndParseAmount(amountStr);
+
+                // 6. Δημιουργία Αντικειμένου
+                // Φτιάχνουμε το αντικείμενο μόνο αν έχουμε ενεργό τύπο (REVENUE/EXPENDITURE) και ποσό > 0
+                if (currentType != null && amount > 0) {
+                    // Αν λείπει ο κωδικός αλλά έχουμε τα άλλα, φτιάχνουμε έναν προσωρινό
+                    if (codePart.isEmpty()) {
+                        codePart = "GEN_" + items.size(); 
+                    }
+                    
+                    BudgetItem item = new BudgetItem(codePart, name, currentType, amount);
                     items.add(item);
                 }
             }
+            // Τέλος ανάγνωσης αρχείου
             return new Budget(year, items);
+
         } catch (IOException e) {
-            System.err.println(e.getMessage());
+            System.err.println("Σφάλμα κατά την ανάγνωση του αρχείου CSV: " + e.getMessage());
+            // Επιστροφή άδειου προϋπολογισμού αντί για crash
             return new Budget(year, new ArrayList<>());
         }
     }
